@@ -1759,8 +1759,8 @@ class cbusLibrary {
                 'mnemonic': 'ASOF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
-                'eventData': {hex:''},
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {hex:''},
                 'text': "ASOF (99) Node " + parseInt(message.substr(9, 4), 16) + 
 					" Device Number " + parseInt(message.substr(13, 4), 16)
         }
