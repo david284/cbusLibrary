@@ -440,12 +440,12 @@ describe('cbusMessage tests', function(){
     //
 	function GetTestCase_DBG1 () {
 		var testCases = [];
-		for (sIndex = 1; sIndex < 4; sIndex++) {
-			if (sIndex == 1) Status = 0;
-			if (sIndex == 2) Status = 1;
-			if (sIndex == 3) Status = 255;
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 255;
 
-			testCases.push({'Status':Status});
+			testCases.push({'status':arg1});
 		}
 		return testCases;
 	}
@@ -453,15 +453,15 @@ describe('cbusMessage tests', function(){
 
     // 30 DBG1
     //
-	itParam("DBG1 test: Status ${value.Status}", GetTestCase_DBG1(), function (value) {
+	itParam("DBG1 test: status ${value.status}", GetTestCase_DBG1(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN DBG1 test ' + JSON.stringify(value)});
-		expected = ":SA780N30" + decToHex(value.Status, 2) + ";";
-        var encode = cbusLib.encodeDBG1(value.Status);
+		expected = ":SA780N30" + decToHex(value.status, 2) + ";";
+        var encode = cbusLib.encodeDBG1(value.status);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: DBG1 encode ' + encode});
 		winston.info({message: 'cbusMessage test: DBG1 decode ' + JSON.stringify(decode)});
 		expect(encode).to.equal(expected, 'encode');
-        expect(decode.Status).to.equal(value.Status, 'Status');
+        expect(decode.status).to.equal(value.status, 'status');
 		expect(decode.mnemonic).to.equal('DBG1', 'mnemonic');
 		expect(decode.opCode).to.equal('30', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
@@ -548,7 +548,7 @@ describe('cbusMessage tests', function(){
                 if (aIndex == 2) Index = 1;
                 if (aIndex == 3) Index = 255;
 
-                testCases.push({'ConID':ConID, 'Index':Index});
+                testCases.push({'conID':ConID, 'index':Index});
             }
         }
 		return testCases;
@@ -557,16 +557,16 @@ describe('cbusMessage tests', function(){
 
     // 41 QCON
     //
-	itParam("QCON test: ConID ${value.ConID} Index ${value.Index}", GetTestCase_QCON(), function (value) {
+	itParam("QCON test: conID ${value.conID} index ${value.index}", GetTestCase_QCON(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN QCON test ' + JSON.stringify(value)});
-		expected = ":SA780N41" + decToHex(value.ConID, 2) + decToHex(value.Index, 2) + ";";
-        var encode = cbusLib.encodeQCON(value.ConID, value.Index);
+		expected = ":SA780N41" + decToHex(value.conID, 2) + decToHex(value.index, 2) + ";";
+        var encode = cbusLib.encodeQCON(value.conID, value.index);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: QCON encode ' + encode});
 		winston.info({message: 'cbusMessage test: QCON decode ' + JSON.stringify(decode)});
 		expect(encode).to.equal(expected, 'encode');
-        expect(decode.ConID).to.equal(value.ConID, 'ConID');
-        expect(decode.Index).to.equal(value.Index, 'Index');
+        expect(decode.conID).to.equal(value.conID, 'conID');
+        expect(decode.index).to.equal(value.index, 'index');
 		expect(decode.mnemonic).to.equal('QCON', 'mnemonic');
 		expect(decode.opCode).to.equal('41', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
@@ -850,7 +850,7 @@ describe('cbusMessage tests', function(){
 				if (ACIndex == 1) Function = 0;
 				if (ACIndex == 2) Function = 1;
 				if (ACIndex == 3) Function = 255;
-				testCases.push({'session':session, 'Function':Function});
+				testCases.push({'session':session, 'functionNumber':Function});
 			}
 		}
 		return testCases;
@@ -859,17 +859,17 @@ describe('cbusMessage tests', function(){
     
     // 49 DFNON
     //
-	itParam("DFNON test: session ${value.session} Function ${value.Function}", GetTestCase_DFNONF(), function (value) {
+	itParam("DFNON test: session ${value.session} function ${value.functionNumber}", GetTestCase_DFNONF(), function (value) {
         var mnemonic = 'DFNON'
 		winston.info({message: 'cbusMessage test: BEGIN ' + mnemonic + ' test ' + JSON.stringify(value)});
-		expected = ":SA780N49" + decToHex(value.session, 2) + decToHex(value.Function, 2) + ";";
-        var encode = cbusLib.encodeDFNON(value.session, value.Function);
+		expected = ":SA780N49" + decToHex(value.session, 2) + decToHex(value.functionNumber, 2) + ";";
+        var encode = cbusLib.encodeDFNON(value.session, value.functionNumber);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + mnemonic + ' encode ' + encode});
 		winston.info({message: 'cbusMessage test: ' + mnemonic + ' decode ' + JSON.stringify(decode)});
 		expect(encode).to.equal(expected, 'encode');
         expect(decode.session).to.equal(value.session, 'session');
-        expect(decode.Function).to.equal(value.Function, 'Function');
+        expect(decode.functionNumber).to.equal(value.functionNumber, 'functionNumber');
 		expect(decode.mnemonic).to.equal(mnemonic, 'mnemonic');
 		expect(decode.opCode).to.equal('49', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ');
@@ -879,17 +879,17 @@ describe('cbusMessage tests', function(){
 
     // 4A DFNOF
     //
-	itParam("DFNOF test: session ${value.session} Function ${value.Function}", GetTestCase_DFNONF(), function (value) {
+	itParam("DFNOF test: session ${value.session} function ${value.functionNumber}", GetTestCase_DFNONF(), function (value) {
         var mnemonic = 'DFNOF'
 		winston.info({message: 'cbusMessage test: BEGIN ' + mnemonic + ' test ' + JSON.stringify(value)});
-		expected = ":SA780N4A" + decToHex(value.session, 2) + decToHex(value.Function, 2) + ";";
-        var encode = cbusLib.encodeDFNOF(value.session, value.Function);
+		expected = ":SA780N4A" + decToHex(value.session, 2) + decToHex(value.functionNumber, 2) + ";";
+        var encode = cbusLib.encodeDFNOF(value.session, value.functionNumber);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + mnemonic + ' encode ' + encode});
 		winston.info({message: 'cbusMessage test: ' + mnemonic + ' decode ' + JSON.stringify(decode)});
 		expect(encode).to.equal(expected, 'encode');
         expect(decode.session).to.equal(value.session, 'session');
-        expect(decode.Function).to.equal(value.Function, 'Function');
+        expect(decode.functionNumber).to.equal(value.functionNumber, 'functionNumber');
 		expect(decode.mnemonic).to.equal(mnemonic, 'mnemonic');
 		expect(decode.opCode).to.equal('4A', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ');
@@ -909,7 +909,7 @@ describe('cbusMessage tests', function(){
 				if (ACIndex == 1) Status = 0;
 				if (ACIndex == 2) Status = 1;
 				if (ACIndex == 3) Status = 255;
-				testCases.push({'session':session, 'Status':Status});
+				testCases.push({'session':session, 'status':Status});
 			}
 		}
 		return testCases;
@@ -918,17 +918,17 @@ describe('cbusMessage tests', function(){
     
     // 4C SSTAT
     //
-	itParam("SSTAT test: session ${value.session} Status ${value.Status}", GetTestCase_SSTAT(), function (value) {
+	itParam("SSTAT test: session ${value.session} status ${value.status}", GetTestCase_SSTAT(), function (value) {
         var mnemonic = 'SSTAT'
 		winston.info({message: 'cbusMessage test: BEGIN ' + mnemonic + ' test ' + JSON.stringify(value)});
-		expected = ":SB780N4C" + decToHex(value.session, 2) + decToHex(value.Status, 2) + ";";
-        var encode = cbusLib.encodeSSTAT(value.session, value.Status);
+		expected = ":SB780N4C" + decToHex(value.session, 2) + decToHex(value.status, 2) + ";";
+        var encode = cbusLib.encodeSSTAT(value.session, value.status);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + mnemonic + ' encode ' + encode});
 		winston.info({message: 'cbusMessage test: ' + mnemonic + ' decode ' + JSON.stringify(decode)});
 		expect(encode).to.equal(expected, 'encode');
         expect(decode.session).to.equal(value.session, 'session');
-        expect(decode.Status).to.equal(value.Status, 'Status');
+        expect(decode.status).to.equal(value.status, 'status');
 		expect(decode.mnemonic).to.equal(mnemonic, 'mnemonic');
 		expect(decode.opCode).to.equal('4C', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ');
@@ -1438,16 +1438,16 @@ describe('cbusMessage tests', function(){
                     if (a2 == 3) arg2 = 255;
                     testCases.push({'mnemonic':'GLOC', 'opCode':'61', 
                                 'address':arg1, 
-                                'Flags':arg2});
+                                'flags':arg2});
                 }
 		}
 		return testCases;
 	}
 
-	itParam("GLOC test address ${value.address} Flags ${value.Flags}", GetTestCase_GLOC(), function (value) {
+	itParam("GLOC test address ${value.address} flags ${value.flags}", GetTestCase_GLOC(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SA780N" + value.opCode + decToHex(value.address, 4) + decToHex(value.Flags, 2) + ";";
-        var encode = cbusLib.encodeGLOC(value.address, value.Flags);
+		expected = ":SA780N" + value.opCode + decToHex(value.address, 4) + decToHex(value.flags, 2) + ";";
+        var encode = cbusLib.encodeGLOC(value.address, value.flags);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
@@ -1457,7 +1457,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.address).to.equal(value.address, 'address');
-        expect(decode.Flags).to.equal(value.Flags, 'Flags');
+        expect(decode.flags).to.equal(value.flags, 'flags');
 	})
 
 
@@ -1675,7 +1675,7 @@ describe('cbusMessage tests', function(){
 		winston.info({message: 'cbusMessage test: RQNPN decode ' + JSON.stringify(decode)});
 		expect(encode).to.equal(expected, 'encode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
-        expect(decode.ParameterIndex).to.equal(value.paramIndex, 'ParameterIndex');
+        expect(decode.parameterIndex).to.equal(value.paramIndex, 'parameterIndex');
 		expect(decode.mnemonic).to.equal('RQNPN', 'mnemonic');
 		expect(decode.opCode).to.equal('73', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
@@ -1897,7 +1897,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal(value.opCode, 'opCode');
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-        expect(decode.Session).to.equal(value.session, 'session');
+        expect(decode.session).to.equal(value.session, 'session');
         expect(decode.CV).to.equal(value.CV, 'CV');
         expect(decode.value).to.equal(value.value, 'value');
 	})
@@ -1944,7 +1944,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal(value.opCode, 'opCode');
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-        expect(decode.Session).to.equal(value.session, 'session');
+        expect(decode.session).to.equal(value.session, 'session');
         expect(decode.CV).to.equal(value.CV, 'CV');
         expect(decode.value).to.equal(value.value, 'value');
 	})
@@ -1991,7 +1991,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal(value.opCode, 'opCode');
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-        expect(decode.Session).to.equal(value.session, 'session');
+        expect(decode.session).to.equal(value.session, 'session');
         expect(decode.CV).to.equal(value.CV, 'CV');
         expect(decode.Mode).to.equal(value.Mode, 'Mode');
 	})
@@ -2038,7 +2038,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal(value.opCode, 'opCode');
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-        expect(decode.Session).to.equal(value.session, 'session');
+        expect(decode.session).to.equal(value.session, 'session');
         expect(decode.CV).to.equal(value.CV, 'CV');
         expect(decode.value).to.equal(value.value, 'value');
 	})
@@ -3437,7 +3437,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal(value.opCode, 'opCode');
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-        expect(decode.Session).to.equal(value.session, 'session');
+        expect(decode.session).to.equal(value.session, 'session');
         expect(decode.CV).to.equal(value.CV, 'CV');
         expect(decode.mode).to.equal(value.mode, 'mode');
         expect(decode.value).to.equal(value.value, 'value');

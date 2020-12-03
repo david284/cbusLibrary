@@ -758,7 +758,7 @@ class cbusLibrary {
                 'mnemonic': 'QLOC',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'text': 'QLOC (22) Session ' + parseInt(message.substr(9, 2), 16),
+                'text': 'QLOC (22) session ' + parseInt(message.substr(9, 2), 16),
         }
     }
     encodeQLOC = function(session) {
@@ -774,7 +774,7 @@ class cbusLibrary {
                 'mnemonic': 'DKEEP',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'text': 'DKEEP (23) Session ' + parseInt(message.substr(9, 2), 16),
+                'text': 'DKEEP (23) session ' + parseInt(message.substr(9, 2), 16),
         }
     }
     encodeDKEEP = function(session) {
@@ -789,12 +789,12 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'DBG1',
                 'opCode': message.substr(7, 2),
-                'Status': parseInt(message.substr(9, 2), 16),
-                'text': 'DBG1 (30) Status ' + parseInt(message.substr(9, 2), 16),
+                'status': parseInt(message.substr(9, 2), 16),
+                'text': 'DBG1 (30) status ' + parseInt(message.substr(9, 2), 16),
         }
     }
-    encodeDBG1 = function(Status) {
-        return this.header({MinPri: 2}) + '30' + decToHex(Status, 2) + ';';
+    encodeDBG1 = function(status) {
+        return this.header({MinPri: 2}) + '30' + decToHex(status, 2) + ';';
     }
     
 
@@ -806,7 +806,7 @@ class cbusLibrary {
                 'mnemonic': 'EXTC',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16),
-                'text': 'EXTC (3F) Status ' + parseInt(message.substr(9, 2), 16),
+                'text': 'EXTC (3F) Ext_OPC ' + parseInt(message.substr(9, 2), 16),
         }
     }
     encodeEXTC = function(Ext_OPC) {
@@ -838,13 +838,13 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'QCON',
                 'opCode': message.substr(7, 2),
-                'ConID': parseInt(message.substr(9, 2), 16),
-                'Index': parseInt(message.substr(11, 2), 16),
+                'conID': parseInt(message.substr(9, 2), 16),
+                'index': parseInt(message.substr(11, 2), 16),
                 'text': 'QCON (41) Node ' + parseInt(message.substr(9, 4), 16),
         }
     }
-    encodeQCON = function(ConID, Index) {
-        return this.header({MinPri: 2}) + '41' + decToHex(ConID, 2) + decToHex(Index, 2) + ';'
+    encodeQCON = function(conID, index) {
+        return this.header({MinPri: 2}) + '41' + decToHex(conID, 2) + decToHex(index, 2) + ';'
     }
 
 
@@ -980,12 +980,13 @@ class cbusLibrary {
                 'mnemonic': 'DFNON',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'Function': parseInt(message.substr(11, 2), 16),
-                'text': 'DFNON (49) Node ' + parseInt(message.substr(9, 4), 16),
+                'functionNumber': parseInt(message.substr(11, 2), 16),
+                'text': 'DFNON (49) session ' + parseInt(message.substr(9, 2), 16) +
+                    ' function ' + parseInt(message.substr(11, 2), 16),
         }
     }
-    encodeDFNON = function(session, Function) {
-            return this.header({MinPri: 2}) + '49' + decToHex(session, 2) + decToHex(Function, 2) + ';'
+    encodeDFNON = function(session, functionNumber) {
+            return this.header({MinPri: 2}) + '49' + decToHex(session, 2) + decToHex(functionNumber, 2) + ';'
     }
 
 
@@ -997,12 +998,13 @@ class cbusLibrary {
                 'mnemonic': 'DFNOF',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'Function': parseInt(message.substr(11, 2), 16),
-                'text': 'DFNOF (4A) Node ' + parseInt(message.substr(9, 4), 16),
+                'functionNumber': parseInt(message.substr(11, 2), 16),
+                'text': 'DFNOF (4A) session ' + parseInt(message.substr(9, 2), 16) +
+                    ' function ' + parseInt(message.substr(11, 2), 16),
         }
     }
-    encodeDFNOF = function(session, Function) {
-            return this.header({MinPri: 2}) + '4A' + decToHex(session, 2) + decToHex(Function, 2) + ';'
+    encodeDFNOF = function(session, functionNumber) {
+            return this.header({MinPri: 2}) + '4A' + decToHex(session, 2) + decToHex(functionNumber, 2) + ';'
     }
 
 
@@ -1014,12 +1016,13 @@ class cbusLibrary {
                 'mnemonic': 'SSTAT',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'Status': parseInt(message.substr(11, 2), 16),
-                'text': 'SSTAT (4C) Node ' + parseInt(message.substr(9, 4), 16),
+                'status': parseInt(message.substr(11, 2), 16),
+                'text': 'SSTAT (4C) session ' + parseInt(message.substr(9, 2), 16) +
+                    ' status ' + parseInt(message.substr(11, 2), 16),
         }
     }
-    encodeSSTAT = function(session, Status) {
-            return this.header({MinPri: 3}) + '4C' + decToHex(session, 2) + decToHex(Status, 2) + ';'
+    encodeSSTAT = function(session, status) {
+            return this.header({MinPri: 3}) + '4C' + decToHex(session, 2) + decToHex(status, 2) + ';'
     }
 
 
@@ -1299,13 +1302,13 @@ class cbusLibrary {
                 'mnemonic': 'GLOC',
                 'opCode': message.substr(7, 2),
                 'address': parseInt(message.substr(9, 4), 16),
-                'Flags': parseInt(message.substr(13, 2), 16),
+                'flags': parseInt(message.substr(13, 2), 16),
                 'text': "GLOC (61) address " + parseInt(message.substr(9, 4), 16) +
-					" Flags " + parseInt(message.substr(13, 2), 16),
+					" flags " + parseInt(message.substr(13, 2), 16),
         }
     }
-    encodeGLOC = function(address, Flags) {
-        return this.header({MinPri: 2}) + '61' + decToHex(address, 4) + decToHex(Flags, 2) + ';';
+    encodeGLOC = function(address, flags) {
+        return this.header({MinPri: 2}) + '61' + decToHex(address, 4) + decToHex(flags, 2) + ';';
     }
 
 
@@ -1320,8 +1323,8 @@ class cbusLibrary {
                 'data1': parseInt(message.substr(9, 2), 16),
                 'data2': parseInt(message.substr(11, 2), 16),
                 'errorNumber': parseInt(message.substr(13, 2), 16),
-                'text': "ERR (63) Data1 " + parseInt(message.substr(9, 2), 16) +
-					" Data2 " + parseInt(message.substr(11, 2), 16) +
+                'text': "ERR (63) data1 " + parseInt(message.substr(9, 2), 16) +
+					" data2 " + parseInt(message.substr(11, 2), 16) +
 					" errorNumber " + parseInt(message.substr(13, 2), 16),
         }
     }
@@ -1410,13 +1413,13 @@ class cbusLibrary {
                 'mnemonic': 'RQNPN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
-                'ParameterIndex': parseInt(message.substr(13, 2), 16),
+                'parameterIndex': parseInt(message.substr(13, 2), 16),
                 'text': "RQNPN (73) Node " + parseInt(message.substr(9, 4), 16) + 
-					" Node Parameter Index " + parseInt(message.substr(13, 2), 16)
+					" Node parameter Index " + parseInt(message.substr(13, 2), 16)
         }
     }
-    encodeRQNPN = function(nodeNumber, ParameterIndex) {
-        return this.header({MinPri: 3}) + '73' + decToHex(nodeNumber, 4) + decToHex(ParameterIndex, 2) + ';'
+    encodeRQNPN = function(nodeNumber, parameterIndex) {
+        return this.header({MinPri: 3}) + '73' + decToHex(nodeNumber, 4) + decToHex(parameterIndex, 2) + ';'
     }
 
 
@@ -1505,16 +1508,16 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'WCVO',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
-                'text': "WCVO (82) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "WCVO (82) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 4), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
     }
-    encodeWCVO = function(Session, CV, value) {
-        return this.header({MinPri: 2}) + '82' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(value, 2) + ';'
+    encodeWCVO = function(session, CV, value) {
+        return this.header({MinPri: 2}) + '82' + decToHex(session, 2) + decToHex(CV, 4) + decToHex(value, 2) + ';'
     }
     
 
@@ -1525,16 +1528,16 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'WCVB',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
-                'text': "WCVB (83) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "WCVB (83) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 2), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
     }
-    encodeWCVB = function(Session, CV, value) {
-        return this.header({MinPri: 2}) + '83' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(value, 2) + ';'
+    encodeWCVB = function(session, CV, value) {
+        return this.header({MinPri: 2}) + '83' + decToHex(session, 2) + decToHex(CV, 4) + decToHex(value, 2) + ';'
     }
     
 
@@ -1545,16 +1548,16 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'QCVS',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'Mode': parseInt(message.substr(15, 2), 16),
-                'text': "QCVS (84) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "QCVS (84) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 2), 16) +
 					" Mode " + parseInt(message.substr(15, 2), 16)
         }
     }
-    encodeQCVS = function(Session, CV, Mode) {
-        return this.header({MinPri: 2}) + '84' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(Mode, 2) + ';'
+    encodeQCVS = function(session, CV, Mode) {
+        return this.header({MinPri: 2}) + '84' + decToHex(session, 2) + decToHex(CV, 4) + decToHex(Mode, 2) + ';'
     }
     
 
@@ -1565,16 +1568,16 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'PCVS',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
-                'text': "PCVS (85) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "PCVS (85) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 2), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
     }
-    encodePCVS = function(Session, CV, value) {
-        return this.header({MinPri: 2}) + '85' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(value, 2) + ';'
+    encodePCVS = function(session, CV, value) {
+        return this.header({MinPri: 2}) + '85' + decToHex(session, 2) + decToHex(CV, 4) + decToHex(value, 2) + ';'
     }
     
 
@@ -2247,18 +2250,18 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'WCVOA',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'mode': parseInt(message.substr(15, 2), 16),
                 'value': parseInt(message.substr(17, 2), 16),
-                'text': "WCVOA (C1) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "WCVOA (C1) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 4), 16) +
 					" mode " + parseInt(message.substr(15, 2), 16) +
 					" value " + parseInt(message.substr(17, 2), 16)
         }
     }
-    encodeWCVOA = function(Session, CV, mode, value) {
-        return this.header({MinPri: 2}) + 'C1' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(mode, 2) + decToHex(value, 2) + ';'
+    encodeWCVOA = function(session, CV, mode, value) {
+        return this.header({MinPri: 2}) + 'C1' + decToHex(session, 2) + decToHex(CV, 4) + decToHex(mode, 2) + decToHex(value, 2) + ';'
     }
     
 
