@@ -4691,54 +4691,61 @@ describe('cbusMessage tests', function(){
 	function GetTestCase_EVLRNI () {
 		var testCases = [];
 		for (a1 = 1; a1 < 4; a1++) {
-			if (a1 == 1) arg1 = '00000000';
-			if (a1 == 2) arg1 = '00000001';
-			if (a1 == 3) arg1 = 'FFFFFFFF';
-            for (a2 = 1; a2 < 4; a2++) {
-                if (a2 == 1) arg2 = 0;
-                if (a2 == 2) arg2 = 1;
-                if (a2 == 3) arg2 = 255;
-                for (a3 = 1; a3 < 4; a3++) {
-                    if (a3 == 1) arg3 = 0;
-                    if (a3 == 2) arg3 = 1;
-                    if (a3 == 3) arg3 = 255;
-                    for (a4 = 1; a4 < 4; a4++) {
-                        if (a4 == 1) arg4 = 0;
-                        if (a4 == 2) arg4 = 1;
-                        if (a4 == 3) arg4 = 255;
-                        testCases.push({'mnemonic':'EVLRNI', 
-                                        'opCode':'F5', 
-                                        'eventName':arg1, 
-                                        'eventNumberIndex':arg2,
-                                        'eventVariableIndex':arg3,
-                                        'eventVariableValue':arg4,
-                        })
-                    }                        
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 65535;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                testCases.push({'mnemonic':'EVLRNI', 
+                                                'opCode':'F5', 
+                                                'nodeNumber':arg1, 
+                                                'eventNumber':arg2, 
+                                                'eventNumberIndex':arg3, 
+                                                'eventVariableIndex':arg4, 
+                                                'eventVariableValue':arg5});
+                            }
+                        }
+                    }
                 }
-            }
 		}
 		return testCases;
 	}
 
     // F5 EVLRNI
     //
-	itParam("EVLRNI test eventName ${value.eventName} eventNumberIndex ${value.eventNumberIndex} eventVariableIndex ${value.eventVariableIndex} eventVariableValue ${value.eventVariableValue}", 
+	itParam("EVLRNI test nodeNumber ${value.nodeNumber} eventNumber ${value.eventNumber} eventNumberIndex ${value.eventNumberIndex} eventVariableIndex ${value.eventVariableIndex} eventVariableValue ${value.eventVariableValue}", 
         GetTestCase_EVLRNI(), function (value) {
             winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-            expected = ":SB780N" + value.opCode + value.eventName + decToHex(value.eventNumberIndex, 2) + decToHex(value.eventVariableIndex, 2) + decToHex(value.eventVariableValue, 2) + ";";
-            var encode = cbusLib.encodeEVLRNI(value.eventName, value.eventNumberIndex, value.eventVariableIndex, value.eventVariableValue);
-            var decode = cbusLib.decode(encode);
+            expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4) + decToHex(value.eventNumberIndex, 2) + decToHex(value.eventVariableIndex, 2) + decToHex(value.eventVariableValue, 2) + ";";
+            var encode = cbusLib.encodeEVLRNI(value.nodeNumber, value.eventNumber, value.eventNumberIndex, value.eventVariableIndex, value.eventVariableValue);
             winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
             expect(encode).to.equal(expected, 'encode');
+            var decode = cbusLib.decode(encode);
+            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
             expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
             expect(decode.opCode).to.equal(value.opCode, 'opCode');
-            expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
-            expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-            expect(decode.eventName).to.equal(value.eventName, 'eventName');
+            expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+            expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventName).to.equal(expected.substr(9, 8), 'eventName');
             expect(decode.eventNumberIndex).to.equal(value.eventNumberIndex, 'eventNumberIndex');
             expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
             expect(decode.eventVariableValue).to.equal(value.eventVariableValue, 'eventVariableValue');
+            expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+            expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
 	})
 
 

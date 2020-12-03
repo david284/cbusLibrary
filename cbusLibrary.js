@@ -2861,18 +2861,26 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'EVLRNI',
                 'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'eventNumber': parseInt(message.substr(13, 4), 16),
                 'eventName': message.substr(9, 8),
                 'eventNumberIndex': parseInt(message.substr(17, 2), 16),
                 'eventVariableIndex': parseInt(message.substr(19, 2), 16),
                 'eventVariableValue': parseInt(message.substr(21, 2), 16),
-                'text': "EVLRNI (F5) eventName " + message.substr(9, 8) + 
+                'text': "EVLRNI (F5) Node " + parseInt(message.substr(9, 4), 16) + 
+					" eventNumber " + parseInt(message.substr(13, 4), 16) + 
+                    " eventName " + message.substr(9, 8) + 
 					" Event Number Index " + parseInt(message.substr(17, 2), 16) + 
 					" Event Variable Index " + parseInt(message.substr(19, 2), 16) + 
 					" Event Variable Value " + parseInt(message.substr(21, 2), 16)
         }
     }
-    encodeEVLRNI = function(eventName, eventNumberIndex, eventVariableIndex, eventVariableValue) {
-        return this.header({MinPri: 3}) + 'F5' + eventName + decToHex(eventNumberIndex, 2) + decToHex(eventVariableIndex, 2) + decToHex(eventVariableValue, 2) + ';'
+    encodeEVLRNI = function(nodeNumber, eventNumber, eventNumberIndex, eventVariableIndex, eventVariableValue) {
+        return this.header({MinPri: 3}) + 'F5' + decToHex(nodeNumber, 4) + 
+                        decToHex(eventNumber, 4) + 
+                        decToHex(eventNumberIndex, 2) + 
+                        decToHex(eventVariableIndex, 2) + 
+                        decToHex(eventVariableValue, 2) + ';'
     }
     
 
