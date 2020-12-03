@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha ./tests/*.spec.js --timeout 30000 --exit"
+    "test": "./node_modules/.bin/mocha ./tests/*.spec.js --exit"
   },
   "repository": {
     "type": "git",

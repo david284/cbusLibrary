@@ -21,6 +21,26 @@
 
 function decToHex(num, len) {return parseInt(num).toString(16).toUpperCase().padStart(len, '0');}
 
+function stringToHex(string) {
+  // expects UTF-8 string
+  var bytes = new TextEncoder().encode(string);
+  return Array.from(
+    bytes,
+    byte => byte.toString(16).padStart(2, "0")
+  ).join("");
+}
+
+function hexToString(hex) {
+    // returns UTF-8 string
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i !== bytes.length; i++) {
+        bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+    }
+    return new TextDecoder().decode(bytes);
+}
+
+
+
 class cbusLibrary {
     constructor() {
         this.canHeader = {
@@ -416,8 +436,24 @@ class cbusLibrary {
         case 'DF':
             return this.decodeEXTC5(message);
             break;
+        case 'E0':
+            return this.decodeRDCC6(message);
+            break;
         case 'E1':
             return this.decodePLOC(message);
+            break;
+        case 'E2':
+            return this.decodeNAME(message);
+            break;
+        case 'E3':
+            return this.decodeSTAT(message);
+            break;
+        // E4 - EE reserved
+        case 'F0':
+            return this.decodeACON3(message);
+            break;
+        case 'EF':
+            return this.decodePARAMS(message);
             break;
         case 'F0':
             return this.decodeACON3(message);
@@ -428,11 +464,42 @@ class cbusLibrary {
         case 'F2':
             return this.decodeENRSP(message);
             break;
+        case 'F3':
+            return this.decodeARON3(message);
+            break;
+        case 'F4':
+            return this.decodeAROF3(message);
+            break;
+        case 'F5':
+            return this.decodeEVLRN(message);
+            break;
+        case 'F6':
+            return this.decodeACDAT(message);
+            break;
+        case 'F7':
+            return this.decodeARDAT(message);
+            break;
         case 'F8':
             return this.decodeASON3(message);
             break;
         case 'F9':
             return this.decodeASOF3(message);
+            break;
+        case 'FA':
+            return this.decodeDDES(message);
+            break;
+        case 'FB':
+            return this.decodeDDRS(message);
+            break;
+        // FC - reserved
+        case 'FD':
+            return this.decodeARSON3(message);
+            break;
+        case 'FE':
+            return this.decodeARSOF3(message);
+            break;
+        case 'FF':
+            return this.decodeEXTC6(message);
             break;
 
         default:
@@ -2492,6 +2559,40 @@ class cbusLibrary {
     }
 
 
+    // E0 RDCC6
+    // RDCC6 Format: <MjPri><MinPri=2><CANID>]<A0><REP><Byte0>..<Byte5>
+    //
+    decodeRDCC6 = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'RDCC6',
+                'opCode': message.substr(7, 2),
+                'repetitions': parseInt(message.substr(9, 2), 16),
+                'byte0': parseInt(message.substr(11, 2), 16),
+                'byte1': parseInt(message.substr(13, 2), 16),
+                'byte2': parseInt(message.substr(15, 2), 16),
+                'byte3': parseInt(message.substr(17, 2), 16),
+                'byte4': parseInt(message.substr(19, 2), 16),
+                'byte5': parseInt(message.substr(21, 2), 16),
+                'text': "RDCC6 (E0) repetitions " + parseInt(message.substr(9, 2), 16) + 
+					" byte0 " + parseInt(message.substr(11, 2), 16) +
+					" byte1 " + parseInt(message.substr(13, 2), 16) +
+					" byte2 " + parseInt(message.substr(15, 2), 16) +
+					" byte3 " + parseInt(message.substr(17, 2), 16) +
+					" byte4 " + parseInt(message.substr(19, 2), 16) +
+					" byte5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeRDCC6 = function(repetitions, byte0, byte1, byte2, byte3, byte4, byte5) {
+        return this.header({MinPri: 2}) + 'E0' + decToHex(repetitions, 2) + 
+                            decToHex(byte0, 2) + 
+                            decToHex(byte1, 2) + 
+                            decToHex(byte2, 2) + 
+                            decToHex(byte3, 2) + 
+                            decToHex(byte4, 2) + 
+                            decToHex(byte5, 2) + ';'
+    }
+    
+
     // E1 PLOC
     // PLOC Format: [<MjPri><MinPri=2><CANID>]<E1><Session><AddrH><AddrL><Speed/Dir><Fn1><Fn2><Fn3>
     //
@@ -2520,6 +2621,88 @@ class cbusLibrary {
     encodePLOC = function(session, address, speed, direction, Fn1, Fn2, Fn3) {
         var speedDir = speed + parseInt((direction == 'Reverse') ? 0 : 128)
         return this.header({MinPri: 2}) + 'E1' + decToHex(session, 2) + decToHex(address, 4) + decToHex(speedDir, 2) + decToHex(Fn1, 2) + decToHex(Fn2, 2) + decToHex(Fn3, 2) + ';';
+    }
+    
+
+    // E2 NAME
+    // NAME Format: [<MjPri><MinPri=3><CANID>]<E2><char1><char2><char3><char4><char5><char6><char7>
+    //
+    decodeNAME = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'NAME',
+                'opCode': message.substr(7, 2),
+                'name': hexToString(message.substr(9, 14)),
+                'text': "NAME (E2) name " + hexToString(message.substr(9, 14)) 
+        }
+    }
+    encodeNAME = function(name) {
+        return this.header({MinPri: 3}) + 'E2' + stringToHex(name.padEnd(7).substr(0,7)) + ';'
+    }
+    
+
+    // E3 STAT
+    // STAT Format: [<MjPri><MinPri=2><CANID>]<E3><NN hi><NN lo><CS num><flags>
+    //               <Major rev><Minor rev><Build no.>   
+    //
+    decodeSTAT = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'STAT',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'CS': parseInt(message.substr(13, 2), 16),
+                'flags': parseInt(message.substr(15, 2), 16),
+                'major': parseInt(message.substr(17,2), 16),
+                'minor': parseInt(message.substr(19, 2), 16),
+                'build': parseInt(message.substr(21, 2), 16),
+                'text': "STAT (E3) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                                " CS " + parseInt(message.substr(13, 2), 16) +
+                                " flags " + parseInt(message.substr(15, 2), 16) +
+                                " major " + parseInt(message.substr(17, 2), 16) +
+                                " minor " + parseInt(message.substr(19, 2), 16) +
+                                " build " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeSTAT = function(nodeNumber, CS, flags, major, minor, build) {
+        return this.header({MinPri: 2}) + 'E3'  + decToHex(nodeNumber, 4) +
+                                            decToHex(CS, 2) +
+                                            decToHex(flags, 2) +
+                                            decToHex(major, 2) +
+                                            decToHex(minor, 2) +
+                                            decToHex(build, 2) + ';'
+    }
+    
+
+    // EF PARAMS
+    // PARAMS Format: [<MjPri><MinPri=3><CANID>]<EF><PARA 1><PARA 2><PARA 3><PARA 4><PARA 5><PARA 6><PARA 7>
+    //
+    decodePARAMS = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'PARAMS',
+                'opCode': message.substr(7, 2),
+                'param1': parseInt(message.substr(9, 2), 16),
+                'param2': parseInt(message.substr(11, 2), 16),
+                'param3': parseInt(message.substr(13, 2), 16),
+                'param4': parseInt(message.substr(15, 2), 16),
+                'param5': parseInt(message.substr(17, 2), 16),
+                'param6': parseInt(message.substr(19, 2), 16),
+                'param7': parseInt(message.substr(21, 2), 16),
+                'text': "PARAMS (EF) param1 " + parseInt(message.substr(9, 2), 16) + 
+					" param2 " + parseInt(message.substr(11, 2), 16) +
+					" param3 " + parseInt(message.substr(13, 2), 16) +
+					" param4 " + parseInt(message.substr(15, 2), 16) +
+					" param5 " + parseInt(message.substr(17, 2), 16) +
+					" param6 " + parseInt(message.substr(19, 2), 16) +
+					" param7 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodePARAMS = function(param1, param2, param3, param4, param5, param6, param7) {
+        return this.header({MinPri: 3}) + 'EF' + decToHex(param1, 2) + 
+                            decToHex(param2, 2) + 
+                            decToHex(param3, 2) + 
+                            decToHex(param4, 2) + 
+                            decToHex(param5, 2) + 
+                            decToHex(param6, 2) + 
+                            decToHex(param7, 2) + ';'
     }
     
 
