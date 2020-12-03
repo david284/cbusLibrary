@@ -1993,16 +1993,14 @@ class cbusLibrary {
 		return {'encoded': message,
                 'mnemonic': 'REQEV',
                 'opCode': message.substr(7, 2),
-                'nodeNumber': parseInt(message.substr(9, 4), 16), 
-                'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventName': message.substr(9, 8),               
                 'eventVariableIndex': parseInt(message.substr(17, 2), 16),
-                'text': "REQEV (B2) Node " + parseInt(message.substr(9, 4), 16) + 
-					" eventNumber " + parseInt(message.substr(13, 4), 16) +
+                'text': "REQEV (B2) eventName " + message.substr(9, 8) +
 					" eventVariableIndex " + parseInt(message.substr(17, 4), 16)
         }
     }
-    encodeREQEV = function(nodeNumber, eventNumber, eventVariableIndex) {
-        return this.header({MinPri: 3}) + 'B2' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + decToHex(eventVariableIndex, 2) + ';';
+    encodeREQEV = function(eventName, eventVariableIndex) {
+        return this.header({MinPri: 3}) + 'B2' + eventName + decToHex(eventVariableIndex, 2) + ';';
     }
 
 
