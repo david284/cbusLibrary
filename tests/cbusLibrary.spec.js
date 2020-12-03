@@ -3601,38 +3601,51 @@ describe('cbusMessage tests', function(){
     //
 	function GetTestCase_EVLRN () {
 		var testCases = [];
-		for (EV = 1; EV < 4; EV++) {
-			if (EV == 1) eventName = '00000000';
-			if (EV == 2) eventName = '00000001';
-			if (EV == 3) eventName = 'FFFFFFFF';
-			for (EVindex = 1; EVindex < 4; EVindex++) {
-				if (EVindex == 1) eventVariableIndex = 0;
-				if (EVindex == 2) eventVariableIndex = 1;
-				if (EVindex == 3) eventVariableIndex = 255;
-				for (EVvalue = 1; EVvalue < 4; EVvalue++) {
-					if (EVvalue == 1) eventVariableValue = 0;
-					if (EVvalue == 2) eventVariableValue = 1;
-					if (EVvalue == 3) eventVariableValue = 255;
-					testCases.push({'eventName':eventName, 'eventVariableIndex':eventVariableIndex, 'eventVariableValue':eventVariableValue});
-				}
-			}
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+            for (a2 = 1; a2 < 4; a2++) {
+                if (a2 == 1) arg2 = 0;
+                if (a2 == 2) arg2 = 1;
+                if (a2 == 3) arg2 = 65535;
+                for (a3 = 1; a3 < 4; a3++) {
+                    if (a3 == 1) arg3 = 0;
+                    if (a3 == 2) arg3 = 1;
+                    if (a3 == 3) arg3 = 255;
+                    for (a4 = 1; a4 < 4; a4++) {
+                        if (a4 == 1) arg4 = 0;
+                        if (a4 == 2) arg4 = 1;
+                        if (a4 == 3) arg4 = 255;
+                        testCases.push({'mnemonic':'ARON2', 
+                                        'opCode':'D4', 
+                                        'nodeNumber':arg1, 
+                                        'eventNumber':arg2,
+                                        'eventVariableIndex':arg3,
+                                        'eventVariableValue':arg4,
+                        })
+                    }                        
+                }
+            }
 		}
 		return testCases;
 	}
 
-	itParam("EVLRN test eventName ${value.eventName} eventVariableIndex ${value.eventVariableIndex} eventVariableValue ${value.eventVariableValue}", GetTestCase_EVLRN(), function (value) {
+	itParam("EVLRN test nodeNumber ${value.nodeNumber} eventNumber ${value.eventNumber} eventVariableIndex ${value.eventVariableIndex} eventVariableValue ${value.eventVariableValue}", GetTestCase_EVLRN(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN EVLRN test ' + JSON.stringify(value)});
-		expected = ":SB780ND2" + value.eventName + decToHex(value.eventVariableIndex, 2) + decToHex(value.eventVariableValue, 2) + ";";
-        var encode = cbusLib.encodeEVLRN(value.eventName, value.eventVariableIndex, value.eventVariableValue);
+		expected = ":SB780ND2" + decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4) + decToHex(value.eventVariableIndex, 2) + decToHex(value.eventVariableValue, 2) + ";";
+        var encode = cbusLib.encodeEVLRN(value.nodeNumber, value.eventNumber, value.eventVariableIndex, value.eventVariableValue);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: EVLRN encode ' + encode});
-		winston.info({message: 'cbusMessage test: EVLRN decode ' + JSON.stringify(decode)});
         expect(encode).to.equal(expected, 'encode');
-        expect(decode.eventName).to.equal(value.eventName, 'eventName');
-        expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
-        expect(decode.eventVariableValue).to.equal(value.eventVariableValue, 'eventVariableValue');
+		winston.info({message: 'cbusMessage test: EVLRN decode ' + JSON.stringify(decode)});
         expect(decode.mnemonic).to.equal('EVLRN', 'mnemonic');
         expect(decode.opCode).to.equal('D2', 'opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+        expect(decode.eventName).to.equal(expected.substr(9, 8), 'eventName');
+        expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
+        expect(decode.eventVariableValue).to.equal(value.eventVariableValue, 'eventVariableValue');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
 	})

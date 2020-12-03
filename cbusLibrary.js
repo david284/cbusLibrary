@@ -2356,16 +2356,23 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'EVLRN',
                 'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'eventNumber': parseInt(message.substr(13, 4), 16),
                 'eventName': message.substr(9, 8),
                 'eventVariableIndex': parseInt(message.substr(17, 2), 16),
                 'eventVariableValue': parseInt(message.substr(19, 2), 16),
-                'text': "EVLRN (D2) eventName " + message.substr(9, 8) + 
+                'text': "EVLRN (D2) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+                    " eventNumber " + parseInt(message.substr(13, 4), 16) + 
+                    " eventName " + message.substr(9, 8) + 
 					" Event Variable Index " + parseInt(message.substr(17, 2), 16) + 
 					" Event Variable Value " + parseInt(message.substr(19, 2), 16)
         }
     }
-    encodeEVLRN = function(eventName, eventVariableIndex, eventVariableValue) {
-        return this.header({MinPri: 3}) + 'D2' + eventName + decToHex(eventVariableIndex, 2) + decToHex(eventVariableValue, 2) + ';'
+    encodeEVLRN = function(nodeNumber, eventNumber, eventVariableIndex, eventVariableValue) {
+        return this.header({MinPri: 3}) + 'D2' + decToHex(nodeNumber, 4) +
+            decToHex(eventNumber, 4) + 
+            decToHex(eventVariableIndex, 2) + 
+            decToHex(eventVariableValue, 2) + ';'
     }
     
 
