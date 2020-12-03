@@ -1683,12 +1683,16 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'EVULN',
                 'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'eventNumber': parseInt(message.substr(13, 4), 16), 
                 'eventName': message.substr(9, 8),
-                'text': "EVULN (95) eventName " + message.substr(9, 8),
+                'text': "EVULN (95) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                    " eventNumber " + parseInt(message.substr(11, 4), 16) +
+                    " eventName " + message.substr(9, 8)
         }
     }
-    encodeEVULN = function(eventName) {
-        return this.header({MinPri: 3}) + '95' + eventName + ';'
+    encodeEVULN = function(nodeNumber, eventNumber) {
+        return this.header({MinPri: 3}) + '95' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + ';'
     }
 
 

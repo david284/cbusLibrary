@@ -2230,26 +2230,37 @@ describe('cbusMessage tests', function(){
     //
 	function GetTestCase_EVULN () {
 		var testCases = [];
-		for (EV = 1; EV < 4; EV++) {
-			if (EV == 1) eventName = '00000000';
-			if (EV == 2) eventName = '00000001';
-			if (EV == 3) eventName = 'FFFFFFFF';
-			testCases.push({'eventName':eventName});
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+            for (a2 = 1; a2 < 4; a2++) {
+                if (a2 == 1) arg2 = 0;
+                if (a2 == 2) arg2 = 1;
+                if (a2 == 3) arg2 = 65535;
+                testCases.push({'mnemonic':'EVULN', 
+                                'opCode':'95', 
+                                'nodeNumber':arg1, 
+                                'eventNumber':arg2,
+                })                                
+            }
 		}
 		return testCases;
 	}
 
-	itParam("EVULN test eventName ${value.eventName}", GetTestCase_EVULN(), function (value) {
+	itParam("EVULN test nodeNumber ${value.nodeNumber} eventNumber ${value.eventNumber}", GetTestCase_EVULN(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN EVULN test ' + JSON.stringify(value)});
-		expected = ":SB780N95" + value.eventName + ";";
-        var encode = cbusLib.encodeEVULN(value.eventName);
+		expected = ":SB780N95" + decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4) + ";";
+        var encode = cbusLib.encodeEVULN(value.nodeNumber, value.eventNumber);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: EVULN encode ' + encode});
-		winston.info({message: 'cbusMessage test: EVULN decode ' + JSON.stringify(decode)});
 		expect(encode).to.equal(expected, 'encode');
-        expect(decode.eventName).to.equal(value.eventName, 'eventName');
+		winston.info({message: 'cbusMessage test: EVULN decode ' + JSON.stringify(decode)});
 		expect(decode.mnemonic).to.equal('EVULN', 'mnemonic');
 		expect(decode.opCode).to.equal('95', 'opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+        expect(decode.eventName).to.equal(expected.substr(9,8), 'eventName');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
 	})
