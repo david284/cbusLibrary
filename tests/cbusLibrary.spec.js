@@ -4522,6 +4522,329 @@ describe('cbusMessage tests', function(){
     })
 
 
+    // F3 ARON3 testcases
+    //
+	function GetTestCase_ARON3 () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 65535;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                testCases.push({'mnemonic':'ARON3', 
+                                                'opCode':'F3', 
+                                                'nodeNumber':arg1, 
+                                                'eventNumber':arg2, 
+                                                'data1':arg3, 
+                                                'data2':arg4, 
+                                                'data3':arg5}
+                                );
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+
+    // F3 ARON3
+    //
+	itParam("ARON3 test nodeNumber ${value.nodeNumber} eventNumber ${value.eventNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3}", 
+        GetTestCase_ARON3(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + ";";
+        var encode = cbusLib.encodeARON3(value.nodeNumber, value.eventNumber, value.data1, value.data2, value.data3);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.eventNumber).to.equal(value.eventNumber, 'param2');
+        expect(decode.eventData.data1).to.equal(value.data1, 'data1');
+        expect(decode.eventData.data2).to.equal(value.data2, 'data2');
+        expect(decode.eventData.data3).to.equal(value.data3, 'data3');
+	})
+
+
+    // F4 AROF3 testcases
+    //
+	function GetTestCase_AROF3 () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 65535;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                testCases.push({'mnemonic':'AROF3', 
+                                                'opCode':'F4', 
+                                                'nodeNumber':arg1, 
+                                                'eventNumber':arg2, 
+                                                'data1':arg3, 
+                                                'data2':arg4, 
+                                                'data3':arg5}
+                                );
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+
+    // F4 AROF3
+    //
+	itParam("AROF3 test nodeNumber ${value.nodeNumber} eventNumber ${value.eventNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3}", 
+        GetTestCase_AROF3(), function (value) {
+            winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+            expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + ";";
+            var encode = cbusLib.encodeAROF3(value.nodeNumber, value.eventNumber, value.data1, value.data2, value.data3);
+            var decode = cbusLib.decode(encode);
+            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+            expect(encode).to.equal(expected, 'encode');
+            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+            expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+            expect(decode.opCode).to.equal(value.opCode, 'opCode');
+            expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+            expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+            expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+            expect(decode.eventNumber).to.equal(value.eventNumber, 'param2');
+            expect(decode.eventData.data1).to.equal(value.data1, 'data1');
+            expect(decode.eventData.data2).to.equal(value.data2, 'data2');
+            expect(decode.eventData.data3).to.equal(value.data3, 'data3');
+            expect(decode.eventData.hex).to.equal(decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2), 'eventdata.hex');
+	})
+
+
+    // F5 EVLRNI testcases
+    //
+	function GetTestCase_EVLRNI () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = '00000000';
+			if (a1 == 2) arg1 = '00000001';
+			if (a1 == 3) arg1 = 'FFFFFFFF';
+            for (a2 = 1; a2 < 4; a2++) {
+                if (a2 == 1) arg2 = 0;
+                if (a2 == 2) arg2 = 1;
+                if (a2 == 3) arg2 = 255;
+                for (a3 = 1; a3 < 4; a3++) {
+                    if (a3 == 1) arg3 = 0;
+                    if (a3 == 2) arg3 = 1;
+                    if (a3 == 3) arg3 = 255;
+                    for (a4 = 1; a4 < 4; a4++) {
+                        if (a4 == 1) arg4 = 0;
+                        if (a4 == 2) arg4 = 1;
+                        if (a4 == 3) arg4 = 255;
+                        testCases.push({'mnemonic':'EVLRNI', 
+                                        'opCode':'F5', 
+                                        'eventName':arg1, 
+                                        'eventNumberIndex':arg2,
+                                        'eventVariableIndex':arg3,
+                                        'eventVariableValue':arg4,
+                        })
+                    }                        
+                }
+            }
+		}
+		return testCases;
+	}
+
+    // F5 EVLRNI
+    //
+	itParam("EVLRNI test eventName ${value.eventName} eventNumberIndex ${value.eventNumberIndex} eventVariableIndex ${value.eventVariableIndex} eventVariableValue ${value.eventVariableValue}", 
+        GetTestCase_EVLRNI(), function (value) {
+            winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+            expected = ":SB780N" + value.opCode + value.eventName + decToHex(value.eventNumberIndex, 2) + decToHex(value.eventVariableIndex, 2) + decToHex(value.eventVariableValue, 2) + ";";
+            var encode = cbusLib.encodeEVLRNI(value.eventName, value.eventNumberIndex, value.eventVariableIndex, value.eventVariableValue);
+            var decode = cbusLib.decode(encode);
+            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+            expect(encode).to.equal(expected, 'encode');
+            expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+            expect(decode.opCode).to.equal(value.opCode, 'opCode');
+            expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+            expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+            expect(decode.eventName).to.equal(value.eventName, 'eventName');
+            expect(decode.eventNumberIndex).to.equal(value.eventNumberIndex, 'eventNumberIndex');
+            expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
+            expect(decode.eventVariableValue).to.equal(value.eventVariableValue, 'eventVariableValue');
+	})
+
+
+    // F6  ACDAT testcases
+    //
+	function GetTestCase_ACDAT () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                for (a6 = 1; a6 < 4; a6++) {
+                                    if (a6 == 1) arg6 = 0;
+                                    if (a6 == 2) arg6 = 1;
+                                    if (a6 == 3) arg6 = 255;
+                                    testCases.push({'mnemonic':'ACDAT', 
+                                                    'opCode':'F6', 
+                                                    'nodeNumber':arg1, 
+                                                    'data1':arg2, 
+                                                    'data2':arg3, 
+                                                    'data3':arg4, 
+                                                    'data4':arg5, 
+                                                    'data5':arg6});
+                                }
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+    // F6 ACDAT
+    //
+	itParam("ACDAT test nodeNumber ${value.nodeNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5}", 
+    GetTestCase_ACDAT(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SA780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
+        var encode = cbusLib.encodeACDAT(value.nodeNumber, value.data1, value.data2, value.data3, value.data4, value.data5);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.data1).to.equal(value.data1, 'data1');
+        expect(decode.data2).to.equal(value.data2, 'data2');
+        expect(decode.data3).to.equal(value.data3, 'data3');
+        expect(decode.data4).to.equal(value.data4, 'data4');
+        expect(decode.data5).to.equal(value.data5, 'data5');
+	})
+
+
+    // F7  ARDAT testcases
+    //
+	function GetTestCase_ARDAT () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                for (a6 = 1; a6 < 4; a6++) {
+                                    if (a6 == 1) arg6 = 0;
+                                    if (a6 == 2) arg6 = 1;
+                                    if (a6 == 3) arg6 = 255;
+                                    testCases.push({'mnemonic':'ARDAT', 
+                                                    'opCode':'F7', 
+                                                    'nodeNumber':arg1, 
+                                                    'data1':arg2, 
+                                                    'data2':arg3, 
+                                                    'data3':arg4, 
+                                                    'data4':arg5, 
+                                                    'data5':arg6});
+                                }
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+    // F7 ARDAT
+    //
+	itParam("ARDAT test nodeNumber ${value.nodeNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5}", 
+    GetTestCase_ARDAT(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SA780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
+        var encode = cbusLib.encodeARDAT(value.nodeNumber, value.data1, value.data2, value.data3, value.data4, value.data5);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.data1).to.equal(value.data1, 'data1');
+        expect(decode.data2).to.equal(value.data2, 'data2');
+        expect(decode.data3).to.equal(value.data3, 'data3');
+        expect(decode.data4).to.equal(value.data4, 'data4');
+        expect(decode.data5).to.equal(value.data5, 'data5');
+	})
+
+
     // F8/F9 ASON3 & ASOF3 test cases
     //
 	function GetTestCase_ASONF3 () {
@@ -4609,6 +4932,346 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
 	})
 
+
+    // FA DDES testcases
+    //
+	function GetTestCase_DDES () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                for (a6 = 1; a6 < 4; a6++) {
+                                    if (a6 == 1) arg6 = 0;
+                                    if (a6 == 2) arg6 = 1;
+                                    if (a6 == 3) arg6 = 255;
+                                    testCases.push({'mnemonic':'DDES', 
+                                                    'opCode':'FA', 
+                                                    'deviceNumber':arg1, 
+                                                    'data1':arg2, 
+                                                    'data2':arg3, 
+                                                    'data3':arg4, 
+                                                    'data4':arg5, 
+                                                    'data5':arg6});
+                                }
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+    // FA DDES
+    //
+	itParam("DDES test deviceNumber ${value.deviceNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5}", 
+    GetTestCase_DDES(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SA780N" + value.opCode + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
+        var encode = cbusLib.encodeDDES(value.deviceNumber, value.data1, value.data2, value.data3, value.data4, value.data5);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.data1).to.equal(value.data1, 'data1');
+        expect(decode.data2).to.equal(value.data2, 'data2');
+        expect(decode.data3).to.equal(value.data3, 'data3');
+        expect(decode.data4).to.equal(value.data4, 'data4');
+        expect(decode.data5).to.equal(value.data5, 'data5');
+	})
+
+
+    // FB DDRS testcases
+    //
+	function GetTestCase_DDRS () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                for (a6 = 1; a6 < 4; a6++) {
+                                    if (a6 == 1) arg6 = 0;
+                                    if (a6 == 2) arg6 = 1;
+                                    if (a6 == 3) arg6 = 255;
+                                    testCases.push({'mnemonic':'DDRS', 
+                                                    'opCode':'FB', 
+                                                    'deviceNumber':arg1, 
+                                                    'data1':arg2, 
+                                                    'data2':arg3, 
+                                                    'data3':arg4, 
+                                                    'data4':arg5, 
+                                                    'data5':arg6});
+                                }
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+    // FB DDRS
+    //
+	itParam("DDRS test deviceNumber ${value.deviceNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5}", 
+    GetTestCase_DDRS(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SA780N" + value.opCode + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
+        var encode = cbusLib.encodeDDRS(value.deviceNumber, value.data1, value.data2, value.data3, value.data4, value.data5);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.data1).to.equal(value.data1, 'data1');
+        expect(decode.data2).to.equal(value.data2, 'data2');
+        expect(decode.data3).to.equal(value.data3, 'data3');
+        expect(decode.data4).to.equal(value.data4, 'data4');
+        expect(decode.data5).to.equal(value.data5, 'data5');
+	})
+
+
+    // FD ARSON3 testcases
+    //
+	function GetTestCase_ARSON3 () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 65535;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                testCases.push({'mnemonic':'ARSON3', 
+                                                'opCode':'FD', 
+                                                'nodeNumber':arg1, 
+                                                'deviceNumber':arg2, 
+                                                'data1':arg3, 
+                                                'data2':arg4, 
+                                                'data3':arg5});
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+
+    // FD ARSON3
+    //
+	itParam("ARSON3 test nodeNumber ${value.nodeNumber} deviceNumber ${value.deviceNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3}", 
+    GetTestCase_ARSON3(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + ";";
+        var encode = cbusLib.encodeARSON3(value.nodeNumber, value.deviceNumber, value.data1, value.data2, value.data3);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.eventData.data1).to.equal(value.data1, 'data1');
+        expect(decode.eventData.data2).to.equal(value.data2, 'data2');
+        expect(decode.eventData.data3).to.equal(value.data3, 'data3');
+	})
+
+
+    // FE ARSOF3 testcases
+    //
+	function GetTestCase_ARSOF3 () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 65535;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                testCases.push({'mnemonic':'ARSOF3', 
+                                                'opCode':'FE', 
+                                                'nodeNumber':arg1, 
+                                                'deviceNumber':arg2, 
+                                                'data1':arg3, 
+                                                'data2':arg4, 
+                                                'data3':arg5});
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+
+    // FE ARSOF3
+    //
+	itParam("ARSOF3 test nodeNumber ${value.nodeNumber} deviceNumber ${value.deviceNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3}", 
+    GetTestCase_ARSOF3(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + ";";
+        var encode = cbusLib.encodeARSOF3(value.nodeNumber, value.deviceNumber, value.data1, value.data2, value.data3);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.eventData.data1).to.equal(value.data1, 'data1');
+        expect(decode.eventData.data2).to.equal(value.data2, 'data2');
+        expect(decode.eventData.data3).to.equal(value.data3, 'data3');
+	})
+
+
+    // FF EXTC6 testcases
+    //
+	function GetTestCase_EXTC6 () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 255;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                for (a6 = 1; a6 < 4; a6++) {
+                                    if (a6 == 1) arg6 = 0;
+                                    if (a6 == 2) arg6 = 1;
+                                    if (a6 == 3) arg6 = 255;
+                                    for (a7 = 1; a7 < 4; a7++) {
+                                        if (a7 == 1) arg7 = 0;
+                                        if (a7 == 2) arg7 = 1;
+                                        if (a7 == 3) arg7 = 255;
+                                        testCases.push({'mnemonic':'EXTC6', 
+                                                        'opCode':'FF', 
+                                                        'Ext_OPC':arg1, 
+                                                        'byte1':arg2, 
+                                                        'byte2':arg3, 
+                                                        'byte3':arg4, 
+                                                        'byte4':arg5, 
+                                                        'byte5':arg6,
+                                                        'byte6':arg7,
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+    // FF EXTC6
+    //
+	itParam("EXTC6 test Ext_OPC ${value.Ext_OPC} byte1 ${value.byte1} byte2 ${value.byte2} byte3 ${value.byte3} byte4 ${value.byte4} byte5 ${value.byte5} byte6 ${value.byte6}", 
+    GetTestCase_EXTC6(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SB780N" + value.opCode + decToHex(value.Ext_OPC, 2) + decToHex(value.byte1, 2) + decToHex(value.byte2, 2) + decToHex(value.byte3, 2) + decToHex(value.byte4, 2) + decToHex(value.byte5, 2) + decToHex(value.byte6, 2) + ";";
+        var encode = cbusLib.encodeEXTC6(value.Ext_OPC, value.byte1, value.byte2, value.byte3, value.byte4, value.byte5, value.byte6);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(encode).to.equal(expected, 'encode');
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.Ext_OPC).to.equal(value.Ext_OPC, 'Ext_OPC');
+        expect(decode.byte1).to.equal(value.byte1, 'byte1');
+        expect(decode.byte2).to.equal(value.byte2, 'byte2');
+        expect(decode.byte3).to.equal(value.byte3, 'byte3');
+        expect(decode.byte4).to.equal(value.byte4, 'byte4');
+        expect(decode.byte5).to.equal(value.byte5, 'byte5');
+        expect(decode.byte6).to.equal(value.byte6, 'byte6');
+	})
 
 
 

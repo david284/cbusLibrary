@@ -471,7 +471,7 @@ class cbusLibrary {
             return this.decodeAROF3(message);
             break;
         case 'F5':
-            return this.decodeEVLRN(message);
+            return this.decodeEVLRNI(message);
             break;
         case 'F6':
             return this.decodeACDAT(message);
@@ -2778,6 +2778,145 @@ class cbusLibrary {
     }
 
 
+    // F3 ARON3
+	// ARON3 Format: [<MjPri><MinPri=3><CANID>]<F3><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
+    //
+    decodeARON3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'ARON3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "ARON3 (F3) Node " + parseInt(message.substr(9, 4), 16) + 
+					" eventNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARON3 = function(nodeNumber, eventNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'F3' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // F4 AROF3
+	// AROF3 Format: [<MjPri><MinPri=3><CANID>]<F4><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
+    //
+    decodeAROF3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'AROF3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "AROF3 (F4) Node " + parseInt(message.substr(9, 4), 16) + 
+					" eventNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeAROF3 = function(nodeNumber, eventNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'F4' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // F5 EVLRNI
+	// EVLRNI Format: [<MjPri><MinPri=3><CANID>]<F5><NN hi><NN lo><EN hi><EN lo>
+    //                  <EN#><EV#><EV val>
+    //
+    decodeEVLRNI = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'EVLRNI',
+                'opCode': message.substr(7, 2),
+                'eventName': message.substr(9, 8),
+                'eventNumberIndex': parseInt(message.substr(17, 2), 16),
+                'eventVariableIndex': parseInt(message.substr(19, 2), 16),
+                'eventVariableValue': parseInt(message.substr(21, 2), 16),
+                'text': "EVLRNI (F5) eventName " + message.substr(9, 8) + 
+					" Event Number Index " + parseInt(message.substr(17, 2), 16) + 
+					" Event Variable Index " + parseInt(message.substr(19, 2), 16) + 
+					" Event Variable Value " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeEVLRNI = function(eventName, eventNumberIndex, eventVariableIndex, eventVariableValue) {
+        return this.header({MinPri: 3}) + 'F5' + eventName + decToHex(eventNumberIndex, 2) + decToHex(eventVariableIndex, 2) + decToHex(eventVariableValue, 2) + ';'
+    }
+    
+
+    // F6 ACDAT
+    // ACDAT Format: [<MjPri><MinPri=3><CANID>]<F6><NN hi><NNlo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeACDAT = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'ACDAT',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "ACDAT (F6) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeACDAT = function(nodeNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'F6'  + decToHex(nodeNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
+    // F7 ARDAT
+    // ARDAT Format: [<MjPri><MinPri=3><CANID>]<F7><NN hi><NNlo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeARDAT = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'ARDAT',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "ARDAT (F7) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARDAT = function(nodeNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'F7'  + decToHex(nodeNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
     // F8 ASON3
 	// ASON3 Format: [<MjPri><MinPri=3><CANID>]<F8><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
     //
@@ -2827,6 +2966,158 @@ class cbusLibrary {
     encodeASOF3 = function(nodeNumber, deviceNumber, data1, data2, data3) {
         return this.header({MinPri: 3}) + 'F9' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
             decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // FA DDES
+    // DDES Format: [<MjPri><MinPri=3><CANID>]<FA><DN hi><DN lo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeDDES = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'DDES',
+                'opCode': message.substr(7, 2),
+                'deviceNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "DDES (FA) deviceNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeDDES = function(deviceNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'FA'  + decToHex(deviceNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
+    // FB DDRS
+    // DDRS Format: [<MjPri><MinPri=3><CANID>]<FB><DN hi><DN lo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeDDRS = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'DDRS',
+                'opCode': message.substr(7, 2),
+                'deviceNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "DDRS (FB) deviceNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeDDRS = function(deviceNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'FB'  + decToHex(deviceNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
+    // FD ARSON3
+	// ARSON3 Format: [<MjPri><MinPri=3><CANID>]<FD><NN hi><NN lo><DN hi><DN lo>
+    //                  <data 1><data 2><data 3>
+    //
+    decodeARSON3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'ARSON3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'deviceNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "ARSON3 (FD) Node " + parseInt(message.substr(9, 4), 16) + 
+					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARSON3 = function(nodeNumber, deviceNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'FD' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // FE ARSOF3
+	// ARSOF3 Format: [<MjPri><MinPri=3><CANID>]<FE><NN hi><NN lo><DN hi><DN lo>
+    //                  <data 1><data 2><data 3>
+    //
+    decodeARSOF3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'ARSOF3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'deviceNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "ARSOF3 (FE) Node " + parseInt(message.substr(9, 4), 16) + 
+					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARSOF3 = function(nodeNumber, deviceNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'FE' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // FF EXTC6
+	// EXTC6 Format: [<MjPri><MinPri=3><CANID>]<DF><Ext_OPC><byte1><byte2><byte3><byte4><byte5><byte6>
+    //
+    decodeEXTC6 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'EXTC6',
+                'opCode': message.substr(7, 2),
+                'Ext_OPC': parseInt(message.substr(9, 2), 16), 
+                'byte1': parseInt(message.substr(11, 2), 16),
+                'byte2': parseInt(message.substr(13, 2), 16),
+                'byte3': parseInt(message.substr(15, 2), 16),
+                'byte4': parseInt(message.substr(17, 2), 16),
+                'byte5': parseInt(message.substr(19, 2), 16),
+                'byte6': parseInt(message.substr(21, 2), 16),
+                'text': "EXTC6 (FF) Ext_OPC " + parseInt(message.substr(9, 2), 16) + 
+					" byte1 " + parseInt(message.substr(11, 4), 16) +
+					" byte2 " + parseInt(message.substr(13, 4), 16) +
+					" byte3 " + parseInt(message.substr(15, 4), 16) +
+					" byte4 " + parseInt(message.substr(17, 4), 16) +
+					" byte5 " + parseInt(message.substr(19, 4), 16) +
+					" byte6 " + parseInt(message.substr(21, 4), 16)
+        }
+    }
+    encodeEXTC6 = function(Ext_OPC, byte1, byte2, byte3, byte4, byte5, byte6) {
+        return this.header({MinPri: 3}) + 'FF' + decToHex(Ext_OPC, 2) + 
+                            decToHex(byte1, 2) + 
+                            decToHex(byte2, 2) + 
+                            decToHex(byte3, 2) + 
+                            decToHex(byte4, 2) + 
+                            decToHex(byte5, 2) + 
+                            decToHex(byte6, 2) + ';';
     }
 
 
