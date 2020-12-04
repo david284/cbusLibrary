@@ -6,8 +6,9 @@ The decoding and encoding follows the CBUS specification available at the follow
 
 ## Installation
 
-    npm install cbusLibrary
+    npm install cbuslibrary
 
+   (note all lower case - npm no longer allows uppercase)
 
 ## usage
 
