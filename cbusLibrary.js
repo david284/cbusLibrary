@@ -499,7 +499,7 @@ class cbusLibrary {
             return this.decodeAROF3(message);
             break;
         case 'F5':
-            return this.decodeEVLRN(message);
+            return this.decodeEVLRNI(message);
             break;
         case 'F6':
             return this.decodeACDAT(message);
@@ -847,7 +847,7 @@ class cbusLibrary {
                 'mnemonic': 'QLOC',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'text': 'QLOC (22) Session ' + parseInt(message.substr(9, 2), 16),
+                'text': 'QLOC (22) session ' + parseInt(message.substr(9, 2), 16),
         }
     }
     encodeQLOC(session) {
@@ -863,7 +863,7 @@ class cbusLibrary {
                 'mnemonic': 'DKEEP',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'text': 'DKEEP (23) Session ' + parseInt(message.substr(9, 2), 16),
+                'text': 'DKEEP (23) session ' + parseInt(message.substr(9, 2), 16),
         }
     }
     encodeDKEEP(session) {
@@ -878,8 +878,8 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'DBG1',
                 'opCode': message.substr(7, 2),
-                'Status': parseInt(message.substr(9, 2), 16),
-                'text': 'DBG1 (30) Status ' + parseInt(message.substr(9, 2), 16),
+                'status': parseInt(message.substr(9, 2), 16),
+                'text': 'DBG1 (30) status ' + parseInt(message.substr(9, 2), 16),
         }
     }
     encodeDBG1(Status) {
@@ -895,7 +895,7 @@ class cbusLibrary {
                 'mnemonic': 'EXTC',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16),
-                'text': 'EXTC (3F) Status ' + parseInt(message.substr(9, 2), 16),
+                'text': 'EXTC (3F) Ext_OPC ' + parseInt(message.substr(9, 2), 16),
         }
     }
     encodeEXTC(Ext_OPC) {
@@ -927,8 +927,8 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'QCON',
                 'opCode': message.substr(7, 2),
-                'ConID': parseInt(message.substr(9, 2), 16),
-                'Index': parseInt(message.substr(11, 2), 16),
+                'conID': parseInt(message.substr(9, 2), 16),
+                'index': parseInt(message.substr(11, 2), 16),
                 'text': 'QCON (41) Node ' + parseInt(message.substr(9, 4), 16),
         }
     }
@@ -1069,8 +1069,9 @@ class cbusLibrary {
                 'mnemonic': 'DFNON',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'Function': parseInt(message.substr(11, 2), 16),
-                'text': 'DFNON (49) Node ' + parseInt(message.substr(9, 4), 16),
+                'functionNumber': parseInt(message.substr(11, 2), 16),
+                'text': 'DFNON (49) session ' + parseInt(message.substr(9, 2), 16) +
+                    ' function ' + parseInt(message.substr(11, 2), 16),
         }
     }
     encodeDFNON(session, Function) {
@@ -1086,8 +1087,9 @@ class cbusLibrary {
                 'mnemonic': 'DFNOF',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'Function': parseInt(message.substr(11, 2), 16),
-                'text': 'DFNOF (4A) Node ' + parseInt(message.substr(9, 4), 16),
+                'functionNumber': parseInt(message.substr(11, 2), 16),
+                'text': 'DFNOF (4A) session ' + parseInt(message.substr(9, 2), 16) +
+                    ' function ' + parseInt(message.substr(11, 2), 16),
         }
     }
     encodeDFNOF(session, Function) {
@@ -1103,8 +1105,9 @@ class cbusLibrary {
                 'mnemonic': 'SSTAT',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
-                'Status': parseInt(message.substr(11, 2), 16),
-                'text': 'SSTAT (4C) Node ' + parseInt(message.substr(9, 4), 16),
+                'status': parseInt(message.substr(11, 2), 16),
+                'text': 'SSTAT (4C) session ' + parseInt(message.substr(9, 2), 16) +
+                    ' status ' + parseInt(message.substr(11, 2), 16),
         }
     }
     encodeSSTAT(session, Status) {
@@ -1388,9 +1391,9 @@ class cbusLibrary {
                 'mnemonic': 'GLOC',
                 'opCode': message.substr(7, 2),
                 'address': parseInt(message.substr(9, 4), 16),
-                'Flags': parseInt(message.substr(13, 2), 16),
+                'flags': parseInt(message.substr(13, 2), 16),
                 'text': "GLOC (61) address " + parseInt(message.substr(9, 4), 16) +
-					" Flags " + parseInt(message.substr(13, 2), 16),
+					" flags " + parseInt(message.substr(13, 2), 16),
         }
     }
     encodeGLOC(address, Flags) {
@@ -1409,8 +1412,8 @@ class cbusLibrary {
                 'data1': parseInt(message.substr(9, 2), 16),
                 'data2': parseInt(message.substr(11, 2), 16),
                 'errorNumber': parseInt(message.substr(13, 2), 16),
-                'text': "ERR (63) Data1 " + parseInt(message.substr(9, 2), 16) +
-					" Data2 " + parseInt(message.substr(11, 2), 16) +
+                'text': "ERR (63) data1 " + parseInt(message.substr(9, 2), 16) +
+					" data2 " + parseInt(message.substr(11, 2), 16) +
 					" errorNumber " + parseInt(message.substr(13, 2), 16),
         }
     }
@@ -1499,9 +1502,9 @@ class cbusLibrary {
                 'mnemonic': 'RQNPN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
-                'ParameterIndex': parseInt(message.substr(13, 2), 16),
+                'parameterIndex': parseInt(message.substr(13, 2), 16),
                 'text': "RQNPN (73) Node " + parseInt(message.substr(9, 4), 16) + 
-					" Node Parameter Index " + parseInt(message.substr(13, 2), 16)
+					" Node parameter Index " + parseInt(message.substr(13, 2), 16)
         }
     }
     encodeRQNPN(nodeNumber, ParameterIndex) {
@@ -1594,10 +1597,10 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'WCVO',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
-                'text': "WCVO (82) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "WCVO (82) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 4), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
@@ -1614,10 +1617,10 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'WCVB',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
-                'text': "WCVB (83) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "WCVB (83) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 2), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
@@ -1634,10 +1637,10 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'QCVS',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'Mode': parseInt(message.substr(15, 2), 16),
-                'text': "QCVS (84) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "QCVS (84) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 2), 16) +
 					" Mode " + parseInt(message.substr(15, 2), 16)
         }
@@ -1654,10 +1657,10 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'PCVS',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
-                'text': "PCVS (85) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "PCVS (85) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 2), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
@@ -1769,8 +1772,12 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'EVULN',
                 'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'eventNumber': parseInt(message.substr(13, 4), 16), 
                 'eventName': message.substr(9, 8),
-                'text': "EVULN (95) eventName " + message.substr(9, 8),
+                'text': "EVULN (95) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                    " eventNumber " + parseInt(message.substr(11, 4), 16) +
+                    " eventName " + message.substr(9, 8)
         }
     }
     encodeEVULN(eventName) {
@@ -1845,8 +1852,8 @@ class cbusLibrary {
                 'mnemonic': 'ASOF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
-                'eventData': {hex:''},
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {hex:''},
                 'text': "ASOF (99) Node " + parseInt(message.substr(9, 4), 16) + 
 					" Device Number " + parseInt(message.substr(13, 4), 16)
         }
@@ -2079,12 +2086,14 @@ class cbusLibrary {
 		return {'encoded': message,
                 'mnemonic': 'REQEV',
                 'opCode': message.substr(7, 2),
-                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
                 'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventName': message.substr(9, 8),               
                 'eventVariableIndex': parseInt(message.substr(17, 2), 16),
-                'text': "REQEV (B2) Node " + parseInt(message.substr(9, 4), 16) + 
+                'text': "REQEV (B2) nodeNumber " + parseInt(message.substr(9, 4), 16) +
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
-					" eventVariableIndex " + parseInt(message.substr(17, 4), 16)
+					" eventName " + message.substr(9, 8) +
+					" eventVariableIndex " + parseInt(message.substr(17, 2), 16)
         }
     }
     encodeREQEV(nodeNumber, eventNumber, eventVariableIndex) {
@@ -2336,11 +2345,11 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'WCVOA',
                 'opCode': message.substr(7, 2),
-                'Session': parseInt(message.substr(9, 2), 16),
+                'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
                 'mode': parseInt(message.substr(15, 2), 16),
                 'value': parseInt(message.substr(17, 2), 16),
-                'text': "WCVOA (C1) Session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "WCVOA (C1) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 4), 16) +
 					" mode " + parseInt(message.substr(15, 2), 16) +
 					" value " + parseInt(message.substr(17, 2), 16)
@@ -2440,10 +2449,14 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'EVLRN',
                 'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'eventNumber': parseInt(message.substr(13, 4), 16),
                 'eventName': message.substr(9, 8),
                 'eventVariableIndex': parseInt(message.substr(17, 2), 16),
                 'eventVariableValue': parseInt(message.substr(19, 2), 16),
-                'text': "EVLRN (D2) eventName " + message.substr(9, 8) + 
+                'text': "EVLRN (D2) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+                    " eventNumber " + parseInt(message.substr(13, 4), 16) + 
+                    " eventName " + message.substr(9, 8) + 
 					" Event Variable Index " + parseInt(message.substr(17, 2), 16) + 
 					" Event Variable Value " + parseInt(message.substr(19, 2), 16)
         }
@@ -2460,10 +2473,14 @@ class cbusLibrary {
         return {'encoded': message,
                 'mnemonic': 'EVANS',
                 'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'eventNumber': parseInt(message.substr(13, 4), 16),
                 'eventName': message.substr(9, 8),
                 'eventVariableIndex': parseInt(message.substr(17, 2), 16),
                 'eventVariableValue': parseInt(message.substr(19, 2), 16),
-                'text': "EVANS (D3) eventName " + message.substr(9, 8) + 
+                'text': "EVANS (D3) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+                    " eventNumber " + parseInt(message.substr(13, 4), 16) + 
+                    " eventName " + message.substr(9, 8) + 
 					" Event Variable Index " + parseInt(message.substr(17, 2), 16) + 
 					" Event Variable Value " + parseInt(message.substr(19, 2), 16)
         }
@@ -2867,6 +2884,153 @@ class cbusLibrary {
     }
 
 
+    // F3 ARON3
+	// ARON3 Format: [<MjPri><MinPri=3><CANID>]<F3><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
+    //
+    decodeARON3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'ARON3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "ARON3 (F3) Node " + parseInt(message.substr(9, 4), 16) + 
+					" eventNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARON3 = function(nodeNumber, eventNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'F3' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // F4 AROF3
+	// AROF3 Format: [<MjPri><MinPri=3><CANID>]<F4><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
+    //
+    decodeAROF3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'AROF3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "AROF3 (F4) Node " + parseInt(message.substr(9, 4), 16) + 
+					" eventNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeAROF3 = function(nodeNumber, eventNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'F4' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // F5 EVLRNI
+	// EVLRNI Format: [<MjPri><MinPri=3><CANID>]<F5><NN hi><NN lo><EN hi><EN lo>
+    //                  <EN#><EV#><EV val>
+    //
+    decodeEVLRNI = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'EVLRNI',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventName': message.substr(9, 8),
+                'eventNumberIndex': parseInt(message.substr(17, 2), 16),
+                'eventVariableIndex': parseInt(message.substr(19, 2), 16),
+                'eventVariableValue': parseInt(message.substr(21, 2), 16),
+                'text': "EVLRNI (F5) Node " + parseInt(message.substr(9, 4), 16) + 
+					" eventNumber " + parseInt(message.substr(13, 4), 16) + 
+                    " eventName " + message.substr(9, 8) + 
+					" Event Number Index " + parseInt(message.substr(17, 2), 16) + 
+					" Event Variable Index " + parseInt(message.substr(19, 2), 16) + 
+					" Event Variable Value " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeEVLRNI = function(nodeNumber, eventNumber, eventNumberIndex, eventVariableIndex, eventVariableValue) {
+        return this.header({MinPri: 3}) + 'F5' + decToHex(nodeNumber, 4) + 
+                        decToHex(eventNumber, 4) + 
+                        decToHex(eventNumberIndex, 2) + 
+                        decToHex(eventVariableIndex, 2) + 
+                        decToHex(eventVariableValue, 2) + ';'
+    }
+    
+
+    // F6 ACDAT
+    // ACDAT Format: [<MjPri><MinPri=3><CANID>]<F6><NN hi><NNlo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeACDAT = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'ACDAT',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "ACDAT (F6) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeACDAT = function(nodeNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'F6'  + decToHex(nodeNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
+    // F7 ARDAT
+    // ARDAT Format: [<MjPri><MinPri=3><CANID>]<F7><NN hi><NNlo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeARDAT = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'ARDAT',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "ARDAT (F7) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARDAT = function(nodeNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'F7'  + decToHex(nodeNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
     // F8 ASON3
 	// ASON3 Format: [<MjPri><MinPri=3><CANID>]<F8><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
     //
@@ -2916,6 +3080,158 @@ class cbusLibrary {
     encodeASOF3(nodeNumber, deviceNumber, data1, data2, data3) {
         return this.header({MinPri: 3}) + 'F9' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
             decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // FA DDES
+    // DDES Format: [<MjPri><MinPri=3><CANID>]<FA><DN hi><DN lo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeDDES = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'DDES',
+                'opCode': message.substr(7, 2),
+                'deviceNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "DDES (FA) deviceNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeDDES = function(deviceNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'FA'  + decToHex(deviceNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
+    // FB DDRS
+    // DDRS Format: [<MjPri><MinPri=3><CANID>]<FB><DN hi><DN lo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeDDRS = function(message) {
+        return {'encoded': message,
+                'mnemonic': 'DDRS',
+                'opCode': message.substr(7, 2),
+                'deviceNumber': parseInt(message.substr(9, 4), 16),
+                'data1': parseInt(message.substr(13, 2), 16),
+                'data2': parseInt(message.substr(15, 2), 16),
+                'data3': parseInt(message.substr(17, 2), 16),
+                'data4': parseInt(message.substr(19, 2), 16),
+                'data5': parseInt(message.substr(21, 2), 16),
+                'text': "DDRS (FB) deviceNumber " + parseInt(message.substr(9, 4), 16) +
+                                " data1 " + parseInt(message.substr(13, 2), 16) +
+                                " data2 " + parseInt(message.substr(15, 2), 16) +
+                                " data3 " + parseInt(message.substr(17, 2), 16) +
+                                " data4 " + parseInt(message.substr(19, 2), 16) +
+                                " data5 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeDDRS = function(deviceNumber, data1, data2, data3, data4, data5) {
+        return this.header({MinPri: 2}) + 'FB'  + decToHex(deviceNumber, 4) +
+                                            decToHex(data1, 2) +
+                                            decToHex(data2, 2) +
+                                            decToHex(data3, 2) +
+                                            decToHex(data4, 2) +
+                                            decToHex(data5, 2) + ';'
+    }
+    
+
+    // FD ARSON3
+	// ARSON3 Format: [<MjPri><MinPri=3><CANID>]<FD><NN hi><NN lo><DN hi><DN lo>
+    //                  <data 1><data 2><data 3>
+    //
+    decodeARSON3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'ARSON3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'deviceNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "ARSON3 (FD) Node " + parseInt(message.substr(9, 4), 16) + 
+					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARSON3 = function(nodeNumber, deviceNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'FD' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // FE ARSOF3
+	// ARSOF3 Format: [<MjPri><MinPri=3><CANID>]<FE><NN hi><NN lo><DN hi><DN lo>
+    //                  <data 1><data 2><data 3>
+    //
+    decodeARSOF3 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'ARSOF3',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'deviceNumber': parseInt(message.substr(13, 4), 16),
+                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
+                                data2: parseInt(message.substr(19, 2), 16), 
+                                data3: parseInt(message.substr(21, 2), 16), 
+                                hex:message.substr(17, 6)},
+                'text': "ARSOF3 (FE) Node " + parseInt(message.substr(9, 4), 16) + 
+					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
+                    " data1 " + parseInt(message.substr(17, 2), 16) +
+                    " data2 " + parseInt(message.substr(19, 2), 16) +
+                    " data3 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    encodeARSOF3 = function(nodeNumber, deviceNumber, data1, data2, data3) {
+        return this.header({MinPri: 3}) + 'FE' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
+            decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
+    }
+
+
+    // FF EXTC6
+	// EXTC6 Format: [<MjPri><MinPri=3><CANID>]<DF><Ext_OPC><byte1><byte2><byte3><byte4><byte5><byte6>
+    //
+    decodeEXTC6 = function(message) {
+		return {'encoded': message,
+                'mnemonic': 'EXTC6',
+                'opCode': message.substr(7, 2),
+                'Ext_OPC': parseInt(message.substr(9, 2), 16), 
+                'byte1': parseInt(message.substr(11, 2), 16),
+                'byte2': parseInt(message.substr(13, 2), 16),
+                'byte3': parseInt(message.substr(15, 2), 16),
+                'byte4': parseInt(message.substr(17, 2), 16),
+                'byte5': parseInt(message.substr(19, 2), 16),
+                'byte6': parseInt(message.substr(21, 2), 16),
+                'text': "EXTC6 (FF) Ext_OPC " + parseInt(message.substr(9, 2), 16) + 
+					" byte1 " + parseInt(message.substr(11, 4), 16) +
+					" byte2 " + parseInt(message.substr(13, 4), 16) +
+					" byte3 " + parseInt(message.substr(15, 4), 16) +
+					" byte4 " + parseInt(message.substr(17, 4), 16) +
+					" byte5 " + parseInt(message.substr(19, 4), 16) +
+					" byte6 " + parseInt(message.substr(21, 4), 16)
+        }
+    }
+    encodeEXTC6 = function(Ext_OPC, byte1, byte2, byte3, byte4, byte5, byte6) {
+        return this.header({MinPri: 3}) + 'FF' + decToHex(Ext_OPC, 2) + 
+                            decToHex(byte1, 2) + 
+                            decToHex(byte2, 2) + 
+                            decToHex(byte3, 2) + 
+                            decToHex(byte4, 2) + 
+                            decToHex(byte5, 2) + 
+                            decToHex(byte6, 2) + ';';
     }
 
 

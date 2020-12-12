@@ -1,6 +1,6 @@
 {
   "name": "cbuslibrary",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Library to decode & encode CBUS messages",
   "main": "cbusLibrary.js",
   "directories": {
@@ -17,7 +17,7 @@
     "CBUS"
   ],
   "author": "David Ellis",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chai": "^4.2.0",
     "mocha": "^8.1.1",
