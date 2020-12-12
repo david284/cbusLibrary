@@ -1701,20 +1701,20 @@ class cbusLibrary {
                 'mnemonic': 'EVNLF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
-                'EVNLF': parseInt(message.substr(13, 2), 16),
+                'EVSPC': parseInt(message.substr(13, 2), 16),
                 'text': "EVNLF (70) Node " + parseInt(message.substr(9, 4), 16) + 
-					" EVNLF " + parseInt(message.substr(13, 2), 16)
+					" EVSPC " + parseInt(message.substr(13, 2), 16)
         }
     }
     /**
     * @desc opCode 70<br>
     * @param {int} nodeNumber number 0 to 65535
-    * @param {int} errorNumber number 0 to 255
+    * @param {int} EVSPC number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt70&gt&ltnodeNumber&gt&ltEVNLF&gt
     */
-    encodeEVNLF(nodeNumber, EVNLF) {
-        return this.header({MinPri: 3}) + '70' + decToHex(nodeNumber, 4) + decToHex(EVNLF, 2) + ';'
+    encodeEVNLF(nodeNumber, EVSPC) {
+        return this.header({MinPri: 3}) + '70' + decToHex(nodeNumber, 4) + decToHex(EVSPC, 2) + ';'
     }
 
 
