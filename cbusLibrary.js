@@ -3692,7 +3692,7 @@ class cbusLibrary {
     // F3 ARON3
 	// ARON3 Format: [<MjPri><MinPri=3><CANID>]<F3><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
     //
-    decodeARON3 = function(message) {
+    decodeARON3(message) {
 		return {'encoded': message,
                 'mnemonic': 'ARON3',
                 'opCode': message.substr(7, 2),
@@ -3719,7 +3719,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF3&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt
     */
-    encodeARON3 = function(nodeNumber, eventNumber, data1, data2, data3) {
+    encodeARON3(nodeNumber, eventNumber, data1, data2, data3) {
         return this.header({MinPri: 3}) + 'F3' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
             decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
     }
@@ -3728,7 +3728,7 @@ class cbusLibrary {
     // F4 AROF3
 	// AROF3 Format: [<MjPri><MinPri=3><CANID>]<F4><NN hi><NN lo><EN hi><EN lo><data1><data2><data3>
     //
-    decodeAROF3 = function(message) {
+    decodeAROF3(message) {
 		return {'encoded': message,
                 'mnemonic': 'AROF3',
                 'opCode': message.substr(7, 2),
@@ -3755,7 +3755,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF4&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt
     */
-    encodeAROF3 = function(nodeNumber, eventNumber, data1, data2, data3) {
+    encodeAROF3(nodeNumber, eventNumber, data1, data2, data3) {
         return this.header({MinPri: 3}) + 'F4' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
             decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
     }
@@ -3765,7 +3765,7 @@ class cbusLibrary {
 	// EVLRNI Format: [<MjPri><MinPri=3><CANID>]<F5><NN hi><NN lo><EN hi><EN lo>
     //                  <EN#><EV#><EV val>
     //
-    decodeEVLRNI = function(message) {
+    decodeEVLRNI(message) {
         return {'encoded': message,
                 'mnemonic': 'EVLRNI',
                 'opCode': message.substr(7, 2),
@@ -3793,7 +3793,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF5&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt&lteventNumberIndex&gt&lteventVariableIndex&gt&ltdeventVariableValue&gt
     */
-    encodeEVLRNI = function(nodeNumber, eventNumber, eventNumberIndex, eventVariableIndex, eventVariableValue) {
+    encodeEVLRNI(nodeNumber, eventNumber, eventNumberIndex, eventVariableIndex, eventVariableValue) {
         return this.header({MinPri: 3}) + 'F5' + decToHex(nodeNumber, 4) + 
                         decToHex(eventNumber, 4) + 
                         decToHex(eventNumberIndex, 2) + 
@@ -3806,7 +3806,7 @@ class cbusLibrary {
     // ACDAT Format: [<MjPri><MinPri=3><CANID>]<F6><NN hi><NNlo>
     //              <data1><data2><data3><data4><data5>   
     //
-    decodeACDAT = function(message) {
+    decodeACDAT(message) {
         return {'encoded': message,
                 'mnemonic': 'ACDAT',
                 'opCode': message.substr(7, 2),
@@ -3835,7 +3835,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF6&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
-    encodeACDAT = function(nodeNumber, data1, data2, data3, data4, data5) {
+    encodeACDAT(nodeNumber, data1, data2, data3, data4, data5) {
         return this.header({MinPri: 2}) + 'F6'  + decToHex(nodeNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
@@ -3849,7 +3849,7 @@ class cbusLibrary {
     // ARDAT Format: [<MjPri><MinPri=3><CANID>]<F7><NN hi><NNlo>
     //              <data1><data2><data3><data4><data5>   
     //
-    decodeARDAT = function(message) {
+    decodeARDAT(message) {
         return {'encoded': message,
                 'mnemonic': 'ARDAT',
                 'opCode': message.substr(7, 2),
@@ -3878,7 +3878,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF7&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
-    encodeARDAT = function(nodeNumber, data1, data2, data3, data4, data5) {
+    encodeARDAT(nodeNumber, data1, data2, data3, data4, data5) {
         return this.header({MinPri: 2}) + 'F7'  + decToHex(nodeNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
@@ -3964,7 +3964,7 @@ class cbusLibrary {
     // DDES Format: [<MjPri><MinPri=3><CANID>]<FA><DN hi><DN lo>
     //              <data1><data2><data3><data4><data5>   
     //
-    decodeDDES = function(message) {
+    decodeDDES(message) {
         return {'encoded': message,
                 'mnemonic': 'DDES',
                 'opCode': message.substr(7, 2),
@@ -3993,7 +3993,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFA&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
-    encodeDDES = function(deviceNumber, data1, data2, data3, data4, data5) {
+    encodeDDES(deviceNumber, data1, data2, data3, data4, data5) {
         return this.header({MinPri: 2}) + 'FA'  + decToHex(deviceNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
@@ -4007,7 +4007,7 @@ class cbusLibrary {
     // DDRS Format: [<MjPri><MinPri=3><CANID>]<FB><DN hi><DN lo>
     //              <data1><data2><data3><data4><data5>   
     //
-    decodeDDRS = function(message) {
+    decodeDDRS(message) {
         return {'encoded': message,
                 'mnemonic': 'DDRS',
                 'opCode': message.substr(7, 2),
@@ -4036,7 +4036,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFB&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
-    encodeDDRS = function(deviceNumber, data1, data2, data3, data4, data5) {
+    encodeDDRS(deviceNumber, data1, data2, data3, data4, data5) {
         return this.header({MinPri: 2}) + 'FB'  + decToHex(deviceNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
@@ -4050,7 +4050,7 @@ class cbusLibrary {
 	// ARSON3 Format: [<MjPri><MinPri=3><CANID>]<FD><NN hi><NN lo><DN hi><DN lo>
     //                  <data 1><data 2><data 3>
     //
-    decodeARSON3 = function(message) {
+    decodeARSON3(message) {
 		return {'encoded': message,
                 'mnemonic': 'ARSON3',
                 'opCode': message.substr(7, 2),
@@ -4077,7 +4077,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFD&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt
     */
-    encodeARSON3 = function(nodeNumber, deviceNumber, data1, data2, data3) {
+    encodeARSON3(nodeNumber, deviceNumber, data1, data2, data3) {
         return this.header({MinPri: 3}) + 'FD' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
             decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
     }
@@ -4087,7 +4087,7 @@ class cbusLibrary {
 	// ARSOF3 Format: [<MjPri><MinPri=3><CANID>]<FE><NN hi><NN lo><DN hi><DN lo>
     //                  <data 1><data 2><data 3>
     //
-    decodeARSOF3 = function(message) {
+    decodeARSOF3(message) {
 		return {'encoded': message,
                 'mnemonic': 'ARSOF3',
                 'opCode': message.substr(7, 2),
@@ -4114,7 +4114,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFE&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt
     */
-    encodeARSOF3 = function(nodeNumber, deviceNumber, data1, data2, data3) {
+    encodeARSOF3(nodeNumber, deviceNumber, data1, data2, data3) {
         return this.header({MinPri: 3}) + 'FE' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) +
             decToHex(data1, 2) + decToHex(data2, 2) + decToHex(data3, 2) + ';';
     }
@@ -4123,7 +4123,7 @@ class cbusLibrary {
     // FF EXTC6
 	// EXTC6 Format: [<MjPri><MinPri=3><CANID>]<DF><Ext_OPC><byte1><byte2><byte3><byte4><byte5><byte6>
     //
-    decodeEXTC6 = function(message) {
+    decodeEXTC6(message) {
 		return {'encoded': message,
                 'mnemonic': 'EXTC6',
                 'opCode': message.substr(7, 2),
@@ -4155,7 +4155,7 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFF&gt&ltExt_OPC&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt&ltdata6&gt
     */
-    encodeEXTC6 = function(Ext_OPC, byte1, byte2, byte3, byte4, byte5, byte6) {
+    encodeEXTC6(Ext_OPC, byte1, byte2, byte3, byte4, byte5, byte6) {
         return this.header({MinPri: 3}) + 'FF' + decToHex(Ext_OPC, 2) + 
                             decToHex(byte1, 2) + 
                             decToHex(byte2, 2) + 
