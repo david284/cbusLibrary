@@ -19,6 +19,17 @@
 'use strict';
 
 
+/**
+* @overview
+* <strong>Module to decode & encode CBUS message strings</strong></br>
+* The decode method expects the CBUS message string to be in the 'Grid connect' CAN over serial message syntax</br>
+* And the encode methods returns a message string in the same format</br>
+*
+*
+*
+*/
+
+
 function decToHex(num, len) {return parseInt(num).toString(16).toUpperCase().padStart(len, '0');}
 
 function stringToHex(string) {
@@ -41,9 +52,8 @@ function hexToString(hex) {
 
 
 
-    /**
-     * cbusLibrary class
-     */
+/**
+*/
 class cbusLibrary {
     constructor() {
         this.canHeader = {
@@ -968,7 +978,7 @@ class cbusLibrary {
     * @desc opCode 40<br>
     * @param {int} address number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&lt40&gt&ltaddress&gt
+    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&lt40&gt&ltaddress hi&gt&ltaddress lo&gt
     */
     encodeRLOC(address) {
         return this.header({MinPri: 2}) + '40' + decToHex(address, 4) + ';'
@@ -1014,7 +1024,7 @@ class cbusLibrary {
     * @desc opCode 42<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt42&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt42&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeSNN(nodeNumber) {
             return this.header({MinPri: 3}) + '42' + decToHex(nodeNumber, 4) + ';'
@@ -1262,7 +1272,7 @@ class cbusLibrary {
     * @desc opCode 50<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt50&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt50&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeRQNN(nodeNumber) {
         return this.header({MinPri: 3}) + '50' + decToHex(nodeNumber, 4) + ';'
@@ -1284,7 +1294,7 @@ class cbusLibrary {
     * @desc opCode 51<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt51&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt51&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeNNREL(nodeNumber) {
         return this.header({MinPri: 3}) + '51' + decToHex(nodeNumber, 4) + ';'
@@ -1306,7 +1316,7 @@ class cbusLibrary {
     * @desc opCode 52<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt52&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt52&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeNNACK(nodeNumber) {
 		if (nodeNumber >= 0 && nodeNumber <= 0xFFFF) {
@@ -1330,7 +1340,7 @@ class cbusLibrary {
     * @desc opCode 53<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt53&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt53&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeNNLRN(nodeNumber) {
 		if (nodeNumber >= 0 && nodeNumber <= 0xFFFF) {
@@ -1354,7 +1364,7 @@ class cbusLibrary {
     * @desc opCode 54<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt54&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt54&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeNNULN(nodeNumber) {
         return this.header({MinPri: 3}) + '54' + decToHex(nodeNumber, 4) + ';'
@@ -1376,7 +1386,7 @@ class cbusLibrary {
     * @desc opCode 55<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt55&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt55&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeNNCLR(nodeNumber) {
         return this.header({MinPri: 3}) + '55' + decToHex(nodeNumber, 4) + ';'
@@ -1398,7 +1408,7 @@ class cbusLibrary {
     * @desc opCode 56<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt56&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt56&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeNNEVN(nodeNumber) {
         return this.header({MinPri: 3}) + '56' + decToHex(nodeNumber, 4) + ';'
@@ -1421,7 +1431,7 @@ class cbusLibrary {
     * @desc opCode 57<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt57&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt57&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
    encodeNERD(nodeNumber) {
         return this.header({MinPri: 3}) + '57' + decToHex(nodeNumber, 4) + ';'
@@ -1444,7 +1454,7 @@ class cbusLibrary {
     * @desc opCode 58<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt58&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt58&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeRQEVN(nodeNumber) {
         return this.header({MinPri: 3}) + '58' + decToHex(nodeNumber, 4) + ';'
@@ -1466,7 +1476,7 @@ class cbusLibrary {
     * @desc opCode 59<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt59&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt59&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeWRACK(nodeNumber) {
         return this.header({MinPri: 3}) + '59' + decToHex(nodeNumber, 4) + ';'
@@ -1488,7 +1498,7 @@ class cbusLibrary {
     * @desc opCode 5A<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5A&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5A&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeRQDAT(nodeNumber) {
         return this.header({MinPri: 3}) + '5A' + decToHex(nodeNumber, 4) + ';'
@@ -1510,7 +1520,7 @@ class cbusLibrary {
     * @desc opCode 5B<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5B&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5B&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeRQDDS(nodeNumber) {
         return this.header({MinPri: 3}) + '5B' + decToHex(nodeNumber, 4) + ';'
@@ -1532,7 +1542,7 @@ class cbusLibrary {
     * @desc opCode 5C<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5C&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5C&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeBOOTM(nodeNumber) {
         return this.header({MinPri: 3}) + '5C' + decToHex(nodeNumber, 4) + ';'
@@ -1554,7 +1564,7 @@ class cbusLibrary {
     * @desc opCode 5D<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5D&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5D&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
     */
     encodeENUM(nodeNumber) {
         return this.header({MinPri: 3}) + '5D' + decToHex(nodeNumber, 4) + ';'
@@ -1711,7 +1721,7 @@ class cbusLibrary {
     * @param {int} nodeNumber number 0 to 65535
     * @param {int} EVSPC number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt70&gt&ltnodeNumber&gt&ltEVNLF&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt70&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltEVNLF&gt
     */
     encodeEVNLF(nodeNumber, EVSPC) {
         return this.header({MinPri: 3}) + '70' + decToHex(nodeNumber, 4) + decToHex(EVSPC, 2) + ';'
@@ -1736,7 +1746,7 @@ class cbusLibrary {
     * @param {int} nodeNumber number 0 to 65535
     * @param {int} nodeVariableIndex number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt71&gt&ltnodeNumber&gt&ltnodeVariableIndex&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt71&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltnodeVariableIndex&gt
     */
     encodeNVRD(nodeNumber, nodeVariableIndex) {
         return this.header({MinPri: 3}) + '71' + decToHex(nodeNumber, 4) + decToHex(nodeVariableIndex, 2) + ';'
@@ -1761,7 +1771,7 @@ class cbusLibrary {
     * @param {int} nodeNumber number 0 to 65535
     * @param {int} eventIndex number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt72&gt&ltnodeNumber&gt&lteventIndex&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt72&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&lteventIndex&gt
     */
     encodeNENRD(nodeNumber, eventIndex) {
         return this.header({MinPri: 3}) + '72' + decToHex(nodeNumber, 4) + decToHex(eventIndex, 2) + ';'
@@ -1786,7 +1796,7 @@ class cbusLibrary {
     * @param {int} nodeNumber number 0 to 65535
     * @param {int} parameterIndex number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt73&gt&ltnodeNumber&gt&ltparameterIndex&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt73&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltparameterIndex&gt
     */
     encodeRQNPN(nodeNumber, parameterIndex) {
         return this.header({MinPri: 3}) + '73' + decToHex(nodeNumber, 4) + decToHex(parameterIndex, 2) + ';'
@@ -1811,7 +1821,7 @@ class cbusLibrary {
     * @param {int} nodeNumber number 0 to 65535
     * @param {int} eventCount number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt74&gt&ltnodeNumber&gt&lteventCount&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt74&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&lteventCount&gt
     */
     encodeNUMEV(nodeNumber, eventCount) {
         return this.header({MinPri: 3}) + '74' + decToHex(nodeNumber, 4) + decToHex(eventCount, 2) + ';'
@@ -1836,7 +1846,7 @@ class cbusLibrary {
     * @param {int} nodeNumber number 0 to 65535
     * @param {int} CAN_ID number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt75&gt&ltnodeNumber&gt&ltCAN_ID&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt75&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltCAN_ID&gt
     */
     encodeCANID(nodeNumber, CAN_ID) {
         return this.header({MinPri: 3}) + '75' + decToHex(nodeNumber, 4) + decToHex(CAN_ID, 2) + ';'
@@ -2033,7 +2043,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} eventNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt90&gt&ltnodeNumber&gt&lteventNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt90&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt
     */
     encodeACON(nodeNumber, eventNumber) {
         return this.header({MinPri: 3}) + '90' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + ';';
@@ -2059,7 +2069,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} eventNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt91&gt&ltnodeNumber&gt&lteventNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt91&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt
     */
     encodeACOF(nodeNumber, eventNumber) {
         return this.header({MinPri: 3}) + '91' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + ';';
@@ -2085,7 +2095,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} eventNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt92&gt&ltnodeNumber&gt&lteventNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt92&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt
     */
     encodeAREQ(nodeNumber, eventNumber) {
         return this.header({MinPri: 3}) + '92' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + ';';
@@ -2111,7 +2121,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} eventNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt93&gt&ltnodeNumber&gt&lteventNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt93&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt
     */
     encodeARON(nodeNumber, eventNumber) {
         return this.header({MinPri: 3}) + '93' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + ';';
@@ -2137,7 +2147,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} eventNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt94&gt&ltnodeNumber&gt&lteventNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt94&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt
     */
     encodeAROF(nodeNumber, eventNumber) {
         return this.header({MinPri: 3}) + '94' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + ';';
@@ -2164,7 +2174,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} eventNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt95&gt&ltnodeNumber&gt&lteventNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt95&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt
     */
     encodeEVULN(nodeNumber, eventNumber) {
         return this.header({MinPri: 3}) + '95' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + ';'
@@ -2192,7 +2202,7 @@ class cbusLibrary {
     * @param {int} nodeVariableIndex 0 to 255
     * @param {int} nodeVariableValue 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt96&gt&ltnodeNumber&gt&ltnodeVariableIndex&gt&ltnodeVariableValue&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt96&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltnodeVariableIndex&gt&ltnodeVariableValue&gt
     */
     encodeNVSET(nodeNumber, nodeVariableIndex, nodeVariableValue) {
         return this.header({MinPri: 3}) + '96' + decToHex(nodeNumber, 4) + decToHex(nodeVariableIndex, 2) + decToHex(nodeVariableValue, 2) + ';'
@@ -2220,7 +2230,7 @@ class cbusLibrary {
     * @param {int} nodeVariableIndex 0 to 255
     * @param {int} nodeVariableValue 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt97&gt&ltnodeNumber&gt&ltnodeVariableIndex&gt&ltnodeVariableValue&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt97&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltnodeVariableIndex&gt&ltnodeVariableValue&gt
     */
     encodeNVANS(nodeNumber, nodeVariableIndex, nodeVariableValue) {
         return this.header({MinPri: 3}) + '97' + decToHex(nodeNumber, 4) + decToHex(nodeVariableIndex, 2) + decToHex(nodeVariableValue, 2) + ';'
@@ -2246,7 +2256,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} deviceNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt98&gt&ltnodeNumber&gt&ltdeviceNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt98&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt
     */
     encodeASON(nodeNumber, deviceNumber) {
         return this.header({MinPri: 3}) + '98' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) + ';';
@@ -2272,7 +2282,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} deviceNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt99&gt&ltnodeNumber&gt&ltdeviceNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt99&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt
     */
     encodeASOF(nodeNumber, deviceNumber) {
         return this.header({MinPri: 3}) + '99' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) + ';';
@@ -2298,7 +2308,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} deviceNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt99&gt&ltnodeNumber&gt&ltdeviceNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt99&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt
     */
     encodeASRQ(nodeNumber, deviceNumber) {
         return this.header({MinPri: 3}) + '9A' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) + ';';
@@ -2326,7 +2336,7 @@ class cbusLibrary {
     * @param {int} parameterIndex 0 to 255
     * @param {int} parameterValue 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9B&gt&ltnodeNumber&gt&ltparameterIndex&gt&ltparameterValue&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9B&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltparameterIndex&gt&ltparameterValue&gt
     */
     encodePARAN(nodeNumber, parameterIndex, parameterValue) {
         return this.header({MinPri: 3}) + '9B' + decToHex(nodeNumber, 4) + decToHex(parameterIndex, 2) + decToHex(parameterValue, 2) + ';'
@@ -2354,7 +2364,7 @@ class cbusLibrary {
     * @param {int} eventIndex 0 to 255
     * @param {int} eventVariableIndex 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9C&gt&ltnodeNumber&gt&lteventIndex&gt&lteventVariableIndex&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9C&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventIndex&gt&lteventVariableIndex&gt
     */
     encodeREVAL(nodeNumber, eventIndex, eventVariableIndex) {
         return this.header({MinPri: 3}) + '9C' + decToHex(nodeNumber, 4) + decToHex(eventIndex, 2) + decToHex(eventVariableIndex, 2) + ';'
@@ -2380,7 +2390,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} deviceNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9D&gt&ltnodeNumber&gt&ltdeviceNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9D&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt
     */
     encodeARSON(nodeNumber, deviceNumber) {
         return this.header({MinPri: 3}) + '9D' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) + ';';
@@ -2406,7 +2416,7 @@ class cbusLibrary {
     * @param {int} nodeNumber 0 to 65535
     * @param {int} deviceNumber 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9E&gt&ltnodeNumber&gt&ltdeviceNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt9E&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt
     */
     encodeARSOF(nodeNumber, deviceNumber) {
         return this.header({MinPri: 3}) + '9E' + decToHex(nodeNumber, 4) + decToHex(deviceNumber, 4) + ';';
@@ -2463,6 +2473,16 @@ class cbusLibrary {
 					" byte3 " + parseInt(message.substr(17, 2), 16)
         }
     }
+    /**
+    * @desc opCode A0<br>
+    * @param {int} repetitions 0 to 255
+    * @param {int} byte0 1 to 255
+    * @param {int} byte1 1 to 255
+    * @param {int} byte1 2 to 255
+    * @param {int} byte1 3 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltA0&gt&ltExt_OPC&gt&ltbyte0&gt&ltbyte1&gt&ltbyte2&gt&ltbyte3&gt
+    */
     encodeRDCC4(repetitions, byte0, byte1, byte2, byte3) {
         return this.header({MinPri: 2}) + 'A0' + decToHex(repetitions, 2) + 
                             decToHex(byte0, 2) + 
@@ -2489,6 +2509,15 @@ class cbusLibrary {
 					" Value " + parseInt(message.substr(17, 2), 16)
         }
     }
+    /**
+    * @desc opCode A2<br>
+    * @param {int} session 0 to 255
+    * @param {int} CV 1 to 65535
+    * @param {int} mode 2 to 255
+    * @param {int} value 3 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltA2&gt&session&gt&ltHigh CV#&gt&ltLow CV#&gt&ltmode&gt&ltvalue3&gt
+    */
     encodeWCVS(session, CV, mode, value) {
         return this.header({MinPri: 2}) + 'A2' + decToHex(session, 2) + 
                             decToHex(CV, 4) + 
@@ -2513,6 +2542,14 @@ class cbusLibrary {
                     " data1 " + parseInt(message.substr(17, 2), 16)
         }
     }
+    /**
+    * @desc opCode B0<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} eventNumber 0 to 65535
+    * @param {int} data1 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltB0&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt&ltdata1&gt
+    */
     encodeACON1(nodeNumber, eventNumber, data1) {
         return this.header({MinPri: 3}) + 'B0' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
             decToHex(data1, 2) + ';';
@@ -2535,6 +2572,14 @@ class cbusLibrary {
                     " data1 " + parseInt(message.substr(17, 2), 16)
         }
     }
+    /**
+    * @desc opCode B1<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} eventNumber 0 to 65535
+    * @param {int} data1 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltB1&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt&ltdata1&gt
+    */
     encodeACOF1(nodeNumber, eventNumber, data1) {
         return this.header({MinPri: 3}) + 'B1' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) +
             decToHex(data1, 2) + ';';
@@ -2558,6 +2603,14 @@ class cbusLibrary {
 					" eventVariableIndex " + parseInt(message.substr(17, 2), 16)
         }
     }
+    /**
+    * @desc opCode B2<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} eventNumber 0 to 65535
+    * @param {int} eventVariableIndex 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltB2&gt&ltNodeNumber hi&gt&ltNodeNumber lo&gt&lteventNumber hi&gt&lteventNumber lo&gt&lteventVariableIndex&gt
+    */
     encodeREQEV(nodeNumber, eventNumber, eventVariableIndex) {
         return this.header({MinPri: 3}) + 'B2' + decToHex(nodeNumber, 4) + decToHex(eventNumber, 4) + decToHex(eventVariableIndex, 2) + ';';
     }
