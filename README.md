@@ -1,8 +1,10 @@
 # cbusLibrary
-Library for decoding and encoding CBUS Layout Control Bus (LCB) messages
-There is a very comprehensive set of tests for this - see ## tests section further below
-The decoding and encoding follows the CBUS specification available at the following link:
-    https://www.merg.org.uk/merg_wiki/doku.php?id=public:cbuspublic:developerguide
+Library for decoding and encoding CBUS Layout Control Bus (LCB) messages. 
+There is a very comprehensive set of tests for this - see ## tests section further below. 
+The decoding and encoding follows the CBUS specification available here 
+<a href="https://www.merg.org.uk/merg_wiki/doku.php?id=public:cbuspublic:developerguide">CBUS dev guide</a>
+
+<a href="cbusLibrary.html">cbusLibrary API</a>
 
 ## Installation
 
