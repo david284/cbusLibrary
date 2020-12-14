@@ -1,0 +1,3 @@
+To update the docs...
+
+	jsdoc cbuslibrary.js README.md
