@@ -113,9 +113,20 @@ class cbusLibrary {
     //
     //
 
+    decode(message) {
+                    if (( message.substr(1, 1) == 'S' ) & (message.length >= 9)) {
+                        return this.decodeStandardMessage(message)
+                    } else if (( message.substr(1, 1) == 'X' ) & (message.length >= 11)) {
+                        return this.decodeExtendedMessage(message)
+                    } else {
+                        return {'encoded': message,
+                                'text': 'Unsupported message',
+                        }
+                    }
+    }
 
     /**
-    * Decode a CBUS message
+    * Decode a CBUS standard ID message
     * As a full message contains the opCode, a single function is used to decode any CBUS message
     * @param {String} message CBUS message in 'Grid connect' ASCII format
     * @return {String} Decoded properties as a JSON structure - content dependant on opCode, but always has 'encoded', 'mnemonic', 'opcode' & 'text' elements
@@ -134,7 +145,8 @@ class cbusLibrary {
     *      "text": "PLOC (E1) Session 255 Address 0 Speed/Dir 127 Direction Reverse Fn1 1 Fn2 255 Fn3 1"
     *    }
     */
-    decode(message) {
+    decodeStandardMessage(message) {
+       
         if (message == undefined) message = this.message;
         var opCode = message.substr(7, 2);
         switch (opCode) {
@@ -551,6 +563,41 @@ class cbusLibrary {
         }
     }
 
+    decodeExtendedMessage(message) {
+        var output = {}
+		output['encoded'] = message
+        if ((message.length >= 27) & (message.substr(0,9) == ':X0008000')){
+            if(parseInt(message.substr(9,1), 16) & 0b0010) {
+               output['operation'] = 'GET' 
+            } else {
+               output['operation'] = 'PUT'
+            }
+            if(parseInt(message.substr(9,1), 16) & 0b0001) {
+                output['type'] = 'DATA'
+                var data = []
+                data.push(parseInt(message.substr(11, 2), 16))
+                data.push(parseInt(message.substr(13, 2), 16))
+                data.push(parseInt(message.substr(15, 2), 16))
+                data.push(parseInt(message.substr(17, 2), 16))
+                data.push(parseInt(message.substr(19, 2), 16))
+                data.push(parseInt(message.substr(21, 2), 16))
+                data.push(parseInt(message.substr(23, 2), 16))
+                data.push(parseInt(message.substr(25, 2), 16))
+                output['data'] = data
+            } else {
+                output['type'] = 'CONTROL'
+                output['address'] = message.substr(15, 2) + message.substr(13, 2) + message.substr(11, 2)
+                output['RESVD'] = parseInt(message.substr(17, 2), 16)
+                output['CTLBT'] = parseInt(message.substr(19, 2), 16)
+                output['SPCMD'] = parseInt(message.substr(21, 2), 16)
+                output['CPDTL'] = parseInt(message.substr(23, 2), 16)
+                output['CPDTH'] = parseInt(message.substr(25, 2), 16)
+            }
+        } else {
+                output['Type'] = 'UNKNOWN MESSAGE'
+        }
+        return output
+    }
 
 
     // 00 ACK
