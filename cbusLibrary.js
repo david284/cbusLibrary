@@ -563,6 +563,7 @@ class cbusLibrary {
         }
     }
 
+
     decodeExtendedMessage(message) {
         var output = {}
 		output['encoded'] = message
@@ -584,6 +585,7 @@ class cbusLibrary {
                 data.push(parseInt(message.substr(23, 2), 16))
                 data.push(parseInt(message.substr(25, 2), 16))
                 output['data'] = data
+                output['text'] = JSON.stringify(output)
             } else {
                 output['type'] = 'CONTROL'
                 output['address'] = message.substr(15, 2) + message.substr(13, 2) + message.substr(11, 2)
@@ -592,13 +594,20 @@ class cbusLibrary {
                 output['SPCMD'] = parseInt(message.substr(21, 2), 16)
                 output['CPDTL'] = parseInt(message.substr(23, 2), 16)
                 output['CPDTH'] = parseInt(message.substr(25, 2), 16)
+                output['text'] = JSON.stringify(output)
             }
         } else {
                 output['Type'] = 'UNKNOWN MESSAGE'
+                output['text'] = JSON.stringify(output)
         }
         return output
     }
 
+
+    encode_EXT_PUT_CONTROL(address, RESVD, CTLBT, SPCMD, CPDTL, CPDTH) {
+		return ":X00080000N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + decToHex(RESVD, 2) + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
+    }
+    
 
     // 00 ACK
     // ACK Format: [<MjPri><MinPri=2><CANID>]<00>
