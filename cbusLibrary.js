@@ -567,6 +567,7 @@ class cbusLibrary {
     decodeExtendedMessage(message) {
         var output = {}
 		output['encoded'] = message
+		output['ID_TYPE'] = 'X'
         if ((message.length >= 27) & (message.substr(0,9) == ':X0008000')){
             if(parseInt(message.substr(9,1), 16) & 0b0010) {
                output['operation'] = 'GET' 
@@ -613,6 +614,7 @@ class cbusLibrary {
     // ACK Format: [<MjPri><MinPri=2><CANID>]<00>
     decodeACK(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACK',
                 'opCode': message.substr(7, 2),
                 'text': 'ACK (00)',
@@ -633,6 +635,7 @@ class cbusLibrary {
     //
     decodeNAK(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NAK',
                 'opCode': message.substr(7, 2),
                 'text': 'NAK (01)',
@@ -653,6 +656,7 @@ class cbusLibrary {
     //
     decodeHLT(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'HLT',
                 'opCode': message.substr(7, 2),
                 'text': 'HLT (02)',
@@ -673,6 +677,7 @@ class cbusLibrary {
     //
     decodeBON(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'BON',
                 'opCode': message.substr(7, 2),
                 'text': 'BON (03)',
@@ -693,6 +698,7 @@ class cbusLibrary {
     //
     decodeTOF(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'TOF',
                 'opCode': message.substr(7, 2),
                 'text': 'TOF (04)',
@@ -713,6 +719,7 @@ class cbusLibrary {
     //
     decodeTON(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'TON',
                 'opCode': message.substr(7, 2),
                 'text': 'TON (05)',
@@ -733,6 +740,7 @@ class cbusLibrary {
     //
     decodeESTOP(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ESTOP',
                 'opCode': message.substr(7, 2),
                 'text': 'ESTOP (06)',
@@ -753,6 +761,7 @@ class cbusLibrary {
     //
     decodeARST(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARST',
                 'opCode': message.substr(7, 2),
                 'text': 'ARST (07)',
@@ -773,6 +782,7 @@ class cbusLibrary {
     //
     decodeRTOF(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RTOF',
                 'opCode': message.substr(7, 2),
                 'text': 'RTOF (08)',
@@ -793,6 +803,7 @@ class cbusLibrary {
     //
     decodeRTON(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RTON',
                 'opCode': message.substr(7, 2),
                 'text': 'RTON (09)',
@@ -813,6 +824,7 @@ class cbusLibrary {
     //
     decodeRESTP(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RESTP',
                 'opCode': message.substr(7, 2),
                 'text': 'RESTP (0A)',
@@ -833,6 +845,7 @@ class cbusLibrary {
     //
     decodeRSTAT(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RSTAT',
                 'opCode': message.substr(7, 2),
                 'text': 'RSTAT (0C)',
@@ -853,6 +866,7 @@ class cbusLibrary {
     //
     decodeQNN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'QNN',
                 'opCode': message.substr(7, 2),
                 'text': 'QNN (0D)',
@@ -873,6 +887,7 @@ class cbusLibrary {
     //
     decodeRQNP(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RQNP',
                 'opCode': message.substr(7, 2),
                 'text': 'RQNP (10)',
@@ -893,6 +908,7 @@ class cbusLibrary {
     //
     decodeRQMN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RQMN',
                 'opCode': message.substr(7, 2),
                 'text': 'RQMN (11)',
@@ -913,6 +929,7 @@ class cbusLibrary {
     //
     decodeKLOC(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'KLOC',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -935,6 +952,7 @@ class cbusLibrary {
     //
     decodeQLOC(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'QLOC',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -957,6 +975,7 @@ class cbusLibrary {
     //
     decodeDKEEP(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DKEEP',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -979,6 +998,7 @@ class cbusLibrary {
     //
     decodeDBG1(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DBG1',
                 'opCode': message.substr(7, 2),
                 'status': parseInt(message.substr(9, 2), 16),
@@ -1001,6 +1021,7 @@ class cbusLibrary {
     //
     decodeEXTC(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EXTC',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16),
@@ -1024,6 +1045,7 @@ class cbusLibrary {
     //
     decodeRLOC(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RLOC',
                 'opCode': message.substr(7, 2),
                 'address': parseInt(message.substr(9, 4), 16),
@@ -1046,6 +1068,7 @@ class cbusLibrary {
     //
     decodeQCON(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'QCON',
                 'opCode': message.substr(7, 2),
                 'conID': parseInt(message.substr(9, 2), 16),
@@ -1070,6 +1093,7 @@ class cbusLibrary {
     //
     decodeSNN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'SNN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1092,6 +1116,7 @@ class cbusLibrary {
     //
     decodeALOC(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ALOC',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1116,6 +1141,7 @@ class cbusLibrary {
     //
     decodeSTMOD(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'STMOD',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1140,6 +1166,7 @@ class cbusLibrary {
     //
     decodePCON(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'PCON',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1164,6 +1191,7 @@ class cbusLibrary {
     //
     decodeKCON(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'KCON',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1190,6 +1218,7 @@ class cbusLibrary {
         var speedDir = parseInt(message.substr(11, 2), 16)
         var direction = (speedDir > 127) ? 'Forward' : 'Reverse'
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DSPD',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1219,6 +1248,7 @@ class cbusLibrary {
     //
     decodeDFLG(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DFLG',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1243,6 +1273,7 @@ class cbusLibrary {
     //
     decodeDFNON(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DFNON',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1268,6 +1299,7 @@ class cbusLibrary {
     //
     decodeDFNOF(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DFNOF',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1293,6 +1325,7 @@ class cbusLibrary {
     //
     decodeSSTAT(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'SSTAT',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1318,6 +1351,7 @@ class cbusLibrary {
     //
     decodeRQNN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RQNN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1340,6 +1374,7 @@ class cbusLibrary {
     //
     decodeNNREL(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NNREL',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1362,6 +1397,7 @@ class cbusLibrary {
     //
     decodeNNACK(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NNACK',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1386,6 +1422,7 @@ class cbusLibrary {
     //
     decodeNNLRN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NNLRN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1410,6 +1447,7 @@ class cbusLibrary {
     //
     decodeNNULN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NNULN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1432,6 +1470,7 @@ class cbusLibrary {
     //
     decodeNNCLR(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NNCLR',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1454,6 +1493,7 @@ class cbusLibrary {
     //
     decodeNNEVN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NNEVN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1477,6 +1517,7 @@ class cbusLibrary {
     decodeNERD(message) {
 		// NERD Format: [<MjPri><MinPri=3><CANID>]<57><NN hi><NN lo>
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NERD',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1500,6 +1541,7 @@ class cbusLibrary {
     decodeRQEVN(message) {
 		// RQEVN Format: [<MjPri><MinPri=3><CANID>]<58><NN hi><NN lo>
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RQEVN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1522,6 +1564,7 @@ class cbusLibrary {
     //
     decodeWRACK(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'WRACK',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1544,6 +1587,7 @@ class cbusLibrary {
     //
     decodeRQDAT(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RQDAT',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1566,6 +1610,7 @@ class cbusLibrary {
     //
     decodeRQDDS(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RQDDS',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1588,6 +1633,7 @@ class cbusLibrary {
     //
     decodeBOOTM(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'BOOTM',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1610,6 +1656,7 @@ class cbusLibrary {
     //
     decodeENUM(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ENUM',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1632,6 +1679,7 @@ class cbusLibrary {
     //
     decodeEXTC1(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EXTC1',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16),
@@ -1656,6 +1704,7 @@ class cbusLibrary {
     //
     decodeDFUN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DFUN',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -1685,6 +1734,7 @@ class cbusLibrary {
     //
     decodeGLOC(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'GLOC',
                 'opCode': message.substr(7, 2),
                 'address': parseInt(message.substr(9, 4), 16),
@@ -1711,6 +1761,7 @@ class cbusLibrary {
     //
     decodeERR(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ERR',
                 'opCode': message.substr(7, 2),
                 'data1': parseInt(message.substr(9, 2), 16),
@@ -1739,6 +1790,7 @@ class cbusLibrary {
     //
     decodeCMDERR(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'CMDERR',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -1764,6 +1816,7 @@ class cbusLibrary {
     //
     decodeEVNLF(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EVNLF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -1789,6 +1842,7 @@ class cbusLibrary {
     //
     decodeNVRD(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NVRD',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -1814,6 +1868,7 @@ class cbusLibrary {
     //
     decodeNENRD(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NENRD',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -1839,6 +1894,7 @@ class cbusLibrary {
     //
     decodeRQNPN(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RQNPN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -1864,6 +1920,7 @@ class cbusLibrary {
     //
     decodeNUMEV(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NUMEV',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1889,6 +1946,7 @@ class cbusLibrary {
     //
     decodeCANID(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'CANID',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -1914,6 +1972,7 @@ class cbusLibrary {
     //
     decodeEXTC2(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EXTC2',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16),
@@ -1942,6 +2001,7 @@ class cbusLibrary {
     //
     decodeRDCC3(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RDCC3',
                 'opCode': message.substr(7, 2),
                 'repetitions': parseInt(message.substr(9, 2), 16),
@@ -1973,6 +2033,7 @@ class cbusLibrary {
     //
     decodeWCVO(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'WCVO',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -2001,6 +2062,7 @@ class cbusLibrary {
     //
     decodeWCVB(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'WCVB',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -2029,6 +2091,7 @@ class cbusLibrary {
     //
     decodeQCVS(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'QCVS',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -2057,6 +2120,7 @@ class cbusLibrary {
     //
     decodePCVS(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'PCVS',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -2085,6 +2149,7 @@ class cbusLibrary {
     //
     decodeACON(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACON',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2111,6 +2176,7 @@ class cbusLibrary {
     //
     decodeACOF(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACOF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2137,6 +2203,7 @@ class cbusLibrary {
     //
     decodeAREQ(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'AREQ',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2163,6 +2230,7 @@ class cbusLibrary {
     //
     decodeARON(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARON',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2189,6 +2257,7 @@ class cbusLibrary {
     //
     decodeAROF(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'AROF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2215,6 +2284,7 @@ class cbusLibrary {
     //
     decodeEVULN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EVULN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2242,6 +2312,7 @@ class cbusLibrary {
     //
     decodeNVSET(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NVSET',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2270,6 +2341,7 @@ class cbusLibrary {
     decodeNVANS(message) {
         // NVANS Format: [[<MjPri><MinPri=3><CANID>]<97><NN hi><NN lo><NV# ><NV val>
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NVANS',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2298,6 +2370,7 @@ class cbusLibrary {
     //
     decodeASON(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASON',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2324,6 +2397,7 @@ class cbusLibrary {
     //
     decodeASOF(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASOF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2350,6 +2424,7 @@ class cbusLibrary {
     //
     decodeASRQ(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASRQ',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2376,6 +2451,7 @@ class cbusLibrary {
     //
     decodePARAN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'PARAN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2404,6 +2480,7 @@ class cbusLibrary {
     //
     decodeREVAL(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'REVAL',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2432,6 +2509,7 @@ class cbusLibrary {
     //
     decodeARSON(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSON',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2458,6 +2536,7 @@ class cbusLibrary {
     //
     decodeARSOF(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSOF',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2484,6 +2563,7 @@ class cbusLibrary {
     //
     decodeEXTC3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EXTC3',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16), 
@@ -2515,6 +2595,7 @@ class cbusLibrary {
     //
     decodeRDCC4(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RDCC4',
                 'opCode': message.substr(7, 2),
                 'repetitions': parseInt(message.substr(9, 2), 16),
@@ -2553,6 +2634,7 @@ class cbusLibrary {
     //
     decodeWCVS(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'WCVS',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -2587,6 +2669,7 @@ class cbusLibrary {
     //
     decodeACON1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACON1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2617,6 +2700,7 @@ class cbusLibrary {
     //
     decodeACOF1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACOF1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2647,6 +2731,7 @@ class cbusLibrary {
     //
     decodeREQEV(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'REQEV',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -2677,6 +2762,7 @@ class cbusLibrary {
     //
     decodeARON1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARON1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2707,6 +2793,7 @@ class cbusLibrary {
     //
     decodeAROF1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'AROF1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2737,6 +2824,7 @@ class cbusLibrary {
     //
     decodeNEVAL(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NEVAL',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -2768,6 +2856,7 @@ class cbusLibrary {
     //
     decodePNN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'PNN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -2801,6 +2890,7 @@ class cbusLibrary {
     //
     decodeASON1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASON1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2831,6 +2921,7 @@ class cbusLibrary {
     //
     decodeASOF1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASOF1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2861,6 +2952,7 @@ class cbusLibrary {
     //
     decodeARSON1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSON1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2891,6 +2983,7 @@ class cbusLibrary {
     //
     decodeARSOF1(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSOF1',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -2921,6 +3014,7 @@ class cbusLibrary {
     //
     decodeEXTC4(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EXTC4',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16), 
@@ -2959,6 +3053,7 @@ class cbusLibrary {
     //
     decodeRDCC5(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RDCC5',
                 'opCode': message.substr(7, 2),
                 'repetitions': parseInt(message.substr(9, 2), 16),
@@ -3001,6 +3096,7 @@ class cbusLibrary {
     //
     decodeWCVOA(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'WCVOA',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -3032,6 +3128,7 @@ class cbusLibrary {
     //
     decodeFCLK(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'FCLK',
                 'opCode': message.substr(7, 2),
                 'minutes': parseInt(message.substr(9, 2), 16),
@@ -3077,6 +3174,7 @@ class cbusLibrary {
     //
     decodeACON2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACON2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3110,6 +3208,7 @@ class cbusLibrary {
     //
     decodeACOF2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACOF2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3143,6 +3242,7 @@ class cbusLibrary {
     //
     decodeEVLRN(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EVLRN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -3176,6 +3276,7 @@ class cbusLibrary {
     //
     decodeEVANS(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EVANS',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -3209,6 +3310,7 @@ class cbusLibrary {
     //
     decodeARON2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARON2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3242,6 +3344,7 @@ class cbusLibrary {
     //
     decodeAROF2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'AROF2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3275,6 +3378,7 @@ class cbusLibrary {
     //
     decodeASON2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASON2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3308,6 +3412,7 @@ class cbusLibrary {
     //
     decodeASOF2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASOF2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3341,6 +3446,7 @@ class cbusLibrary {
     //
     decodeARSON2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSON2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3374,6 +3480,7 @@ class cbusLibrary {
     //
     decodeARSOF2(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSOF2',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3407,6 +3514,7 @@ class cbusLibrary {
     //
     decodeEXTC5(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EXTC5',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16), 
@@ -3449,6 +3557,7 @@ class cbusLibrary {
     //
     decodeRDCC6(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'RDCC6',
                 'opCode': message.substr(7, 2),
                 'repetitions': parseInt(message.substr(9, 2), 16),
@@ -3497,6 +3606,7 @@ class cbusLibrary {
         var speedDir = parseInt(message.substr(15, 2), 16)
         var direction = (speedDir > 127) ? 'Forward' : 'Reverse';
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'PLOC',
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
@@ -3539,6 +3649,7 @@ class cbusLibrary {
     //
     decodeNAME(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'NAME',
                 'opCode': message.substr(7, 2),
                 'name': hexToString(message.substr(9, 14)),
@@ -3562,6 +3673,7 @@ class cbusLibrary {
     //
     decodeSTAT(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'STAT',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -3604,6 +3716,7 @@ class cbusLibrary {
     //
     decodePARAMS(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'PARAMS',
                 'opCode': message.substr(7, 2),
                 'param1': parseInt(message.substr(9, 2), 16),
@@ -3650,6 +3763,7 @@ class cbusLibrary {
     //
     decodeACON3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACON3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3686,6 +3800,7 @@ class cbusLibrary {
     //
     decodeACOF3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACOF3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3722,6 +3837,7 @@ class cbusLibrary {
     //
     decodeENRSP(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ENRSP',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -3750,6 +3866,7 @@ class cbusLibrary {
     //
     decodeARON3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARON3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3786,6 +3903,7 @@ class cbusLibrary {
     //
     decodeAROF3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'AROF3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3823,6 +3941,7 @@ class cbusLibrary {
     //
     decodeEVLRNI(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EVLRNI',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -3864,6 +3983,7 @@ class cbusLibrary {
     //
     decodeACDAT(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ACDAT',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -3907,6 +4027,7 @@ class cbusLibrary {
     //
     decodeARDAT(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARDAT',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
@@ -3949,6 +4070,7 @@ class cbusLibrary {
     //
     decodeASON3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASON3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -3985,6 +4107,7 @@ class cbusLibrary {
     //
     decodeASOF3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ASOF3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -4022,6 +4145,7 @@ class cbusLibrary {
     //
     decodeDDES(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DDES',
                 'opCode': message.substr(7, 2),
                 'deviceNumber': parseInt(message.substr(9, 4), 16),
@@ -4065,6 +4189,7 @@ class cbusLibrary {
     //
     decodeDDRS(message) {
         return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'DDRS',
                 'opCode': message.substr(7, 2),
                 'deviceNumber': parseInt(message.substr(9, 4), 16),
@@ -4108,6 +4233,7 @@ class cbusLibrary {
     //
     decodeARSON3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSON3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -4145,6 +4271,7 @@ class cbusLibrary {
     //
     decodeARSOF3(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'ARSOF3',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
@@ -4181,6 +4308,7 @@ class cbusLibrary {
     //
     decodeEXTC6(message) {
 		return {'encoded': message,
+                'ID_TYPE': 'S',
                 'mnemonic': 'EXTC6',
                 'opCode': message.substr(7, 2),
                 'Ext_OPC': parseInt(message.substr(9, 2), 16), 
