@@ -5585,23 +5585,23 @@ describe('cbusMessage tests', function(){
             for (a2 = 1; a2 < 4; a2++) {
                 if (a2 == 1) arg2 = 0;
                 if (a2 == 2) arg2 = 1;
-                if (a2 == 2) arg2 = 255;
+                if (a2 == 3) arg2 = 255;
                 for (a3 = 1; a3 < 4; a3++) {
                     if (a3 == 1) arg3 = 0;
                     if (a3 == 2) arg3 = 1;
-                    if (a3 == 2) arg3 = 255;
+                    if (a3 == 3) arg3 = 255;
                     for (a4 = 1; a4 < 4; a4++) {
                         if (a4 == 1) arg4 = 0;
                         if (a4 == 2) arg4 = 1;
-                        if (a4 == 2) arg4 = 255;
+                        if (a4 == 3) arg4 = 255;
                         for (a5 = 1; a5 < 4; a5++) {
                             if (a5 == 1) arg5 = 0;
                             if (a5 == 2) arg5 = 1;
-                            if (a5 == 2) arg5 = 255;
+                            if (a5 == 3) arg5 = 255;
                             for (a6 = 1; a6 < 4; a6++) {
                                 if (a6 == 1) arg6 = 0;
                                 if (a6 == 2) arg6 = 1;
-                                if (a6 == 2) arg6 = 255;
+                                if (a6 == 3) arg6 = 255;
                                 testCases.push({'address':arg1, 
                                     'RESVD':arg2, 
                                     'CTLBT':arg3, 
@@ -5648,6 +5648,118 @@ describe('cbusMessage tests', function(){
     })
 
 
+    // PUT DATA
+    //
+	function GetTestCase_PUT_DATA () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 255;
+            for (a2 = 1; a2 < 4; a2++) {
+                if (a2 == 1) arg2 = 0;
+                if (a2 == 2) arg2 = 1;
+                if (a2 == 3) arg2 = 255;
+                for (a3 = 1; a3 < 4; a3++) {
+                    if (a3 == 1) arg3 = 0;
+                    if (a3 == 2) arg3 = 1;
+                    if (a3 == 3) arg3 = 255;
+                    for (a4 = 1; a4 < 4; a4++) {
+                        if (a4 == 1) arg4 = 0;
+                        if (a4 == 2) arg4 = 1;
+                        if (a4 == 3) arg4 = 255;
+                        for (a5 = 1; a5 < 4; a5++) {
+                            if (a5 == 1) arg5 = 0;
+                            if (a5 == 2) arg5 = 1;
+                            if (a5 == 3) arg5 = 255;
+                            for (a6 = 1; a6 < 4; a6++) {
+                                if (a6 == 1) arg6 = 0;
+                                if (a6 == 2) arg6 = 1;
+                                if (a6 == 3) arg6 = 255;
+                                for (a7 = 1; a7 < 4; a7++) {
+                                    if (a7 == 1) arg7 = 0;
+                                    if (a7 == 2) arg7 = 1;
+                                    if (a7 == 3) arg7 = 255;
+                                    for (a8 = 1; a8 < 4; a8++) {
+                                        if (a8 == 1) arg8 = 0;
+                                        if (a8 == 2) arg8 = 1;
+                                        if (a8 == 3) arg8 = 255;
+                                        testCases.push({'data0':arg1, 
+                                            'data1':arg2, 
+                                            'data2':arg3, 
+                                            'data3':arg4, 
+                                            'data4':arg5, 
+                                            'data5':arg6, 
+                                            'data6':arg7, 
+                                            'data7':arg8});
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+		}
+		return testCases;
+	}
+
+    // EXT_PUT_CONTROL test
+    //
+	itParam("EXT_PUT_DATA test data0 ${value.data0} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5} data6 ${value.data6} data7 ${value.data7}", 
+        GetTestCase_PUT_DATA(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN EXT_PUT_DATA test ' + JSON.stringify(value)});
+		expected = ":X00080001N" + 
+            decToHex(value.data0, 2) + 
+            decToHex(value.data1, 2) + 
+            decToHex(value.data2, 2) + 
+            decToHex(value.data3, 2) + 
+            decToHex(value.data4, 2) + 
+            decToHex(value.data5, 2) + 
+            decToHex(value.data6, 2) + 
+            decToHex(value.data7, 2) + ";";
+        var testData = [value.data0, value.data1, value.data2, value.data3, value.data4, value.data5, value.data6, value.data7]
+        var encode = cbusLib.encode_EXT_PUT_DATA(testData);
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: encode ' + encode});
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: decode ' + decode.text});
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
+		expect(decode.operation).to.equal('PUT', 'operation');
+		expect(decode.type).to.equal('DATA', 'type');
+        expect(decode.text).to.include('PUT', 'text operation');
+        expect(decode.text).to.include('DATA', 'text type');
+    })
+
+
+    // EXT_RESPONSE
+    //
+	function GetTestCase_EXT_RESPONSE () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 255;
+            testCases.push({'response':arg1});
+		}
+		return testCases;
+	}
+
+
+    // EXT_RESPONSE test
+    //
+	itParam("EXT_RESPONSE test response ${value.response}", GetTestCase_EXT_RESPONSE(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN EXT_RESPONSE test ' + JSON.stringify(value)});
+		expected = ":X80080000N" + decToHex(value.response, 2) + ";";
+        var encode = cbusLib.encode_EXT_RESPONSE(value.response);
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: encode ' + encode});
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: decode ' + decode.text});
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
+		expect(decode.response).to.equal(value.response, 'response');
+    })
 
 
 })

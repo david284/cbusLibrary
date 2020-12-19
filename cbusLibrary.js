@@ -597,6 +597,9 @@ class cbusLibrary {
                 output['CPDTH'] = parseInt(message.substr(25, 2), 16)
                 output['text'] = JSON.stringify(output)
             }
+        } else if (message.length >= 13) {
+                output['response'] = parseInt(message.substr(11, 2), 16)
+                output['text'] = JSON.stringify(output)
         } else {
                 output['Type'] = 'UNKNOWN MESSAGE'
                 output['text'] = JSON.stringify(output)
@@ -607,6 +610,24 @@ class cbusLibrary {
 
     encode_EXT_PUT_CONTROL(address, RESVD, CTLBT, SPCMD, CPDTL, CPDTH) {
 		return ":X00080000N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + decToHex(RESVD, 2) + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
+    }
+    
+
+    encode_EXT_PUT_DATA(data) {
+		return ":X00080001N" + 
+            decToHex(data[0], 2) + 
+            decToHex(data[1], 2) + 
+            decToHex(data[2], 2) + 
+            decToHex(data[3], 2) + 
+            decToHex(data[4], 2) + 
+            decToHex(data[5], 2) + 
+            decToHex(data[6], 2) + 
+            decToHex(data[7], 2) + ";";
+    }
+    
+
+    encode_EXT_RESPONSE(response) {
+		return ":X80080000N" + decToHex(response, 2) + ";";
     }
     
 
