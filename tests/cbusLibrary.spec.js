@@ -5598,17 +5598,11 @@ describe('cbusMessage tests', function(){
                             if (a5 == 1) arg5 = 0;
                             if (a5 == 2) arg5 = 1;
                             if (a5 == 3) arg5 = 255;
-                            for (a6 = 1; a6 < 4; a6++) {
-                                if (a6 == 1) arg6 = 0;
-                                if (a6 == 2) arg6 = 1;
-                                if (a6 == 3) arg6 = 255;
-                                testCases.push({'address':arg1, 
-                                    'RESVD':arg2, 
-                                    'CTLBT':arg3, 
-                                    'SPCMD':arg4, 
-                                    'CPDTL':arg5, 
-                                    'CPDTH':arg6});
-                            }
+                            testCases.push({'address':arg1, 
+                                'CTLBT':arg2, 
+                                'SPCMD':arg3, 
+                                'CPDTL':arg4, 
+                                'CPDTH':arg5});
                         }
                     }
                 }
@@ -5619,16 +5613,16 @@ describe('cbusMessage tests', function(){
 
     // EXT_PUT_CONTROL test
     //
-	itParam("EXT_PUT_CONTROL test address ${value.address} RESVD ${value.RESVD} CTLBT ${value.CTLBT} SPCMD ${value.SPCMD} CPDTL ${value.CPDTL} CPDTH ${value.CPDTH}", 
+	itParam("EXT_PUT_CONTROL test address ${value.address} CTLBT ${value.CTLBT} SPCMD ${value.SPCMD} CPDTL ${value.CPDTL} CPDTH ${value.CPDTH}", 
         GetTestCase_PUT_CONTROL(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN EXT_PUT_CONTROL test ' + JSON.stringify(value)});
 		expected = ":X00080000N" + value.address.substr(4, 2) + value.address.substr(2, 2) + value.address.substr(0, 2) + 
-            decToHex(value.RESVD, 2) + 
+            '00' +                          // RESVD - not used, always set to 0
             decToHex(value.CTLBT, 2) + 
             decToHex(value.SPCMD, 2) + 
             decToHex(value.CPDTL, 2) + 
             decToHex(value.CPDTH, 2) + ";";
-        var encode = cbusLib.encode_EXT_PUT_CONTROL(value.address, value.RESVD, value.CTLBT, value.SPCMD, value.CPDTL, value.CPDTH);
+        var encode = cbusLib.encode_EXT_PUT_CONTROL(value.address, value.CTLBT, value.SPCMD, value.CPDTL, value.CPDTH);
 		expect(encode).to.equal(expected, 'encode');
 		winston.info({message: 'cbusMessage test: encode ' + encode});
         var decode = cbusLib.decode(encode);
@@ -5638,7 +5632,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.operation).to.equal('PUT', 'operation');
 		expect(decode.type).to.equal('CONTROL', 'type');
         expect(decode.address).to.equal(value.address, 'address');
-        expect(decode.RESVD).to.equal(value.RESVD, 'RESVD');
+        expect(decode.RESVD).to.equal(0, 'RESVD');
         expect(decode.CTLBT).to.equal(value.CTLBT, 'CTLBT');
         expect(decode.SPCMD).to.equal(value.SPCMD, 'SPCMD');
         expect(decode.CPDTL).to.equal(value.CPDTL, 'CPDTL');
@@ -5703,7 +5697,7 @@ describe('cbusMessage tests', function(){
 		return testCases;
 	}
 
-    // EXT_PUT_CONTROL test
+    // EXT_PUT_DATA test
     //
 	itParam("EXT_PUT_DATA test data0 ${value.data0} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5} data6 ${value.data6} data7 ${value.data7}", 
         GetTestCase_PUT_DATA(), function (value) {

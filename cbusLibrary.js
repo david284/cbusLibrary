@@ -113,6 +113,47 @@ class cbusLibrary {
     //
     //
 
+    /**
+    * @desc Decode a CAN message<br>
+    * This will decode both 11 bit ID CBUS messages and also 29 bit extended messages, as these are identified in the message itself 
+    * @param {String} message CAN BUS message in 'Grid connect' ASCII format
+    * @return {String} Decoded properties as a JSON structure - content dependant on specific message, 
+    * but always has 'encoded', 'ID_TYPE' & 'text' elements<br>
+    * 'ID_TYPE' will be either 'S' (11 bit CBUS message) or 'X' (29 bit extended message) - or blank if not valid
+    *
+    * @example
+    *
+    * // 11 bit CBUS message
+    *    {
+    *      "encoded": ":SA780NE1FF00007F01FF01;",
+    *      "ID_TYPE":"S",
+    *      "mnemonic": "PLOC",
+    *      "opCode": "E1",
+    *      "session": 255,
+    *      "address": 0,
+    *      "speed": 127,
+    *      "direction": "Reverse",
+    *      "Fn1": 1,
+    *      "Fn2": 255,
+    *      "Fn3": 1,
+    *      "text": "PLOC (E1) Session 255 Address 0 Speed/Dir 127 Direction Reverse Fn1 1 Fn2 255 Fn3 1"
+    *    }
+    *
+    * // 29 bit firmware download control message
+    *    {
+    *       "encoded":":X00080004N000000000D040000;",
+    *       "ID_TYPE":"X",
+    *       "operation":"PUT",
+    *       "type":"CONTROL",
+    *       "address":"000000",
+    *       "RESVD":0,
+    *       "CTLBT":13,
+    *       "SPCMD":4,
+    *       "CPDTL":0,
+    *       "CPDTH":0
+    *       "text": {"encoded":":X00080004N000000000D040000;","ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000000","RESVD":0,"CTLBT":13,"SPCMD":4,"CPDTL":0,"CPDTH":0}
+    *    }
+    */
     decode(message) {
                     if (( message.substr(1, 1) == 'S' ) & (message.length >= 9)) {
                         return this.decodeStandardMessage(message)
@@ -120,19 +161,21 @@ class cbusLibrary {
                         return this.decodeExtendedMessage(message)
                     } else {
                         return {'encoded': message,
+                                'ID_TYPE': '',
                                 'text': 'Unsupported message',
                         }
                     }
     }
 
     /**
-    * Decode a CBUS standard ID message
+    * @desc Decode a CBUS standard ID message
     * As a full message contains the opCode, a single function is used to decode any CBUS message
     * @param {String} message CBUS message in 'Grid connect' ASCII format
     * @return {String} Decoded properties as a JSON structure - content dependant on opCode, but always has 'encoded', 'mnemonic', 'opcode' & 'text' elements
     * @example
     *    {
     *      "encoded": ":SA780NE1FF00007F01FF01;",
+    *      "ID_TYPE":"S",
     *      "mnemonic": "PLOC",
     *      "opCode": "E1",
     *      "session": 255,
@@ -608,11 +651,29 @@ class cbusLibrary {
     }
 
 
-    encode_EXT_PUT_CONTROL(address, RESVD, CTLBT, SPCMD, CPDTL, CPDTH) {
-		return ":X00080000N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + decToHex(RESVD, 2) + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
+    /**
+    * @desc 29 bit Extended CAN Identifier 'Put Control' firmware download message<br>
+    * @param {string} address 6 digit hexadecimal number 000000 to FFFFFF
+    * @param {int} CTLBT 0 to 255
+    * @param {int} SPCMD 0 to 255
+    * @param {int} CPDTL 0 to 255
+    * @param {int} CPDTH 0 to 255
+    * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Example :X00080004N000000000D040000;<br>
+    * 29 bit fixed header (:X00080004N.......)
+    */
+    encode_EXT_PUT_CONTROL(address, CTLBT, SPCMD, CPDTL, CPDTH) {
+		return ":X00080000N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + '00' + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
     }
     
 
+    /**
+    * @desc 29 bit Extended CAN Identifier 'Put Data' firmware download message<br>
+    * @param {array} data 8 byte data array 
+    * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Example :X00080005N20EF04F0FFFFFFFF;<br>
+    * 29 bit fixed header (:X00080004N.......)
+    */
     encode_EXT_PUT_DATA(data) {
 		return ":X00080001N" + 
             decToHex(data[0], 2) + 
@@ -626,6 +687,13 @@ class cbusLibrary {
     }
     
 
+    /**
+    * @desc 29 bit Extended CAN Identifier firmware download 'response' message<br>
+    * @param {int} response response number to firmware download control message 
+    * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Example :X80180004N02;<br>
+    * 29 bit fixed header (:X80080000N.......)
+    */
     encode_EXT_RESPONSE(response) {
 		return ":X80080000N" + decToHex(response, 2) + ";";
     }
