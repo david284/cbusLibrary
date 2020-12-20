@@ -93,7 +93,7 @@ Note that MinPri is specifically defined for each opCode, so is set for each ind
 
 The absence of a definition for the 29 bit identifier means that the identifier is hard coded to match existing 
 <ul style="list-style-type:none;">
-<li>0000N000&ltA&gt for FCO originated messages</li>
+<li>0000N000&ltA&gt for FCU originated messages</li>
 <li>8000N000&ltA&gt for module originated messages</li>
 </ul>
 where: &ltA&gt is a bit mapped character, bit 0 being control/data, and bit 1 being put/get
