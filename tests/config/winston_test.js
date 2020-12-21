@@ -34,7 +34,7 @@ var options = {
     filename: `./tests/logs/tests.log`,
 	options: { flags: 'w' },
     handleExceptions: true,
-    maxsize: 20971520, // 20MB
+    maxsize: 50*1024*1024, // 50MB
     maxFiles: 5,
 	format: timeStampFirst
   },
