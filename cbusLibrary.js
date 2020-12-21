@@ -570,7 +570,8 @@ class cbusLibrary {
             break;
 
         default:
-            return {'encoded': message ,'mnemonic': 'UNSUPPORTED', 'opCode': message.substr(7, 2)}
+            return {'encoded': message, 'ID_TYPE': 'S', 'mnemonic': 'UNSUPPORTED', 'opCode': message.substr(7, 2), 'text': 'UNSUPPORTED (' + message.substr(7, 2) + ')'}
+//            return {'encoded': message, 'mnemonic': 'UNSUPPORTED', 'opCode': message.substr(7, 2)}
             break;
         }
     }

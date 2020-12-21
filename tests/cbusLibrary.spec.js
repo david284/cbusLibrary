@@ -5361,6 +5361,22 @@ describe('cbusMessage tests', function(){
 	})
 
 
+    // FC Unsupported opCode
+    //
+	it("Unsupported opCode test",  function () {
+		winston.info({message: 'Unsupported opCode test: BEGIN '});
+		expected = ":SA780N" + 'FC' + '00000000000000' + ";";
+        var decode = cbusLib.decode(expected);
+		winston.info({message: 'Unsupported opCode test: decode ' + JSON.stringify(decode)});
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+		expect(decode.mnemonic).to.equal('UNSUPPORTED', 'mnemonic');
+		expect(decode.opCode).to.equal('FC', 'opCode');
+        expect(decode.text).to.include('UNSUPPORTED ', 'text mnemonic');
+        expect(decode.text).to.include('(FC)', 'text opcode');
+	})
+
+
     // FD ARSON3 testcases
     //
 	function GetTestCase_ARSON3 () {
