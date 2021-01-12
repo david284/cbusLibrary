@@ -611,6 +611,7 @@ class cbusLibrary {
                 output['text'] = JSON.stringify(output)
             }
         } else if (message.length >= 13) {
+                output['operation'] = 'RESPONSE' 
                 output['response'] = parseInt(message.substr(11, 2), 16)
                 output['text'] = JSON.stringify(output)
         } else {
@@ -633,6 +634,7 @@ class cbusLibrary {
     * 29 bit fixed header (:X00080004N.......)
     */
     encode_EXT_PUT_CONTROL(address, CTLBT, SPCMD, CPDTL, CPDTH) {
+        // Format: <header> ADDRL ADDRH ADDRU RESVD CTLBT SPCMD CPDTL CPDTH
 		return ":X00080000N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + '00' + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
     }
     

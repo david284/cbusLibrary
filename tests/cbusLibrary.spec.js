@@ -5768,6 +5768,7 @@ describe('cbusMessage tests', function(){
 		winston.info({message: 'cbusMessage test: decode ' + decode.text});
 		expect(decode.encoded).to.equal(expected, 'encoded');
 		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
+		expect(decode.operation).to.equal('RESPONSE', 'operation');
 		expect(decode.response).to.equal(value.response, 'response');
     })
 
