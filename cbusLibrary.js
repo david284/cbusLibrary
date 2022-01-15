@@ -104,7 +104,7 @@ class cbusLibrary {
     //
 
     /**
-    * @desc Decode a CAN message<br>
+    * @desc Decode a CBUS message<br>
     * This will decode both 11 bit ID CBUS messages and also 29 bit extended messages, as these are identified in the message itself 
     * @param {String} message CAN BUS message in 'Grid connect' ASCII format
     * @return {String} Decoded properties as a JSON structure - content dependant on specific message, 
@@ -571,7 +571,6 @@ class cbusLibrary {
 
         default:
             return {'encoded': message, 'ID_TYPE': 'S', 'mnemonic': 'UNSUPPORTED', 'opCode': message.substr(7, 2), 'text': 'UNSUPPORTED (' + message.substr(7, 2) + ')'}
-//            return {'encoded': message, 'mnemonic': 'UNSUPPORTED', 'opCode': message.substr(7, 2)}
             break;
         }
     }
@@ -619,6 +618,36 @@ class cbusLibrary {
                 output['text'] = JSON.stringify(output)
         }
         return output
+    }
+
+
+    /**
+    * @desc encode a CBUS message<br>
+    * This will encode a 11 bit ID CBUS message from a supplied JSON object
+    * @param CBUS message properties as a JSON object - content dependant on specific CBUS opcode
+    * @return {String} encoded CBUS message in 'grid connect' ascii format
+    *
+    */
+    encode(message){
+        if(message.hasOwnProperty('mnemonic')) {
+            switch (message['mnemonic']) {
+            case 'ACK':
+                message.encoded = this.encodeACK();
+                break;
+            case 'NAK':
+                message.encoded = this.encodeNAK();
+                break;
+            case 'HLT':
+                message.encoded = this.encodeHLT();
+                break;
+            default:
+                return null;
+            }
+            return message;
+        }
+        else {
+                return null;
+        }
     }
 
 
