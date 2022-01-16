@@ -688,6 +688,14 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
                 message.encoded = this.encodeDKEEP(message.session);
                 break;
+            case 'DBG1':    // 30
+                if(!message.hasOwnProperty('status')) {throw Error("encode: property 'status' missing")};
+                message.encoded = this.encodeDBG1(message.status);
+                break;
+            case 'EXTC':    // 3F
+                if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
+                message.encoded = this.encodeEXTC(message.Ext_OPC);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;

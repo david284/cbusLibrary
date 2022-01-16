@@ -106,6 +106,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'KLOC', 'session': '1'}, 'expected': ':SA780N2101;'});
 		testCases.push({'test':{'mnemonic': 'QLOC', 'session': '1'}, 'expected': ':SA780N2201;'});
 		testCases.push({'test':{'mnemonic': 'DKEEP', 'session': '1'}, 'expected': ':SA780N2301;'});
+		testCases.push({'test':{'mnemonic': 'DBG1', 'status': '1'}, 'expected': ':SA780N3001;'});
+		testCases.push({'test':{'mnemonic': 'EXTC', 'Ext_OPC': '1'}, 'expected': ':SB780N3F01;'});
 		return testCases;
 	}
 
@@ -130,6 +132,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'KLOC'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'QLOC'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'DKEEP'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'DBG1'}, 'expected': 'encode: property \'status\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
 		return testCases;
 	}
 
