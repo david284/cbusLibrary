@@ -670,14 +670,20 @@ class cbusLibrary {
             case 'QNN':    // 0D
                 message.encoded = this.encodeQNN();
                 break;
+            case 'RQNP':    // 10
+                message.encoded = this.encodeRQNP();
+                break;
+            case 'RQMN':    // 11
+                message.encoded = this.encodeRQMN();
+                break;
             default:
-                throw "encode: ${message['mnemonic']} not supported";
+                throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
             }
             return message;
         }
         else {
-                throw "encode: property 'mnemonic' missing";
+                throw Error("encode: property 'mnemonic' missing");
         }
     }
 

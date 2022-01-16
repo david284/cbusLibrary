@@ -101,6 +101,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'RESTP'}, 'expected': ':S8780N0A;'});
 		testCases.push({'test':{'mnemonic': 'RSTAT'}, 'expected': ':SA780N0C;'});
 		testCases.push({'test':{'mnemonic': 'QNN'}, 'expected': ':SB780N0D;'});
+		testCases.push({'test':{'mnemonic': 'RQNP'}, 'expected': ':SB780N10;'});
+		testCases.push({'test':{'mnemonic': 'RQMN'}, 'expected': ':SA780N11;'});
 		return testCases;
 	}
 
@@ -120,16 +122,17 @@ describe('cbusMessage tests', function(){
     //
 	function GetTestCase_encodeFail () {
 		var testCases = [];
-		testCases.push({'fail':1});
-		testCases.push({'mnemonic': 'unknown'});
+		testCases.push({'test':{'fail':1}, 'expected':'encode: property \'mnemonic\' missing'});
+		testCases.push({'test':{'mnemonic': 'unknown'}, 'expected':'encode: \'unknown\' not supported'});
 		return testCases;
 	}
 
     //
     //
-	itParam("Generic encode fail test - ${JSON.stringify(value)}", GetTestCase_encodeFail(), function (value) {
+	itParam("Generic encode fail test - ${JSON.stringify(value.test)}", GetTestCase_encodeFail(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN Generic encode test '});
-        expect(() => cbusLib.encode(value)).to.throw();
+        expect(() => cbusLib.encode(value.test)).to.throw(Error).with.property('message', value.expected);
+//      cbusLib.encode(value.test)
 	})
 
 
