@@ -96,12 +96,28 @@ describe('cbusMessage tests', function(){
 
     //
     //
-	itParam("Generic encode test ${value.mnemonic}", GetTestCase_encode(), function (value) {
-//	it("Generic encode test", function () {
+	itParam("Generic encode test - ${JSON.stringify(value)}", GetTestCase_encode(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN Generic encode test '});
         var encode = cbusLib.encode(value);
 		winston.info({message: 'cbusMessage test: Generic encode ' + JSON.stringify(encode)});
 		expect(encode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+	})
+
+
+    // Generic encode fail test cases
+    //
+	function GetTestCase_encodeFail () {
+		var testCases = [];
+		testCases.push({'fail':1});
+		testCases.push({'mnemonic': 'unknown'});
+		return testCases;
+	}
+
+    //
+    //
+	itParam("Generic encode fail test - ${JSON.stringify(value)}", GetTestCase_encodeFail(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN Generic encode test '});
+        expect(() => cbusLib.encode(value)).to.throw();
 	})
 
 

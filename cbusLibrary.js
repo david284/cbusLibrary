@@ -641,12 +641,13 @@ class cbusLibrary {
                 message.encoded = this.encodeHLT();
                 break;
             default:
-                return null;
+                throw "encode: 'mnemonic' value not supported";
+                break;
             }
             return message;
         }
         else {
-                return null;
+                throw "encode: property 'mnemonic' missing";
         }
     }
 
