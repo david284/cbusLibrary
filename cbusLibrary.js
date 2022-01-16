@@ -755,6 +755,38 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('status')) {throw Error("encode: property 'status' missing")};
                 message.encoded = this.encodeSSTAT(message.session, message.status);
                 break;
+            case 'RQNN':    // 50
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeRQNN(message.nodeNumber, message.status);
+                break;
+            case 'NNREL':    // 51
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNREL(message.nodeNumber, message.status);
+                break;
+            case 'NNACK':    // 52
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNACK(message.nodeNumber, message.status);
+                break;
+            case 'NNLRN':    // 53
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNLRN(message.nodeNumber, message.status);
+                break;
+            case 'NNULN':    // 54
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNULN(message.nodeNumber, message.status);
+                break;
+            case 'NNCLR':    // 55
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNCLR(message.nodeNumber, message.status);
+                break;
+            case 'NNEVN':    // 56
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNEVN(message.nodeNumber, message.status);
+                break;
+            case 'NERD':    // 57
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNERD(message.nodeNumber, message.status);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;

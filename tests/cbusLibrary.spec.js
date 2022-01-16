@@ -120,6 +120,14 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DFNON', 'session': '1', 'functionNumber': '2'}, 'expected': ':SA780N490102;'});
 		testCases.push({'test':{'mnemonic': 'DFNOF', 'session': '1', 'functionNumber': '2'}, 'expected': ':SA780N4A0102;'});
 		testCases.push({'test':{'mnemonic': 'SSTAT', 'session': '1', 'status': '2'}, 'expected': ':SB780N4C0102;'});
+		testCases.push({'test':{'mnemonic': 'RQNN', 'nodeNumber': '1'}, 'expected': ':SB780N500001;'});
+		testCases.push({'test':{'mnemonic': 'NNREL', 'nodeNumber': '1'}, 'expected': ':SB780N510001;'});
+		testCases.push({'test':{'mnemonic': 'NNACK', 'nodeNumber': '1'}, 'expected': ':SB780N520001;'});
+		testCases.push({'test':{'mnemonic': 'NNLRN', 'nodeNumber': '1'}, 'expected': ':SB780N530001;'});
+		testCases.push({'test':{'mnemonic': 'NNULN', 'nodeNumber': '1'}, 'expected': ':SB780N540001;'});
+		testCases.push({'test':{'mnemonic': 'NNCLR', 'nodeNumber': '1'}, 'expected': ':SB780N550001;'});
+		testCases.push({'test':{'mnemonic': 'NNEVN', 'nodeNumber': '1'}, 'expected': ':SB780N560001;'});
+		testCases.push({'test':{'mnemonic': 'NERD', 'nodeNumber': '1'}, 'expected': ':SB780N570001;'});
 		return testCases;
 	}
 
@@ -169,6 +177,14 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DFNOF', 'session':'1'}, 'expected': 'encode: property \'functionNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'SSTAT', 'status': '2'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'SSTAT', 'session':'1'}, 'expected': 'encode: property \'status\' missing'});
+		testCases.push({'test':{'mnemonic': 'RQNN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NNREL'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NNACK'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NNLRN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NNULN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NNCLR'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NNEVN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NERD'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		return testCases;
 	}
 
