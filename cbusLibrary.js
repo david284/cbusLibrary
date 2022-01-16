@@ -676,6 +676,10 @@ class cbusLibrary {
             case 'RQMN':    // 11
                 message.encoded = this.encodeRQMN();
                 break;
+            case 'KLOC':    // 21
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                message.encoded = this.encodeKLOC(message.session);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
