@@ -735,6 +735,11 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('direction')) {throw Error("encode: property 'direction' missing")};
                 message.encoded = this.encodeDSPD(message.session, message.speed, message.direction);
                 break;
+            case 'DFLG':    // 48
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('flags')) {throw Error("encode: property 'flags' missing")};
+                message.encoded = this.encodeDFLG(message.session, message.flags);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
