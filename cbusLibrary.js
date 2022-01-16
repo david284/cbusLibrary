@@ -631,17 +631,47 @@ class cbusLibrary {
     encode(message){
         if(message.hasOwnProperty('mnemonic')) {
             switch (message['mnemonic']) {
-            case 'ACK':
+            case 'ACK':     // 00
                 message.encoded = this.encodeACK();
                 break;
-            case 'NAK':
+            case 'NAK':     // 01
                 message.encoded = this.encodeNAK();
                 break;
-            case 'HLT':
+            case 'HLT':     // 02
                 message.encoded = this.encodeHLT();
                 break;
+            case 'BON':     // 03
+                message.encoded = this.encodeBON();
+                break;
+            case 'TOF':     // 04
+                message.encoded = this.encodeTOF();
+                break;
+            case 'TON':     // 05
+                message.encoded = this.encodeTON();
+                break;
+            case 'ESTOP':   // 06
+                message.encoded = this.encodeESTOP();
+                break;
+            case 'ARST':    // 07
+                message.encoded = this.encodeARST();
+                break;
+            case 'RTOF':    // 08
+                message.encoded = this.encodeRTOF();
+                break;
+            case 'RTON':    // 09
+                message.encoded = this.encodeRTON();
+                break;
+            case 'RESTP':    // 0A
+                message.encoded = this.encodeRESTP();
+                break;
+            case 'RSTAT':    // 0C
+                message.encoded = this.encodeRSTAT();
+                break;
+            case 'QNN':    // 0D
+                message.encoded = this.encodeQNN();
+                break;
             default:
-                throw "encode: 'mnemonic' value not supported";
+                throw "encode: ${message['mnemonic']} not supported";
                 break;
             }
             return message;

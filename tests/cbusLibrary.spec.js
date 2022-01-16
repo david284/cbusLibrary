@@ -88,19 +88,31 @@ describe('cbusMessage tests', function(){
     //
 	function GetTestCase_encode () {
 		var testCases = [];
-		testCases.push({'mnemonic': 'ACK'});
-		testCases.push({'mnemonic': 'NAK'});
-		testCases.push({'mnemonic': 'HLT'});
+		testCases.push({'test':{'mnemonic': 'ACK'}, 'expected': ':SA780N00;'});
+		testCases.push({'test':{'mnemonic': 'NAK'}, 'expected': ':SA780N01;'});
+		testCases.push({'test':{'mnemonic': 'HLT'}, 'expected': ':S8780N02;'});
+		testCases.push({'test':{'mnemonic': 'BON'}, 'expected': ':S9780N03;'});
+		testCases.push({'test':{'mnemonic': 'TOF'}, 'expected': ':S9780N04;'});
+		testCases.push({'test':{'mnemonic': 'TON'}, 'expected': ':S9780N05;'});
+		testCases.push({'test':{'mnemonic': 'ESTOP'}, 'expected': ':S9780N06;'});
+		testCases.push({'test':{'mnemonic': 'ARST'}, 'expected': ':S8780N07;'});
+		testCases.push({'test':{'mnemonic': 'RTOF'}, 'expected': ':S9780N08;'});
+		testCases.push({'test':{'mnemonic': 'RTON'}, 'expected': ':S9780N09;'});
+		testCases.push({'test':{'mnemonic': 'RESTP'}, 'expected': ':S8780N0A;'});
+		testCases.push({'test':{'mnemonic': 'RSTAT'}, 'expected': ':SA780N0C;'});
+		testCases.push({'test':{'mnemonic': 'QNN'}, 'expected': ':SB780N0D;'});
 		return testCases;
 	}
 
     //
     //
-	itParam("Generic encode test - ${JSON.stringify(value)}", GetTestCase_encode(), function (value) {
+	itParam("Generic encode test - ${JSON.stringify(value.test)}", GetTestCase_encode(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN Generic encode test '});
-        var encode = cbusLib.encode(value);
+        var encode = cbusLib.encode(value.test);
 		winston.info({message: 'cbusMessage test: Generic encode ' + JSON.stringify(encode)});
-		expect(encode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(encode.mnemonic).to.equal(value.test.mnemonic, 'mnemonic');
+        expect(encode.encoded).to.equal(value.expected, 'encoded');
+
 	})
 
 
