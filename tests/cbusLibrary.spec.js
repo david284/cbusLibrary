@@ -108,6 +108,14 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DKEEP', 'session': '1'}, 'expected': ':SA780N2301;'});
 		testCases.push({'test':{'mnemonic': 'DBG1', 'status': '1'}, 'expected': ':SA780N3001;'});
 		testCases.push({'test':{'mnemonic': 'EXTC', 'Ext_OPC': '1'}, 'expected': ':SB780N3F01;'});
+		testCases.push({'test':{'mnemonic': 'RLOC', 'address': '1'}, 'expected': ':SA780N400001;'});
+		testCases.push({'test':{'mnemonic': 'QCON', 'ConID': '1', 'index': '2'}, 'expected': ':SA780N410102;'});
+		testCases.push({'test':{'mnemonic': 'SNN', 'nodeNumber': '1'}, 'expected': ':SB780N420001;'});
+		testCases.push({'test':{'mnemonic': 'ALOC', 'session': '1', 'allocationCode': '2'}, 'expected': ':SA780N430102;'});
+		testCases.push({'test':{'mnemonic': 'STMOD', 'session': '1', 'modeByte': '2'}, 'expected': ':SA780N440102;'});
+		testCases.push({'test':{'mnemonic': 'PCON', 'session': '1', 'consistAddress': '2'}, 'expected': ':SA780N450102;'});
+		testCases.push({'test':{'mnemonic': 'KCON', 'session': '1', 'consistAddress': '2'}, 'expected': ':SA780N460102;'});
+		testCases.push({'test':{'mnemonic': 'DSPD', 'session': '1', 'speed': '2', 'direction':'Reverse'}, 'expected': ':SA780N470114;'});
 		return testCases;
 	}
 
@@ -134,6 +142,21 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DKEEP'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'DBG1'}, 'expected': 'encode: property \'status\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
+		testCases.push({'test':{'mnemonic': 'RLOC'}, 'expected': 'encode: property \'address\' missing'});
+		testCases.push({'test':{'mnemonic': 'QCON', 'index': '2'}, 'expected': 'encode: property \'ConID\' missing'});
+		testCases.push({'test':{'mnemonic': 'QCON', 'ConID':'1'}, 'expected': 'encode: property \'index\' missing'});
+		testCases.push({'test':{'mnemonic': 'SNN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ALOC', 'allocationCode': '2'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'ALOC', 'session':'1'}, 'expected': 'encode: property \'allocationCode\' missing'});
+		testCases.push({'test':{'mnemonic': 'STMOD', 'modeByte': '2'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'STMOD', 'session':'1'}, 'expected': 'encode: property \'modeByte\' missing'});
+		testCases.push({'test':{'mnemonic': 'PCON', 'consistAddress': '2'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'PCON', 'session':'1'}, 'expected': 'encode: property \'consistAddress\' missing'});
+		testCases.push({'test':{'mnemonic': 'KCON', 'consistAddress': '2'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'KCON', 'session':'1'}, 'expected': 'encode: property \'consistAddress\' missing'});
+		testCases.push({'test':{'mnemonic': 'DSPD', 'speed':'1','direction': 'Reverse'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'DSPD', 'session':'1','direction': 'Reverse'}, 'expected': 'encode: property \'speed\' missing'});
+		testCases.push({'test':{'mnemonic': 'DSPD', 'session':'1','speed': '2'}, 'expected': 'encode: property \'direction\' missing'});
 		return testCases;
 	}
 

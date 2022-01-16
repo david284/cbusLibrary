@@ -696,6 +696,45 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
                 message.encoded = this.encodeEXTC(message.Ext_OPC);
                 break;
+            case 'RLOC':    // 40
+                if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
+                message.encoded = this.encodeRLOC(message.address);
+                break;
+            case 'QCON':    // 41
+                if(!message.hasOwnProperty('ConID')) {throw Error("encode: property 'ConID' missing")};
+                if(!message.hasOwnProperty('index')) {throw Error("encode: property 'index' missing")};
+                message.encoded = this.encodeQCON(message.ConID, message.index);
+                break;
+            case 'SNN':    // 42
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeSNN(message.nodeNumber);
+                break;
+            case 'ALOC':    // 43
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('allocationCode')) {throw Error("encode: property 'allocationCode' missing")};
+                message.encoded = this.encodeALOC(message.session, message.allocationCode);
+                break;
+            case 'STMOD':    // 44
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('modeByte')) {throw Error("encode: property 'modeByte' missing")};
+                message.encoded = this.encodeSTMOD(message.session, message.modeByte);
+                break;
+            case 'PCON':    // 45
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('consistAddress')) {throw Error("encode: property 'consistAddress' missing")};
+                message.encoded = this.encodePCON(message.session, message.consistAddress);
+                break;
+            case 'KCON':    // 46
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('consistAddress')) {throw Error("encode: property 'consistAddress' missing")};
+                message.encoded = this.encodeKCON(message.session, message.consistAddress);
+                break;
+            case 'DSPD':    // 47
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('speed')) {throw Error("encode: property 'speed' missing")};
+                if(!message.hasOwnProperty('direction')) {throw Error("encode: property 'direction' missing")};
+                message.encoded = this.encodeDSPD(message.session, message.speed, message.direction);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
@@ -1278,8 +1317,8 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&lt43&gt&ltsession&gt&ltallocatonCode&gt
     */
-    encodeALOC(session, allocatonCode) {
-            return this.header({MinPri: 2}) + '43' + decToHex(session, 2) + decToHex(allocatonCode, 2) + ';'
+    encodeALOC(session, allocationCode) {
+            return this.header({MinPri: 2}) + '43' + decToHex(session, 2) + decToHex(allocationCode, 2) + ';'
     }
 
 
