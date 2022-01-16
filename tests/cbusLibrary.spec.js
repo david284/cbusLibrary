@@ -128,6 +128,13 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'NNCLR', 'nodeNumber': '1'}, 'expected': ':SB780N550001;'});
 		testCases.push({'test':{'mnemonic': 'NNEVN', 'nodeNumber': '1'}, 'expected': ':SB780N560001;'});
 		testCases.push({'test':{'mnemonic': 'NERD', 'nodeNumber': '1'}, 'expected': ':SB780N570001;'});
+		testCases.push({'test':{'mnemonic': 'RQEVN', 'nodeNumber': '1'}, 'expected': ':SB780N580001;'});
+		testCases.push({'test':{'mnemonic': 'WRACK', 'nodeNumber': '1'}, 'expected': ':SB780N590001;'});
+		testCases.push({'test':{'mnemonic': 'RQDAT', 'nodeNumber': '1'}, 'expected': ':SB780N5A0001;'});
+		testCases.push({'test':{'mnemonic': 'RQDDS', 'nodeNumber': '1'}, 'expected': ':SB780N5B0001;'});
+		testCases.push({'test':{'mnemonic': 'BOOTM', 'nodeNumber': '1'}, 'expected': ':SB780N5C0001;'});
+		testCases.push({'test':{'mnemonic': 'ENUM', 'nodeNumber': '1'}, 'expected': ':SB780N5D0001;'});
+		testCases.push({'test':{'mnemonic': 'EXTC1', 'Ext_OPC': '1', 'byte1':'2'}, 'expected': ':SB780N5F0102;'});
 		return testCases;
 	}
 
@@ -185,6 +192,14 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'NNCLR'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'NNEVN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'NERD'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'RQEVN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'WRACK'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'RQDAT'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'RQDDS'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'BOOTM'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ENUM'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC1', 'byte1':'2'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC1', 'Ext_OPC':'1'}, 'expected': 'encode: property \'byte1\' missing'});
 		return testCases;
 	}
 

@@ -757,23 +757,23 @@ class cbusLibrary {
                 break;
             case 'RQNN':    // 50
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                message.encoded = this.encodeRQNN(message.nodeNumber, message.status);
+                message.encoded = this.encodeRQNN(message.nodeNumber);
                 break;
             case 'NNREL':    // 51
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                message.encoded = this.encodeNNREL(message.nodeNumber, message.status);
+                message.encoded = this.encodeNNREL(message.nodeNumber);
                 break;
             case 'NNACK':    // 52
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                message.encoded = this.encodeNNACK(message.nodeNumber, message.status);
+                message.encoded = this.encodeNNACK(message.nodeNumber);
                 break;
             case 'NNLRN':    // 53
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                message.encoded = this.encodeNNLRN(message.nodeNumber, message.status);
+                message.encoded = this.encodeNNLRN(message.nodeNumber);
                 break;
             case 'NNULN':    // 54
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                message.encoded = this.encodeNNULN(message.nodeNumber, message.status);
+                message.encoded = this.encodeNNULN(message.nodeNumber);
                 break;
             case 'NNCLR':    // 55
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -781,11 +781,40 @@ class cbusLibrary {
                 break;
             case 'NNEVN':    // 56
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                message.encoded = this.encodeNNEVN(message.nodeNumber, message.status);
+                message.encoded = this.encodeNNEVN(message.nodeNumber);
                 break;
             case 'NERD':    // 57
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                message.encoded = this.encodeNERD(message.nodeNumber, message.status);
+                message.encoded = this.encodeNERD(message.nodeNumber);
+                break;
+            case 'RQEVN':   // 58
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeRQEVN(message.nodeNumber);
+                break;
+            case 'WRACK':   // 59
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeWRACK(message.nodeNumber);
+                break;
+            case 'RQDAT':   // 5A
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeRQDAT(message.nodeNumber);
+                break;
+            case 'RQDDS':   // 5B
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeRQDDS(message.nodeNumber);
+                break;
+            case 'BOOTM':   // 5C
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeBOOTM(message.nodeNumber);
+                break;
+            case 'ENUM':   // 5D
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeENUM(message.nodeNumber);
+                break;
+            case 'EXTC1':   // 5F
+                if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                message.encoded = this.encodeEXTC1(message.Ext_OPC, message.byte1);
                 break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
