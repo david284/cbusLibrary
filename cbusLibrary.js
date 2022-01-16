@@ -680,6 +680,14 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
                 message.encoded = this.encodeKLOC(message.session);
                 break;
+            case 'QLOC':    // 22
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                message.encoded = this.encodeQLOC(message.session);
+                break;
+            case 'DKEEP':    // 23
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                message.encoded = this.encodeDKEEP(message.session);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
