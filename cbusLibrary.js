@@ -740,6 +740,21 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('flags')) {throw Error("encode: property 'flags' missing")};
                 message.encoded = this.encodeDFLG(message.session, message.flags);
                 break;
+            case 'DFNON':    // 49
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('functionNumber')) {throw Error("encode: property 'functionNumber' missing")};
+                message.encoded = this.encodeDFNON(message.session, message.functionNumber);
+                break;
+            case 'DFNOF':    // 4A
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('functionNumber')) {throw Error("encode: property 'functionNumber' missing")};
+                message.encoded = this.encodeDFNOF(message.session, message.functionNumber);
+                break;
+            case 'SSTAT':    // 4C
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('status')) {throw Error("encode: property 'status' missing")};
+                message.encoded = this.encodeSSTAT(message.session, message.status);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;

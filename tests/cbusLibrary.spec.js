@@ -117,6 +117,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'KCON', 'session': '1', 'consistAddress': '2'}, 'expected': ':SA780N460102;'});
 		testCases.push({'test':{'mnemonic': 'DSPD', 'session': '1', 'speed': '2', 'direction':'Reverse'}, 'expected': ':SA780N470114;'});
 		testCases.push({'test':{'mnemonic': 'DFLG', 'session': '1', 'flags': '2'}, 'expected': ':SA780N480102;'});
+		testCases.push({'test':{'mnemonic': 'DFNON', 'session': '1', 'functionNumber': '2'}, 'expected': ':SA780N490102;'});
+		testCases.push({'test':{'mnemonic': 'DFNOF', 'session': '1', 'functionNumber': '2'}, 'expected': ':SA780N4A0102;'});
+		testCases.push({'test':{'mnemonic': 'SSTAT', 'session': '1', 'status': '2'}, 'expected': ':SB780N4C0102;'});
 		return testCases;
 	}
 
@@ -160,6 +163,12 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DSPD', 'session':'1','speed': '2'}, 'expected': 'encode: property \'direction\' missing'});
 		testCases.push({'test':{'mnemonic': 'DFLG', 'flags': '2'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'DFLG', 'session':'1'}, 'expected': 'encode: property \'flags\' missing'});
+		testCases.push({'test':{'mnemonic': 'DFNON', 'functionNumber': '2'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'DFNON', 'session':'1'}, 'expected': 'encode: property \'functionNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'DFNOF', 'functionNumber': '2'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'DFNOF', 'session':'1'}, 'expected': 'encode: property \'functionNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'SSTAT', 'status': '2'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'SSTAT', 'session':'1'}, 'expected': 'encode: property \'status\' missing'});
 		return testCases;
 	}
 
