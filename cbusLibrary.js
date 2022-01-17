@@ -833,6 +833,47 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('errorNumber')) {throw Error("encode: property 'errorNumber' missing")};
                 message.encoded = this.encodeERR(message.data1, message.data2, message.errorNumber);
                 break;
+            case 'CMDERR':   // 6F
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('errorNumber')) {throw Error("encode: property 'errorNumber' missing")};
+                message.encoded = this.encodeCMDERR(message.nodeNumber, message.errorNumber);
+                break;
+            case 'EVNLF':   // 70
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('EVSPC')) {throw Error("encode: property 'EVSPC' missing")};
+                message.encoded = this.encodeEVNLF(message.nodeNumber, message.EVSPC);
+                break;
+            case 'NVRD':   // 71
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('nodeVariableIndex')) {throw Error("encode: property 'nodeVariableIndex' missing")};
+                message.encoded = this.encodeNVRD(message.nodeNumber, message.nodeVariableIndex);
+                break;
+            case 'NENRD':   // 72
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventIndex')) {throw Error("encode: property 'eventIndex' missing")};
+                message.encoded = this.encodeNENRD(message.nodeNumber, message.eventIndex);
+                break;
+            case 'RQNPN':   // 73
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('parameterIndex')) {throw Error("encode: property 'parameterIndex' missing")};
+                message.encoded = this.encodeRQNPN(message.nodeNumber, message.parameterIndex);
+                break;
+            case 'NUMEV':   // 74
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventCount')) {throw Error("encode: property 'eventCount' missing")};
+                message.encoded = this.encodeNUMEV(message.nodeNumber, message.eventCount);
+                break;
+            case 'CANID':   // 75
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('CAN_ID')) {throw Error("encode: property 'CAN_ID' missing")};
+                message.encoded = this.encodeCANID(message.nodeNumber, message.CAN_ID);
+                break;
+            case 'EXTC2':   // 7F
+                if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
+                message.encoded = this.encodeEXTC2(message.Ext_OPC, message.byte1, message.byte2);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;

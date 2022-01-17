@@ -138,6 +138,14 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DFUN', 'session': '1', 'Fn1': '2', 'Fn2':'3'}, 'expected': ':SA780N60010203;'});
 		testCases.push({'test':{'mnemonic': 'GLOC', 'address': '1', 'flags':'2'}, 'expected': ':SA780N61000102;'});
 		testCases.push({'test':{'mnemonic': 'ERR', 'data1': '1', 'data2':'2', 'errorNumber': '3'}, 'expected': ':SA780N63010203;'});
+		testCases.push({'test':{'mnemonic': 'CMDERR', 'nodeNumber': '1', 'errorNumber':'2'}, 'expected': ':SB780N6F000102;'});
+		testCases.push({'test':{'mnemonic': 'EVNLF', 'nodeNumber': '1', 'EVSPC':'2'}, 'expected': ':SB780N70000102;'});
+		testCases.push({'test':{'mnemonic': 'NVRD', 'nodeNumber': '1', 'nodeVariableIndex':'2'}, 'expected': ':SB780N71000102;'});
+		testCases.push({'test':{'mnemonic': 'NENRD', 'nodeNumber': '1', 'eventIndex':'2'}, 'expected': ':SB780N72000102;'});
+		testCases.push({'test':{'mnemonic': 'RQNPN', 'nodeNumber': '1', 'parameterIndex':'2'}, 'expected': ':SB780N73000102;'});
+		testCases.push({'test':{'mnemonic': 'NUMEV', 'nodeNumber': '1', 'eventCount':'2'}, 'expected': ':SB780N74000102;'});
+		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber': '1', 'CAN_ID':'2'}, 'expected': ':SB780N75000102;'});
+		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3'}, 'expected': ':SB780N7F010203;'});
 		return testCases;
 	}
 
@@ -211,6 +219,23 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ERR', 'data2':'2', 'errorNumber': '3'}, 'expected': 'encode: property \'data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'ERR', 'data1':'2', 'errorNumber': '3'}, 'expected': 'encode: property \'data2\' missing'});
 		testCases.push({'test':{'mnemonic': 'ERR', 'data1':'2', 'data2': '3'}, 'expected': 'encode: property \'errorNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'CMDERR', 'errorNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'CMDERR', 'nodeNumber':'2'}, 'expected': 'encode: property \'errorNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'EVNLF', 'EVSPC': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'EVNLF', 'nodeNumber':'2'}, 'expected': 'encode: property \'EVSPC\' missing'});
+		testCases.push({'test':{'mnemonic': 'NVRD', 'nodeVariableIndex': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NVRD', 'nodeNumber':'2'}, 'expected': 'encode: property \'nodeVariableIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'NENRD', 'eventIndex': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NENRD', 'nodeNumber':'2'}, 'expected': 'encode: property \'eventIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'RQNPN', 'parameterIndex': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'RQNPN', 'nodeNumber':'2'}, 'expected': 'encode: property \'parameterIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'NUMEV', 'eventCount': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NUMEV', 'nodeNumber':'2'}, 'expected': 'encode: property \'eventCount\' missing'});
+		testCases.push({'test':{'mnemonic': 'CANID', 'CAN_ID': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber':'2'}, 'expected': 'encode: property \'CAN_ID\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC2', 'byte1':'2', 'byte2':'3'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC':'1', 'byte2':'3'}, 'expected': 'encode: property \'byte1\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC':'1', 'byte1':'2'}, 'expected': 'encode: property \'byte2\' missing'});
 		return testCases;
 	}
 
