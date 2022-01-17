@@ -874,6 +874,37 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
                 message.encoded = this.encodeEXTC2(message.Ext_OPC, message.byte1, message.byte2);
                 break;
+            case 'RDCC3':   // 80
+                if(!message.hasOwnProperty('repetitions')) {throw Error("encode: property 'repetitions' missing")};
+                if(!message.hasOwnProperty('byte0')) {throw Error("encode: property 'byte0' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
+                message.encoded = this.encodeRDCC3(message.repetitions, message.byte0, message.byte1, message.byte2);
+                break;
+            case 'WCVO':   // 82
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
+                if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
+                message.encoded = this.encodeWCVO(message.session, message.CV, message.value);
+                break;
+            case 'WCVB':   // 83
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
+                if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
+                message.encoded = this.encodeWCVB(message.session, message.CV, message.value);
+                break;
+            case 'QCVS':   // 84
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
+                if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
+                message.encoded = this.encodeQCVS(message.session, message.CV, message.Mode);
+                break;
+            case 'PCVS':   // 85
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
+                if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
+                message.encoded = this.encodePCVS(message.session, message.CV, message.value);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
