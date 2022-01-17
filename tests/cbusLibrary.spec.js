@@ -167,6 +167,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ARSON', 'nodeNumber': '1', 'deviceNumber':'2'}, 'expected': ':SB780N9D00010002;'});
 		testCases.push({'test':{'mnemonic': 'ARSOF', 'nodeNumber': '1', 'deviceNumber':'2'}, 'expected': ':SB780N9E00010002;'});
 		testCases.push({'test':{'mnemonic': 'EXTC3', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4'}, 'expected': ':SB780N9F01020304;'});
+		testCases.push({'test':{'mnemonic': 'RDCC4', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5'}, 'expected': ':SA780NA00102030405;'});
+		testCases.push({'test':{'mnemonic': 'WCVS', 'session': '1', 'CV':'2', 'Mode':'3', 'value':'4'}, 'expected': ':SA780NA20100020304;'});
 		return testCases;
 	}
 
@@ -311,6 +313,15 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'EXTC3', 'Ext_OPC':'1', 'byte2':'3', 'byte3':'4'}, 'expected': 'encode: property \'byte1\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC3', 'Ext_OPC':'1', 'byte1':'2', 'byte3':'4'}, 'expected': 'encode: property \'byte2\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC3', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3'}, 'expected': 'encode: property \'byte3\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC4', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5'}, 'expected': 'encode: property \'repetitions\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC4', 'repetitions':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5'}, 'expected': 'encode: property \'byte0\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC4', 'repetitions':'2', 'byte0':'3', 'byte2':'4', 'byte3':'5'}, 'expected': 'encode: property \'byte1\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC4', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte3':'5'}, 'expected': 'encode: property \'byte2\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC4', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte2':'5'}, 'expected': 'encode: property \'byte3\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVS', 'CV':'2', 'Mode':'3', 'value':'4'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVS', 'session':'1', 'Mode':'3', 'value':'4'}, 'expected': 'encode: property \'CV\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVS', 'session':'1', 'CV':'2', 'value':'4'}, 'expected': 'encode: property \'Mode\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVS', 'session':'1', 'CV':'2', 'Mode':'3'}, 'expected': 'encode: property \'value\' missing'});
 		return testCases;
 	}
 

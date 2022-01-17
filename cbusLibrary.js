@@ -991,6 +991,21 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('byte3')) {throw Error("encode: property 'byte3' missing")};
                 message.encoded = this.encodeEXTC3(message.Ext_OPC, message.byte1, message.byte2, message.byte3);
                 break;
+            case 'RDCC4':   // A0
+                if(!message.hasOwnProperty('repetitions')) {throw Error("encode: property 'repetitions' missing")};
+                if(!message.hasOwnProperty('byte0')) {throw Error("encode: property 'byte0' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
+                if(!message.hasOwnProperty('byte3')) {throw Error("encode: property 'byte3' missing")};
+                message.encoded = this.encodeRDCC4(message.repetitions, message.byte0, message.byte1, message.byte2, message.byte3);
+                break;
+            case 'WCVS':   // A2
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
+                if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
+                if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
+                message.encoded = this.encodeWCVS(message.session, message.CV, message.Mode, message.value);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
