@@ -169,6 +169,18 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'EXTC3', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4'}, 'expected': ':SB780N9F01020304;'});
 		testCases.push({'test':{'mnemonic': 'RDCC4', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5'}, 'expected': ':SA780NA00102030405;'});
 		testCases.push({'test':{'mnemonic': 'WCVS', 'session': '1', 'CV':'2', 'Mode':'3', 'value':'4'}, 'expected': ':SA780NA20100020304;'});
+		testCases.push({'test':{'mnemonic': 'ACON1', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3'}, 'expected': ':SB780NB00001000203;'});
+		testCases.push({'test':{'mnemonic': 'ACOF1', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3'}, 'expected': ':SB780NB10001000203;'});
+		testCases.push({'test':{'mnemonic': 'REQEV', 'nodeNumber': '1', 'eventNumber':'2', 'eventVariableIndex':'3'}, 'expected': ':SB780NB20001000203;'});
+		testCases.push({'test':{'mnemonic': 'ARON1', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3'}, 'expected': ':SB780NB30001000203;'});
+		testCases.push({'test':{'mnemonic': 'AROF1', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3'}, 'expected': ':SB780NB40001000203;'});
+		testCases.push({'test':{'mnemonic': 'NEVAL', 'nodeNumber': '1', 'eventIndex':'2', 'eventVariableIndex':'3', 'eventVariableValue':'4'}, 'expected': ':SB780NB50001020304;'});
+		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber': '1', 'manufacturerId':'2', 'moduleId':'3', 'flags':'4'}, 'expected': ':SB780NB60001020304;'});
+		testCases.push({'test':{'mnemonic': 'ASON1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NB80001000203;'});
+		testCases.push({'test':{'mnemonic': 'ASOF1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NB90001000203;'});
+		testCases.push({'test':{'mnemonic': 'ARSON1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NBD0001000203;'});
+		testCases.push({'test':{'mnemonic': 'ARSOF1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NBE0001000203;'});
+		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5'}, 'expected': ':SB780NBF0102030405;'});
 		return testCases;
 	}
 
@@ -322,6 +334,46 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'WCVS', 'session':'1', 'Mode':'3', 'value':'4'}, 'expected': 'encode: property \'CV\' missing'});
 		testCases.push({'test':{'mnemonic': 'WCVS', 'session':'1', 'CV':'2', 'value':'4'}, 'expected': 'encode: property \'Mode\' missing'});
 		testCases.push({'test':{'mnemonic': 'WCVS', 'session':'1', 'CV':'2', 'Mode':'3'}, 'expected': 'encode: property \'value\' missing'});
+		testCases.push({'test':{'mnemonic': 'ACON1', 'eventNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ACON1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'eventNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ACON1', 'nodeNumber':'2', 'eventNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'ACOF1', 'eventNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ACOF1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'eventNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ACOF1', 'nodeNumber':'2', 'eventNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'REQEV', 'eventNumber': '2', 'eventVariableIndex':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'REQEV', 'nodeNumber':'2', 'eventVariableIndex':'3'}, 'expected': 'encode: property \'eventNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'REQEV', 'nodeNumber':'2', 'eventNumber':'2'}, 'expected': 'encode: property \'eventVariableIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARON1', 'eventNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARON1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'eventNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARON1', 'nodeNumber':'2', 'eventNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'AROF1', 'eventNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'AROF1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'eventNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'AROF1', 'nodeNumber':'2', 'eventNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'NEVAL', 'eventIndex':'2', 'eventVariableIndex':'3', 'eventVariableValue':'4'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NEVAL', 'nodeNumber':'1', 'eventVariableIndex':'3', 'eventVariableValue':'4'}, 'expected': 'encode: property \'eventIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'NEVAL', 'nodeNumber':'1', 'eventIndex':'2', 'eventVariableValue':'4'}, 'expected': 'encode: property \'eventVariableIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'NEVAL', 'nodeNumber':'1', 'eventIndex':'2', 'eventVariableIndex':'3'}, 'expected': 'encode: property \'eventVariableValue\' missing'});
+		testCases.push({'test':{'mnemonic': 'PNN', 'manufacturerId':'2', 'moduleId':'3', 'flags':'4'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber':'1', 'moduleId':'3', 'flags':'4'}, 'expected': 'encode: property \'manufacturerId\' missing'});
+		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber':'1', 'manufacturerId':'2', 'flags':'4'}, 'expected': 'encode: property \'moduleId\' missing'});
+		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber':'1', 'manufacturerId':'2', 'moduleId':'3'}, 'expected': 'encode: property \'flags\' missing'});
+		testCases.push({'test':{'mnemonic': 'ASON1', 'deviceNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ASON1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'deviceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ASON1', 'nodeNumber':'2', 'deviceNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'ASOF1', 'deviceNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ASOF1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'deviceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ASOF1', 'nodeNumber':'2', 'deviceNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARSON1', 'deviceNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARSON1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'deviceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARSON1', 'nodeNumber':'2', 'deviceNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARSOF1', 'deviceNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARSOF1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'deviceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ARSOF1', 'nodeNumber':'2', 'deviceNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC4', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC':'1', 'byte2':'3', 'byte3':'4', 'byte4':'5'}, 'expected': 'encode: property \'byte1\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC':'1', 'byte1':'2', 'byte3':'4', 'byte4':'5'}, 'expected': 'encode: property \'byte2\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte4':'5'}, 'expected': 'encode: property \'byte3\' missing'});
+		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4'}, 'expected': 'encode: property \'byte4\' missing'});
 		return testCases;
 	}
 
