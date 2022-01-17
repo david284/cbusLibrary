@@ -816,6 +816,23 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
                 message.encoded = this.encodeEXTC1(message.Ext_OPC, message.byte1);
                 break;
+            case 'DFUN':   // 60
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('Fn1')) {throw Error("encode: property 'Fn1' missing")};
+                if(!message.hasOwnProperty('Fn2')) {throw Error("encode: property 'Fn2' missing")};
+                message.encoded = this.encodeDFUN(message.session, message.Fn1, message.Fn2);
+                break;
+            case 'GLOC':   // 61
+                if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
+                if(!message.hasOwnProperty('flags')) {throw Error("encode: property 'flags' missing")};
+                message.encoded = this.encodeGLOC(message.address, message.flags);
+                break;
+            case 'ERR':   // 63
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('errorNumber')) {throw Error("encode: property 'errorNumber' missing")};
+                message.encoded = this.encodeERR(message.data1, message.data2, message.errorNumber);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;

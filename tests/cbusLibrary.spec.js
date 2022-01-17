@@ -135,6 +135,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'BOOTM', 'nodeNumber': '1'}, 'expected': ':SB780N5C0001;'});
 		testCases.push({'test':{'mnemonic': 'ENUM', 'nodeNumber': '1'}, 'expected': ':SB780N5D0001;'});
 		testCases.push({'test':{'mnemonic': 'EXTC1', 'Ext_OPC': '1', 'byte1':'2'}, 'expected': ':SB780N5F0102;'});
+		testCases.push({'test':{'mnemonic': 'DFUN', 'session': '1', 'Fn1': '2', 'Fn2':'3'}, 'expected': ':SA780N60010203;'});
+		testCases.push({'test':{'mnemonic': 'GLOC', 'address': '1', 'flags':'2'}, 'expected': ':SA780N61000102;'});
+		testCases.push({'test':{'mnemonic': 'ERR', 'data1': '1', 'data2':'2', 'errorNumber': '3'}, 'expected': ':SA780N63010203;'});
 		return testCases;
 	}
 
@@ -200,6 +203,14 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ENUM'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC1', 'byte1':'2'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC1', 'Ext_OPC':'1'}, 'expected': 'encode: property \'byte1\' missing'});
+		testCases.push({'test':{'mnemonic': 'DFUN', 'Fn1':'2', 'Fn2': '3'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'DFUN', 'session':'1', 'Fn2': '3'}, 'expected': 'encode: property \'Fn1\' missing'});
+		testCases.push({'test':{'mnemonic': 'DFUN', 'session':'1', 'Fn1': '2'}, 'expected': 'encode: property \'Fn2\' missing'});
+		testCases.push({'test':{'mnemonic': 'GLOC', 'flags':'1'}, 'expected': 'encode: property \'address\' missing'});
+		testCases.push({'test':{'mnemonic': 'GLOC', 'address':'1'}, 'expected': 'encode: property \'flags\' missing'});
+		testCases.push({'test':{'mnemonic': 'ERR', 'data2':'2', 'errorNumber': '3'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'ERR', 'data1':'2', 'errorNumber': '3'}, 'expected': 'encode: property \'data2\' missing'});
+		testCases.push({'test':{'mnemonic': 'ERR', 'data1':'2', 'data2': '3'}, 'expected': 'encode: property \'errorNumber\' missing'});
 		return testCases;
 	}
 
