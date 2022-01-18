@@ -4,7 +4,7 @@ var winston = require('./config/winston_test.js');
 
 const cbusLib = require('./../cbusLibrary.js')
 
-function decToHex(num, len) {return parseInt(num).toString(16).toUpperCase().padStart(len, '0');}
+function decToHex(num, len) {return parseInt(num & (2 ** (4*len) - 1)).toString(16).toUpperCase().padStart(len, '0');}
 
 function stringToHex(string) {
   // expects UTF-8 string
@@ -49,6 +49,40 @@ describe('cbusMessage tests', function(){
 	after(function() {
    		winston.info({message: ' '});   // blank line to separate tests
 	});																										
+
+	function GetTestCase_dec2hex () {
+		var testCases = [];
+        testCases.push({'number':-128, 'length': '2','expected':'80'});
+        testCases.push({'number':-1, 'length': '2','expected':'FF'});
+        testCases.push({'number':0, 'length': '2','expected':'00'});
+        testCases.push({'number':1, 'length': '2','expected':'01'});
+        testCases.push({'number':127, 'length': '2','expected':'7F'});
+        //
+        testCases.push({'number':-2048, 'length': '3','expected':'800'});
+        testCases.push({'number':-128, 'length': '3','expected':'F80'});
+        testCases.push({'number':-1, 'length': '3','expected':'FFF'});
+        testCases.push({'number':0, 'length': '3','expected':'000'});
+        testCases.push({'number':1, 'length': '3','expected':'001'});
+        testCases.push({'number':127, 'length': '3','expected':'07F'});
+        testCases.push({'number':2047, 'length': '3','expected':'7FF'});
+        //
+        testCases.push({'number':-32768, 'length': '4','expected':'8000'});
+        testCases.push({'number':-128, 'length': '4','expected':'FF80'});
+        testCases.push({'number':-1, 'length': '4','expected':'FFFF'});
+        testCases.push({'number':0, 'length': '4','expected':'0000'});
+        testCases.push({'number':1, 'length': '4','expected':'0001'});
+        testCases.push({'number':127, 'length': '4','expected':'007F'});
+        testCases.push({'number':32767, 'length': '4','expected':'7FFF'});
+		return testCases;
+	}
+
+	itParam("decToHex test ${JSON.stringify(value))", GetTestCase_dec2hex(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN dec2hex test ' + JSON.stringify(value)});
+        var result = decToHex(value.number, value.length);
+		winston.info({message: 'cbusMessage test: Result ' + result});
+		expect(result).to.equal(value.expected, 'dec2hex test');
+	})
+	
 
 	
 	function GetTestCase_canHeader () {
@@ -181,6 +215,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ARSON1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NBD0001000203;'});
 		testCases.push({'test':{'mnemonic': 'ARSOF1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NBE0001000203;'});
 		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5'}, 'expected': ':SB780NBF0102030405;'});
+		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6'}, 'expected': ':SA780NC0010203040506;'});
+		testCases.push({'test':{'mnemonic': 'WCVOA', 'address': '1', 'CV':'2', 'Mode':'3', 'value':'4'}, 'expected': ':SA780NC1000100020304;'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes': '1', 'hours':'2', 'dayOfWeek':'3', 'dayOfMonth':'4', 'month':'5',  'div':'6', 'temperature':'7'}, 'expected': ':SB780NCF010253060407;'});
 		return testCases;
 	}
 
@@ -192,7 +229,8 @@ describe('cbusMessage tests', function(){
 		winston.info({message: 'cbusMessage test: Generic encode ' + JSON.stringify(encode)});
 		expect(encode.mnemonic).to.equal(value.test.mnemonic, 'mnemonic');
         expect(encode.encoded).to.equal(value.expected, 'encoded');
-
+        var decode = cbusLib.decode(encode.encoded);
+		winston.info({message: 'cbusMessage test: decode result ' + JSON.stringify(decode)});
 	})
 
 
@@ -374,13 +412,30 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC':'1', 'byte1':'2', 'byte3':'4', 'byte4':'5'}, 'expected': 'encode: property \'byte2\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte4':'5'}, 'expected': 'encode: property \'byte3\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC4', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4'}, 'expected': 'encode: property \'byte4\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC5', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6'}, 'expected': 'encode: property \'repetitions\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6'}, 'expected': 'encode: property \'byte0\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions':'2', 'byte0':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6'}, 'expected': 'encode: property \'byte1\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte3':'5', 'byte4':'6'}, 'expected': 'encode: property \'byte2\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte2':'5', 'byte4':'6'}, 'expected': 'encode: property \'byte3\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte2':'5', 'byte3':'5'}, 'expected': 'encode: property \'byte4\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVOA', 'CV':'2', 'Mode':'3', 'value':'4'}, 'expected': 'encode: property \'address\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVOA', 'address':'1', 'Mode':'3', 'value':'4'}, 'expected': 'encode: property \'CV\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVOA', 'address':'1', 'CV':'2', 'value':'4'}, 'expected': 'encode: property \'Mode\' missing'});
+		testCases.push({'test':{'mnemonic': 'WCVOA', 'address':'1', 'CV':'2', 'Mode':'3'}, 'expected': 'encode: property \'value\' missing'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'hours':'2', 'dayOfWeek':'3', 'dayOfMonth':'4', 'month':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'minutes\' missing'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'dayOfWeek':'3', 'dayOfMonth':'4', 'month':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'hours\' missing'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'hours':'3', 'dayOfMonth':'4', 'month':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'dayOfWeek\' missing'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'hours':'3', 'dayOfWeek':'4', 'month':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'dayOfMonth\' missing'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'hours':'3', 'dayOfWeek':'4', 'dayOfMonth':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'month\' missing'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'hours':'3', 'dayOfWeek':'4', 'dayOfMonth':'5', 'month':'5', 'temperature':'6'}, 'expected': 'encode: property \'div\' missing'});
+		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'hours':'3', 'dayOfWeek':'4', 'dayOfMonth':'5', 'month':'5', 'div':'6'}, 'expected': 'encode: property \'temperature\' missing'});
 		return testCases;
 	}
 
     //
     //
 	itParam("Generic encode fail test - ${JSON.stringify(value.test)}", GetTestCase_encodeFail(), function (value) {
-		winston.info({message: 'cbusMessage test: BEGIN Generic encode test '});
+		winston.info({message: 'cbusMessage test: BEGIN Generic encode failure test '});
         expect(() => cbusLib.encode(value.test)).to.throw(Error).with.property('message', value.expected);
 	})
 
@@ -3898,7 +3953,7 @@ describe('cbusMessage tests', function(){
 		for (a1 = 1; a1 < 4; a1++) {
 			if (a1 == 1) arg1 = 0;
 			if (a1 == 2) arg1 = 1;
-			if (a1 == 3) arg1 = 255;
+			if (a1 == 3) arg1 = 65535;
                 for (a2 = 1; a2 < 4; a2++) {
                     if (a2 == 1) arg2 = 0;
                     if (a2 == 2) arg2 = 1;
@@ -3913,7 +3968,7 @@ describe('cbusMessage tests', function(){
                             if (a4 == 3) arg4 = 255;
                             testCases.push({'mnemonic':'WCVOA', 
                                             'opCode':'C1', 
-                                            'session':arg1, 
+                                            'address':arg1, 
                                             'CV':arg2, 
                                             'mode':arg3, 
                                             'value':arg4});
@@ -3926,10 +3981,10 @@ describe('cbusMessage tests', function(){
 
     // C1 WCVOA
     //
-	itParam("WCVOA test session ${value.session} CV ${value.CV} mode ${value.mode} value ${value.value}", GetTestCase_WCVOA(), function (value) {
+	itParam("WCVOA test address ${value.address} CV ${value.CV} mode ${value.mode} value ${value.value}", GetTestCase_WCVOA(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SA780N" + value.opCode + decToHex(value.session, 2) + decToHex(value.CV, 4) + decToHex(value.mode, 2) + decToHex(value.value, 2) + ";";
-        var encode = cbusLib.encodeWCVOA(value.session, value.CV, value.mode, value.value);
+		expected = ":SA780N" + value.opCode + decToHex(value.address, 4) + decToHex(value.CV, 4) + decToHex(value.mode, 2) + decToHex(value.value, 2) + ";";
+        var encode = cbusLib.encodeWCVOA(value.address, value.CV, value.mode, value.value);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
@@ -3940,7 +3995,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal(value.opCode, 'opCode');
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-        expect(decode.session).to.equal(value.session, 'session');
+        expect(decode.address).to.equal(value.address, 'address');
         expect(decode.CV).to.equal(value.CV, 'CV');
         expect(decode.mode).to.equal(value.mode, 'mode');
         expect(decode.value).to.equal(value.value, 'value');
@@ -3951,38 +4006,45 @@ describe('cbusMessage tests', function(){
     //
 	function GetTestCase_FCLK () {
 		var testCases = [];
-		for (a1 = 1; a1 < 4; a1++) {
+		for (a1 = 1; a1 < 4; a1++) { //minutes
 			if (a1 == 1) arg1 = 0;
 			if (a1 == 2) arg1 = 1;
 			if (a1 == 3) arg1 = 255;
-                for (a2 = 1; a2 < 4; a2++) {
+                for (a2 = 1; a2 < 4; a2++) { // hours
                     if (a2 == 1) arg2 = 0;
                     if (a2 == 2) arg2 = 1;
                     if (a2 == 3) arg2 = 255;
-                    for (a3 = 1; a3 < 4; a3++) {
-                        if (a3 == 1) arg3 = 0;
-                        if (a3 == 2) arg3 = 1;
-                        if (a3 == 3) arg3 = 255;
-                        for (a4 = 1; a4 < 4; a4++) {
-                            if (a4 == 1) arg4 = 0;
-                            if (a4 == 2) arg4 = 1;
-                            if (a4 == 3) arg4 = 255;
-                            for (a5 = 1; a5 < 4; a5++) {
+                    for (a3 = 1; a3 < 3; a3++) { // day of week
+                        if (a3 == 1) arg3 = 1;
+                        if (a3 == 2) arg3 = 7;
+                        for (a4 = 1; a4 < 3; a4++) { // month
+                            if (a4 == 1) arg4 = 1;
+                            if (a4 == 2) arg4 = 12;
+                            for (a5 = 1; a5 < 4; a5++) { // div
                                 if (a5 == 1) arg5 = 0;
                                 if (a5 == 2) arg5 = 1;
                                 if (a5 == 3) arg5 = 255;
-                                for (a6 = 1; a6 < 4; a6++) {
+                                for (a6 = 1; a6 < 4; a6++) { // day of month
                                     if (a6 == 1) arg6 = 0;
                                     if (a6 == 2) arg6 = 1;
                                     if (a6 == 3) arg6 = 255;
-                                    testCases.push({'mnemonic':'FCLK', 
-                                                    'opCode':'CF', 
-                                                    'minutes':arg1, 
-                                                    'hours':arg2, 
-                                                    'wdmon':arg3, 
-                                                    'div':arg4, 
-                                                    'mday':arg5, 
-                                                    'temp':arg6});
+                                    for (a7 = 1; a7 < 7; a7++) { // temperature
+                                        if (a7 == 1) arg7 = -128;
+                                        if (a7 == 2) arg7 = -127;
+                                        if (a7 == 3) arg7 = -1;
+                                        if (a7 == 4) arg7 = 0;
+                                        if (a7 == 5) arg7 = 1;
+                                        if (a7 == 6) arg7 = 127;
+                                        testCases.push({'mnemonic':'FCLK', 
+                                                        'opCode':'CF', 
+                                                        'minutes':arg1, 
+                                                        'hours':arg2, 
+                                                        'dayOfWeek':arg3, 
+                                                        'month':arg4, 
+                                                        'div':arg5, 
+                                                        'dayOfMonth':arg6, 
+                                                        'temperature':arg7});
+                                    }
                                 }
                             }
                         }
@@ -3994,11 +4056,11 @@ describe('cbusMessage tests', function(){
 
     // CF FCLK
     //
-	itParam("FCLK test minutes ${value.minutes} hours ${value.hours} wdmon ${value.wdmon} div ${value.div} mday ${value.mday} temp ${value.temp}", 
-        GetTestCase_FCLK(), function (value) {
+	itParam("FCLK test ${JSON.stringify(value)}", GetTestCase_FCLK(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SB780N" + value.opCode + decToHex(value.minutes, 2) + decToHex(value.hours, 2) + decToHex(value.wdmon, 2) + decToHex(value.div, 2) + decToHex(value.mday, 2) + decToHex(value.temp, 2) + ";";
-        var encode = cbusLib.encodeFCLK(value.minutes, value.hours, value.wdmon, value.div, value.mday, value.temp);
+        var wdmon = value.dayOfWeek + (16 * value.month);
+		expected = ":SB780N" + value.opCode + decToHex(value.minutes, 2) + decToHex(value.hours, 2) + decToHex(wdmon, 2) + decToHex(value.div, 2) + decToHex(value.dayOfMonth, 2) + decToHex((value.temperature & 0xFF), 2) + ";";
+        var encode = cbusLib.encodeFCLK(value.minutes, value.hours, value.dayOfWeek, value.dayOfMonth, value.month, value.div, value.temperature);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
@@ -4011,10 +4073,11 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.minutes).to.equal(value.minutes, 'minutes');
         expect(decode.hours).to.equal(value.hours, 'hours');
-        expect(decode.wdmon).to.equal(value.wdmon, 'wdmon');
+        expect(decode.dayOfWeek).to.equal(value.dayOfWeek, 'dayOfWeek');
+        expect(decode.dayOfMonth).to.equal(value.dayOfMonth, 'dayOfMonth');
+        expect(decode.month).to.equal(value.month, 'month');
         expect(decode.div).to.equal(value.div, 'div');
-        expect(decode.mday).to.equal(value.mday, 'mday');
-        expect(decode.temp).to.equal(value.temp, 'temp');
+        expect(decode.temperature).to.equal(value.temperature, 'temperature');
 	})
 
 

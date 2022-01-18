@@ -22,7 +22,7 @@
 //      All formats & naming conventions taken from CBUS specification
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function decToHex(num, len) {return parseInt(num).toString(16).toUpperCase().padStart(len, '0');}
+function decToHex(num, len) {return parseInt(num & (2 ** (4*len) - 1)).toString(16).toUpperCase().padStart(len, '0');}
 
 function stringToHex(string) {
   // expects UTF-8 string
@@ -1081,6 +1081,32 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('byte3')) {throw Error("encode: property 'byte3' missing")};
                 if(!message.hasOwnProperty('byte4')) {throw Error("encode: property 'byte4' missing")};
                 message.encoded = this.encodeEXTC4(message.Ext_OPC, message.byte1, message.byte2, message.byte3, message.byte4);
+                break;
+            case 'RDCC5':   // C0
+                if(!message.hasOwnProperty('repetitions')) {throw Error("encode: property 'repetitions' missing")};
+                if(!message.hasOwnProperty('byte0')) {throw Error("encode: property 'byte0' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
+                if(!message.hasOwnProperty('byte3')) {throw Error("encode: property 'byte3' missing")};
+                if(!message.hasOwnProperty('byte4')) {throw Error("encode: property 'byte4' missing")};
+                message.encoded = this.encodeRDCC5(message.repetitions, message.byte0, message.byte1, message.byte2, message.byte3, message.byte4);
+                break;
+            case 'WCVOA':   // C1
+                if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
+                if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
+                if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
+                if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
+                message.encoded = this.encodeWCVOA(message.address, message.CV, message.Mode, message.value);
+                break;
+            case 'FCLK':   // CF
+                if(!message.hasOwnProperty('minutes')) {throw Error("encode: property 'minutes' missing")};
+                if(!message.hasOwnProperty('hours')) {throw Error("encode: property 'hours' missing")};
+                if(!message.hasOwnProperty('dayOfWeek')) {throw Error("encode: property 'dayOfWeek' missing")};
+                if(!message.hasOwnProperty('dayOfMonth')) {throw Error("encode: property 'dayOfMonth' missing")};
+                if(!message.hasOwnProperty('month')) {throw Error("encode: property 'month' missing")};
+                if(!message.hasOwnProperty('div')) {throw Error("encode: property 'div' missing")};
+                if(!message.hasOwnProperty('temperature')) {throw Error("encode: property 'temperature' missing")};
+                message.encoded = this.encodeFCLK(message.minutes, message.hours, message.dayOfWeek, message.dayOfMonth, message.month, message.div, message.temperature);
                 break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
@@ -3632,14 +3658,14 @@ class cbusLibrary {
                 'ID_TYPE': 'S',
                 'mnemonic': 'WCVOA',
                 'opCode': message.substr(7, 2),
-                'session': parseInt(message.substr(9, 2), 16),
-                'CV': parseInt(message.substr(11, 4), 16),
-                'mode': parseInt(message.substr(15, 2), 16),
-                'value': parseInt(message.substr(17, 2), 16),
+                'address': parseInt(message.substr(9, 4), 16),
+                'CV': parseInt(message.substr(13, 4), 16),
+                'mode': parseInt(message.substr(17, 2), 16),
+                'value': parseInt(message.substr(19, 2), 16),
                 'text': "WCVOA (C1) session " + parseInt(message.substr(9, 2), 16) + 
-					" CV " + parseInt(message.substr(11, 4), 16) +
-					" mode " + parseInt(message.substr(15, 2), 16) +
-					" value " + parseInt(message.substr(17, 2), 16)
+					" CV " + parseInt(message.substr(13, 4), 16) +
+					" mode " + parseInt(message.substr(17, 2), 16) +
+					" value " + parseInt(message.substr(19, 2), 16)
         }
     }
     /**
@@ -3651,8 +3677,8 @@ class cbusLibrary {
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltC1&gt&ltsession&gt&ltCV hi&gt&ltCV lo&gt&ltmode&gt&ltvalue&gt
     */
-    encodeWCVOA(Session, CV, mode, value) {
-        return this.header({MinPri: 2}) + 'C1' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(mode, 2) + decToHex(value, 2) + ';'
+    encodeWCVOA(address, CV, mode, value) {
+        return this.header({MinPri: 2}) + 'C1' + decToHex(address, 4) + decToHex(CV, 4) + decToHex(mode, 2) + decToHex(value, 2) + ';'
     }
     
 
@@ -3660,45 +3686,63 @@ class cbusLibrary {
     // FCLK Format: <MjPri><MinPri=3><CANID>]<CF><mins><hrs><wdmon><div><mday><temp>
     //
     decodeFCLK(message) {
-        return {'encoded': message,
+        var minutes = parseInt(message.substr(9, 2), 16);
+        var hours = parseInt(message.substr(11, 2), 16);
+        var wdmon = parseInt(message.substr(13, 2), 16);
+        var dayOfWeek = parseInt(message.substr(13, 2), 16)%16;
+        var month = parseInt(message.substr(13, 2), 16) >> 4;
+        var div = parseInt(message.substr(15, 2), 16);
+        var dayOfMonth = parseInt(message.substr(17, 2), 16);
+        var temperature = parseInt(message.substr(19, 2), 16);
+        // parseInt can't tell if hex is a signed value
+        // so need to convert it to two's complement
+        if (temperature > 127) {temperature = temperature - 256}
+        var output = {'encoded': message,
                 'ID_TYPE': 'S',
                 'mnemonic': 'FCLK',
                 'opCode': message.substr(7, 2),
-                'minutes': parseInt(message.substr(9, 2), 16),
-                'hours': parseInt(message.substr(11, 2), 16),
-                'wdmon': parseInt(message.substr(13, 2), 16),
-                'div': parseInt(message.substr(15, 2), 16),
-                'mday': parseInt(message.substr(17, 2), 16),
-                'temp': parseInt(message.substr(19, 2), 16),
-                'weekDay': parseInt(message.substr(13, 2), 16)%16,
-                'month': parseInt(message.substr(13, 2), 16) >> 4,
-                'text': "FCLK (CF) minutes " + parseInt(message.substr(9, 2), 16) + 
-					" hours " + parseInt(message.substr(11, 4), 16) +
-					" wdmon " + parseInt(message.substr(13, 2), 16) +
-					" div " + parseInt(message.substr(15, 2), 16) +
-					" mday " + parseInt(message.substr(17, 2), 16) +
-					" temp " + parseInt(message.substr(19, 2), 16)
+                'minutes': minutes,
+                'hours': hours,
+                'wdmon': wdmon,
+                'dayOfWeek': dayOfWeek,
+                'month': month,
+                'div': div,
+                'dayOfMonth': dayOfMonth,
+                'temperature': temperature,
+                'text': "FCLK (CF) minutes " + minutes + 
+					" hours " + hours +
+					" dayOfMonth " + dayOfMonth +
+                    " month " + month +
+                    " dayOfWeek " + dayOfWeek +
+					" wdmon " + wdmon +
+					" div " + div +
+					" temperature " + temperature
         }
+        return output;
     }
     /**
     * @desc opCode CF<br>
     * @param {int} minutes 0 to 59
     * @param {int} hours 0 to 23
-    * @param {int} wdmon bits 0-3 are the weekday (1=Sun, 2=Mon etc), bits 4-7 are the month (1=Jan, 2=Feb etc)
+    * @param {int} day of week 1 to 7 (1=Sun, 2=Mon etc)
+    * @param {int} month 1 to 12 (1=Jan, 2=Feb etc)
     * @param {int} div Set to 0 for freeze, 1 for real time
-    * @param {int} mday Day of the month 1-31
-    * @param {int} temp Temperature as twos complement -127 to +127
+    * @param {int} mday - day of the month 1-31
+    * @param {int} temperature - twos complement -127 to +127
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltCF&gt&ltmins&gt&lthrs&gt&ltwdmon&gt&ltdiv&gt&ltmday&gt&lttemp&gt
     */
-    encodeFCLK(minutes, hours, wdmon, div, mday, temp) {
+    encodeFCLK(minutes, hours, dayOfWeek, dayOfMonth, month, div, temperature) {
+        // wdmon bits 0-3 are the weekday (1=Sun, 2=Mon etc), bits 4-7 are the month (1=Jan, 2=Feb etc)
+        // the input fields may be strings, so take care with maths on these fields
+        var wdmon = (month << 4) + (dayOfWeek & 0xF);
         return this.header({MinPri: 3}) + 'CF' + 
                             decToHex(minutes, 2) + 
                             decToHex(hours, 2) + 
                             decToHex(wdmon, 2) + 
                             decToHex(div, 2) + 
-                            decToHex(mday, 2) + 
-                            decToHex(temp, 2) + ';'
+                            decToHex(dayOfMonth, 2) + 
+                            decToHex(temperature, 2) + ';'
     }
     
 
