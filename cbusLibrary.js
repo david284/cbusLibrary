@@ -1108,6 +1108,85 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('temperature')) {throw Error("encode: property 'temperature' missing")};
                 message.encoded = this.encodeFCLK(message.minutes, message.hours, message.dayOfWeek, message.dayOfMonth, message.month, message.div, message.temperature);
                 break;
+            case 'ACON2':   // D0
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeACON2(message.nodeNumber, message.eventNumber, message.data1, message.data2);
+                break;
+            case 'ACOF2':   // D1
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeACOF2(message.nodeNumber, message.eventNumber, message.data1, message.data2);
+                break;
+            case 'EVLRN':   // D2
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('eventVariableIndex')) {throw Error("encode: property 'eventVariableIndex' missing")};
+                if(!message.hasOwnProperty('eventVariableValue')) {throw Error("encode: property 'eventVariableValue' missing")};
+                message.encoded = this.encodeEVLRN(message.nodeNumber, message.eventNumber, message.eventVariableIndex, message.eventVariableValue);
+                break;
+            case 'EVANS':   // D3
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('eventVariableIndex')) {throw Error("encode: property 'eventVariableIndex' missing")};
+                if(!message.hasOwnProperty('eventVariableValue')) {throw Error("encode: property 'eventVariableValue' missing")};
+                message.encoded = this.encodeEVANS(message.nodeNumber, message.eventNumber, message.eventVariableIndex, message.eventVariableValue);
+                break;
+            case 'ARON2':   // D4
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeARON2(message.nodeNumber, message.eventNumber, message.data1, message.data2);
+                break;
+            case 'AROF2':   // D5
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeAROF2(message.nodeNumber, message.eventNumber, message.data1, message.data2);
+                break;
+            case 'ASON2':   // D8
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeASON2(message.nodeNumber, message.deviceNumber, message.data1, message.data2);
+                break;
+            case 'ASOF2':   // D9
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeASOF2(message.nodeNumber, message.deviceNumber, message.data1, message.data2);
+                break;
+            case 'ARSON2':   // DD
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeARSON2(message.nodeNumber, message.deviceNumber, message.data1, message.data2);
+                break;
+            case 'ARSOF2':   // DE
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                message.encoded = this.encodeARSOF2(message.nodeNumber, message.deviceNumber, message.data1, message.data2);
+                break;
+            case 'EXTC5':   // DF
+                if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
+                if(!message.hasOwnProperty('byte3')) {throw Error("encode: property 'byte3' missing")};
+                if(!message.hasOwnProperty('byte4')) {throw Error("encode: property 'byte4' missing")};
+                if(!message.hasOwnProperty('byte5')) {throw Error("encode: property 'byte5' missing")};
+                message.encoded = this.encodeEXTC5(message.Ext_OPC, message.byte1, message.byte2, message.byte3, message.byte4, message.byte5);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
