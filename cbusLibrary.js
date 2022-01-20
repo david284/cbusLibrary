@@ -1211,6 +1211,25 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('name')) {throw Error("encode: property 'name' missing")};
                 message.encoded = this.encodeNAME(message.name);
                 break;
+            case 'STAT':    // E3
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('CS')) {throw Error("encode: property 'CS' missing")};
+                if(!message.hasOwnProperty('flags')) {throw Error("encode: property 'flags' missing")};
+                if(!message.hasOwnProperty('major')) {throw Error("encode: property 'major' missing")};
+                if(!message.hasOwnProperty('minor')) {throw Error("encode: property 'minor' missing")};
+                if(!message.hasOwnProperty('build')) {throw Error("encode: property 'build' missing")};
+                message.encoded = this.encodeSTAT(message.nodeNumber, message.CS, message.flags, message.major, message.minor, message.build);
+                break;
+            case 'PARAMS':       // EF
+                if(!message.hasOwnProperty('param1')) {throw Error("encode: property 'param1' missing")};
+                if(!message.hasOwnProperty('param2')) {throw Error("encode: property 'param2' missing")};
+                if(!message.hasOwnProperty('param3')) {throw Error("encode: property 'param3' missing")};
+                if(!message.hasOwnProperty('param4')) {throw Error("encode: property 'param4' missing")};
+                if(!message.hasOwnProperty('param5')) {throw Error("encode: property 'param5' missing")};
+                if(!message.hasOwnProperty('param6')) {throw Error("encode: property 'param6' missing")};
+                if(!message.hasOwnProperty('param7')) {throw Error("encode: property 'param7' missing")};
+                message.encoded = this.encodePARAMS(message.param1, message.param2, message.param3, message.param4, message.param5, message.param6, message.param7);
+                break;
 
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');

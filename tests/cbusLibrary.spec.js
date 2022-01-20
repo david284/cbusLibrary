@@ -232,6 +232,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6', 'byte5':'7'}, 'expected': ':SA780NE001020304050607;'});
 		testCases.push({'test':{'mnemonic': 'PLOC', 'session': '1', 'address':'2', 'speed':'3', 'direction':'forward', 'Fn1':'5', 'Fn2':'6', 'Fn3':'7'}, 'expected': ':SA780NE101000283050607;'});
 		testCases.push({'test':{'mnemonic': 'NAME', 'name': '1234567'}, 'expected': ':SB780NE231323334353637;'});
+		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5', 'build':'6'}, 'expected': ':SA780NE300010203040506;'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1': '1', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': ':SB780NEF01020304050607;'});
 		return testCases;
 	}
 
@@ -504,6 +506,19 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'address':'3', 'speed':'5', 'direction':'4', 'Fn1':'6', 'Fn3':'3'}, 'expected': 'encode: property \'Fn2\' missing'});
 		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'address':'3', 'speed':'5', 'direction':'4', 'Fn1':'6', 'Fn2':'3'}, 'expected': 'encode: property \'Fn3\' missing'});
 		testCases.push({'test':{'mnemonic': 'NAME'}, 'expected': 'encode: property \'name\' missing'});
+		testCases.push({'test':{'mnemonic': 'STAT', 'CS':'2', 'flags':'3', 'major':'5', 'minor':'4', 'build':'6'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'flags':'3', 'major':'4', 'minor':'5', 'build':'6'}, 'expected': 'encode: property \'CS\' missing'});
+		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'major':'4', 'minor':'5', 'build':'6'}, 'expected': 'encode: property \'flags\' missing'});
+		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'minor':'5', 'build':'6'}, 'expected': 'encode: property \'major\' missing'});
+		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'build':'6'}, 'expected': 'encode: property \'minor\' missing'});
+		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5'}, 'expected': 'encode: property \'build\' missing'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param1\' missing'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param2\' missing'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param3\' missing'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param3':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param4\' missing'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param3':'4', 'param4':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param5\' missing'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param3':'4', 'param4':'5', 'param5':'6', 'param7':'7'}, 'expected': 'encode: property \'param6\' missing'});
+		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param3':'4', 'param4':'5', 'param5':'6', 'param6':'7'}, 'expected': 'encode: property \'param7\' missing'});
 		return testCases;
 	}
 
