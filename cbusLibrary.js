@@ -1187,6 +1187,31 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('byte5')) {throw Error("encode: property 'byte5' missing")};
                 message.encoded = this.encodeEXTC5(message.Ext_OPC, message.byte1, message.byte2, message.byte3, message.byte4, message.byte5);
                 break;
+            case 'RDCC6':       // E0
+                if(!message.hasOwnProperty('repetitions')) {throw Error("encode: property 'repetitions' missing")};
+                if(!message.hasOwnProperty('byte0')) {throw Error("encode: property 'byte0' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
+                if(!message.hasOwnProperty('byte3')) {throw Error("encode: property 'byte3' missing")};
+                if(!message.hasOwnProperty('byte4')) {throw Error("encode: property 'byte4' missing")};
+                if(!message.hasOwnProperty('byte5')) {throw Error("encode: property 'byte5' missing")};
+                message.encoded = this.encodeRDCC6(message.repetitions, message.byte0, message.byte1, message.byte2, message.byte3, message.byte4, message.byte5);
+                break;
+            case 'PLOC':    // E1
+                if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
+                if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
+                if(!message.hasOwnProperty('speed')) {throw Error("encode: property 'speed' missing")};
+                if(!message.hasOwnProperty('direction')) {throw Error("encode: property 'direction' missing")};
+                if(!message.hasOwnProperty('Fn1')) {throw Error("encode: property 'Fn1' missing")};
+                if(!message.hasOwnProperty('Fn2')) {throw Error("encode: property 'Fn2' missing")};
+                if(!message.hasOwnProperty('Fn3')) {throw Error("encode: property 'Fn3' missing")};
+                message.encoded = this.encodePLOC(message.session, message.address, message.speed, message.direction, message.Fn1, message.Fn2, message.Fn3);
+                break;
+            case 'NAME':    // E2
+                if(!message.hasOwnProperty('name')) {throw Error("encode: property 'name' missing")};
+                message.encoded = this.encodeNAME(message.name);
+                break;
+
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
@@ -4295,7 +4320,7 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltE1&gt&ltrepetitions&gt&ltsession&gt&ltaddress hi&gt&ltaddress lo&gt&ltSpeed/Dir&gt&ltFn1&gt&ltFn2&gt&ltFn3&gt
     */
     encodePLOC(session, address, speed, direction, Fn1, Fn2, Fn3) {
-        var speedDir = speed + parseInt((direction == 'Reverse') ? 0 : 128)
+        var speedDir = (speed & 0x7F) + parseInt((direction.toUpperCase() == 'REVERSE') ? 0 : 128)
         return this.header({MinPri: 2}) + 'E1' + decToHex(session, 2) + decToHex(address, 4) + decToHex(speedDir, 2) + decToHex(Fn1, 2) + decToHex(Fn2, 2) + decToHex(Fn3, 2) + ';';
     }
     

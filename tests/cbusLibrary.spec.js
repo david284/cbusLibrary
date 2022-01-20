@@ -229,6 +229,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ARSON2', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': ':SB780NDD000100020304;'});
 		testCases.push({'test':{'mnemonic': 'ARSOF2', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': ':SB780NDE000100020304;'});
 		testCases.push({'test':{'mnemonic': 'EXTC5', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte5':'6'}, 'expected': ':SB780NDF010203040506;'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6', 'byte5':'7'}, 'expected': ':SA780NE001020304050607;'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'session': '1', 'address':'2', 'speed':'3', 'direction':'forward', 'Fn1':'5', 'Fn2':'6', 'Fn3':'7'}, 'expected': ':SA780NE101000283050607;'});
+		testCases.push({'test':{'mnemonic': 'NAME', 'name': '1234567'}, 'expected': ':SB780NE231323334353637;'});
 		return testCases;
 	}
 
@@ -486,6 +489,21 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'EXTC5', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte4':'5', 'byte5':'6'}, 'expected': 'encode: property \'byte3\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC5', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte5':'6'}, 'expected': 'encode: property \'byte4\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC5', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5'}, 'expected': 'encode: property \'byte5\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6', 'byte5':'7'}, 'expected': 'encode: property \'repetitions\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6', 'byte5':'7'}, 'expected': 'encode: property \'byte0\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions':'2', 'byte0':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6', 'byte5':'7'}, 'expected': 'encode: property \'byte1\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte3':'5', 'byte4':'6', 'byte5':'7'}, 'expected': 'encode: property \'byte2\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte2':'5', 'byte4':'6', 'byte5':'7'}, 'expected': 'encode: property \'byte3\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte2':'5', 'byte3':'5', 'byte5':'7'}, 'expected': 'encode: property \'byte4\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDCC6', 'repetitions':'2', 'byte0':'3', 'byte1':'4', 'byte2':'5', 'byte3':'4', 'byte4':'6'}, 'expected': 'encode: property \'byte5\' missing'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'address':'3', 'speed':'4', 'direction':'5', 'Fn1':'4', 'Fn2':'6', 'Fn3':'3'}, 'expected': 'encode: property \'session\' missing'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'speed':'4', 'direction':'5', 'Fn1':'4', 'Fn2':'6', 'Fn3':'3'}, 'expected': 'encode: property \'address\' missing'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'address':'3', 'direction':'5', 'Fn1':'4', 'Fn2':'6', 'Fn3':'3'}, 'expected': 'encode: property \'speed\' missing'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'address':'3', 'speed':'5', 'Fn1':'4', 'Fn2':'6', 'Fn3':'3'}, 'expected': 'encode: property \'direction\' missing'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'address':'3', 'speed':'5', 'direction':'4', 'Fn2':'6', 'Fn3':'3'}, 'expected': 'encode: property \'Fn1\' missing'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'address':'3', 'speed':'5', 'direction':'4', 'Fn1':'6', 'Fn3':'3'}, 'expected': 'encode: property \'Fn2\' missing'});
+		testCases.push({'test':{'mnemonic': 'PLOC', 'session':'2', 'address':'3', 'speed':'5', 'direction':'4', 'Fn1':'6', 'Fn2':'3'}, 'expected': 'encode: property \'Fn3\' missing'});
+		testCases.push({'test':{'mnemonic': 'NAME'}, 'expected': 'encode: property \'name\' missing'});
 		return testCases;
 	}
 
