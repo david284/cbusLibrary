@@ -1252,8 +1252,23 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('eventIndex')) {throw Error("encode: property 'eventIndex' missing")};
                 message.encoded = this.encodeENRSP(message.nodeNumber, message.eventName, message.eventIndex);
                 break;
+            case 'ARON3':   // F3
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                message.encoded = this.encodeARON3(message.nodeNumber, message.eventNumber, message.data1, message.data2, message.data3);
+                break;
+            case 'AROF3':   // F4
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                message.encoded = this.encodeAROF3(message.nodeNumber, message.eventNumber, message.data1, message.data2, message.data3);
+                break;
                 
-                //    encodeENRSP(nodeNumber, eventName, eventIndex) {
 
 
             default:
