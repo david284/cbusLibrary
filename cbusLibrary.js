@@ -1276,7 +1276,24 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('eventVariableValue')) {throw Error("encode: property 'eventVariableValue' missing")};
                 message.encoded = this.encodeEVLRNI(message.nodeNumber, message.eventNumber, message.eventNumberIndex, message.eventVariableIndex, message.eventVariableValue);
                 break;
-   //   encodeEVLRNI(nodeNumber, eventNumber, eventNumberIndex, eventVariableIndex, eventVariableValue) {             
+            case 'ACDAT':   // F6
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                if(!message.hasOwnProperty('data4')) {throw Error("encode: property 'data4' missing")};
+                if(!message.hasOwnProperty('data5')) {throw Error("encode: property 'data5' missing")};
+                message.encoded = this.encodeACDAT(message.nodeNumber, message.data1, message.data2, message.data3, message.data4, message.data5);
+                break;
+            case 'ARDAT':   // F7
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                if(!message.hasOwnProperty('data4')) {throw Error("encode: property 'data4' missing")};
+                if(!message.hasOwnProperty('data5')) {throw Error("encode: property 'data5' missing")};
+                message.encoded = this.encodeARDAT(message.nodeNumber, message.data1, message.data2, message.data3, message.data4, message.data5);
+                break;
 
 
             default:
