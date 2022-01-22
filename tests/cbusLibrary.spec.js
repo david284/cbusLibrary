@@ -239,6 +239,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventName':'2', 'eventIndex':'3'}, 'expected': ':SB780NF200010000000203;'});
 		testCases.push({'test':{'mnemonic': 'ARON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF300010002030405;'});
 		testCases.push({'test':{'mnemonic': 'AROF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF400010002030405;'});
+		testCases.push({'test':{'mnemonic': 'EVLRNI', 'nodeNumber':'1', 'eventNumber':'2', 'eventNumberIndex':'3', 'eventVariableIndex':'4', 'eventVariableValue':'5'}, 'expected': ':SB780NF500010002030405;'});
 		return testCases;
 	}
 
@@ -547,6 +548,11 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'AROF3', 'nodeNumber':'2', 'eventNumber':'2', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'AROF3', 'nodeNumber':'2', 'eventNumber':'2', 'data1':'3', 'data3':'5'}, 'expected': 'encode: property \'data2\' missing'});
 		testCases.push({'test':{'mnemonic': 'AROF3', 'nodeNumber':'2', 'eventNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': 'encode: property \'data3\' missing'});
+		testCases.push({'test':{'mnemonic': 'EVLRNI', 'eventNumber': '2', 'eventNumberIndex':'3', 'eventVariableIndex':'4', 'eventVariableValue':'5'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'EVLRNI', 'nodeNumber': '1', 'eventNumberIndex':'3', 'eventVariableIndex':'4', 'eventVariableValue':'5'}, 'expected': 'encode: property \'eventNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'EVLRNI', 'nodeNumber': '1', 'eventNumber': '2', 'eventVariableIndex':'4', 'eventVariableValue':'5'}, 'expected': 'encode: property \'eventNumberIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'EVLRNI', 'nodeNumber': '1', 'eventNumber': '2', 'eventNumberIndex':'3', 'eventVariableValue':'5'}, 'expected': 'encode: property \'eventVariableIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'EVLRNI', 'nodeNumber': '1', 'eventNumber': '2', 'eventNumberIndex':'3', 'eventVariableIndex':'4'}, 'expected': 'encode: property \'eventVariableValue\' missing'});
 		return testCases;
 	}
 

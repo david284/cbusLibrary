@@ -1268,7 +1268,15 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
                 message.encoded = this.encodeAROF3(message.nodeNumber, message.eventNumber, message.data1, message.data2, message.data3);
                 break;
-                
+            case 'EVLRNI':   // F5
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('eventNumberIndex')) {throw Error("encode: property 'eventNumberIndex' missing")};
+                if(!message.hasOwnProperty('eventVariableIndex')) {throw Error("encode: property 'eventVariableIndex' missing")};
+                if(!message.hasOwnProperty('eventVariableValue')) {throw Error("encode: property 'eventVariableValue' missing")};
+                message.encoded = this.encodeEVLRNI(message.nodeNumber, message.eventNumber, message.eventNumberIndex, message.eventVariableIndex, message.eventVariableValue);
+                break;
+   //   encodeEVLRNI(nodeNumber, eventNumber, eventNumberIndex, eventVariableIndex, eventVariableValue) {             
 
 
             default:
