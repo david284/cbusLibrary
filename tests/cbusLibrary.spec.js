@@ -263,17 +263,11 @@ describe('cbusMessage tests', function(){
         var decode = cbusLib.decode(encode.encoded);
 		winston.info({message: 'cbusMessage test: decode result ' + JSON.stringify(decode)});
 
-
         winston.info({message: 'cbusMessage test: --------------------------'});
-        
-            
             Object.entries(value.test).forEach(function([key, item]){
                 winston.info({message: 'cbusMessage test: ' + key + ' : ' + item});
                 expect(decode[key].toString()).to.equal(value.test[key]);
             });
-            
-            
-            
         winston.info({message: 'cbusMessage test: --------------------------'});
 
 
