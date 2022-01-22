@@ -1230,6 +1230,22 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('param7')) {throw Error("encode: property 'param7' missing")};
                 message.encoded = this.encodePARAMS(message.param1, message.param2, message.param3, message.param4, message.param5, message.param6, message.param7);
                 break;
+            case 'ACON3':   // F0
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                message.encoded = this.encodeACON3(message.nodeNumber, message.eventNumber, message.data1, message.data2, message.data3);
+                break;
+            case 'ACOF3':   // F1
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventNumber')) {throw Error("encode: property 'eventNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                message.encoded = this.encodeACOF3(message.nodeNumber, message.eventNumber, message.data1, message.data2, message.data3);
+                break;
 
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
