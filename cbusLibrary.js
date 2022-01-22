@@ -1328,8 +1328,32 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('data5')) {throw Error("encode: property 'data5' missing")};
                 message.encoded = this.encodeDDRS(message.deviceNumber, message.data1, message.data2, message.data3, message.data4, message.data5);
                 break;
-
-
+            case 'ARSON3':   // FD
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                message.encoded = this.encodeARSON3(message.nodeNumber, message.deviceNumber, message.data1, message.data2, message.data3);
+                break;
+            case 'ARSOF3':   // FE
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                message.encoded = this.encodeARSOF3(message.nodeNumber, message.deviceNumber, message.data1, message.data2, message.data3);
+                break;
+            case 'EXTC6':   // FF
+                if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
+                if(!message.hasOwnProperty('byte1')) {throw Error("encode: property 'byte1' missing")};
+                if(!message.hasOwnProperty('byte2')) {throw Error("encode: property 'byte2' missing")};
+                if(!message.hasOwnProperty('byte3')) {throw Error("encode: property 'byte3' missing")};
+                if(!message.hasOwnProperty('byte4')) {throw Error("encode: property 'byte4' missing")};
+                if(!message.hasOwnProperty('byte5')) {throw Error("encode: property 'byte5' missing")};
+                if(!message.hasOwnProperty('byte6')) {throw Error("encode: property 'byte6' missing")};
+                message.encoded = this.encodeEXTC6(message.Ext_OPC, message.byte1, message.byte2, message.byte3, message.byte4, message.byte5, message.byte6);
+                break;
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
                 break;
