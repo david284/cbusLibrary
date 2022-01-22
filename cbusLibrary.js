@@ -1246,6 +1246,15 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
                 message.encoded = this.encodeACOF3(message.nodeNumber, message.eventNumber, message.data1, message.data2, message.data3);
                 break;
+            case 'ENRSP':   // F2
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('eventName')) {throw Error("encode: property 'eventName' missing")};
+                if(!message.hasOwnProperty('eventIndex')) {throw Error("encode: property 'eventIndex' missing")};
+                message.encoded = this.encodeENRSP(message.nodeNumber, message.eventName, message.eventIndex);
+                break;
+                
+                //    encodeENRSP(nodeNumber, eventName, eventIndex) {
+
 
             default:
                 throw Error('encode: \'' + message.mnemonic + '\' not supported');
@@ -4573,7 +4582,9 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF2&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&lteventName char 3&gt&lteventName char 2&gt&lteventName char 1&gt&lteventName char 0&gt&lteventIndex&gt
     */
     encodeENRSP(nodeNumber, eventName, eventIndex) {
-        return this.header({MinPri: 3}) + 'F2' + decToHex(nodeNumber, 4) + eventName + decToHex(eventIndex, 2) + ';';
+        // process eventName - remove spaces, limit to 8 chars, and pad with 0's if less than eight
+        var processedEventName = eventName.trim().substring(0, 8).padStart(8, '0')
+        return this.header({MinPri: 3}) + 'F2' + decToHex(nodeNumber, 4) + processedEventName + decToHex(eventIndex, 2) + ';';
     }
 
 

@@ -236,6 +236,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1': '1', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': ':SB780NEF01020304050607;'});
 		testCases.push({'test':{'mnemonic': 'ACON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF000010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF100010002030405;'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventName':'2', 'eventIndex':'3'}, 'expected': ':SB780NF200010000000203;'});
 		return testCases;
 	}
 
@@ -531,6 +532,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber':'2', 'eventNumber':'2', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber':'2', 'eventNumber':'2', 'data1':'3', 'data3':'5'}, 'expected': 'encode: property \'data2\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber':'2', 'eventNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': 'encode: property \'data3\' missing'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'eventName': '2', 'eventIndex':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventIndex':'3'}, 'expected': 'encode: property \'eventName\' missing'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventName':'2'}, 'expected': 'encode: property \'eventIndex\' missing'});
 		return testCases;
 	}
 
