@@ -1310,6 +1310,24 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
                 message.encoded = this.encodeASOF3(message.nodeNumber, message.deviceNumber, message.data1, message.data2, message.data3);
                 break;
+            case 'DDES':   // FA
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                if(!message.hasOwnProperty('data4')) {throw Error("encode: property 'data4' missing")};
+                if(!message.hasOwnProperty('data5')) {throw Error("encode: property 'data5' missing")};
+                message.encoded = this.encodeDDES(message.deviceNumber, message.data1, message.data2, message.data3, message.data4, message.data5);
+                break;
+            case 'DDRS':   // FB
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                if(!message.hasOwnProperty('data4')) {throw Error("encode: property 'data4' missing")};
+                if(!message.hasOwnProperty('data5')) {throw Error("encode: property 'data5' missing")};
+                message.encoded = this.encodeDDRS(message.deviceNumber, message.data1, message.data2, message.data3, message.data4, message.data5);
+                break;
 
 
             default:
