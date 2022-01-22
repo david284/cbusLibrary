@@ -701,9 +701,9 @@ class cbusLibrary {
                 message.encoded = this.encodeRLOC(message.address);
                 break;
             case 'QCON':    // 41
-                if(!message.hasOwnProperty('ConID')) {throw Error("encode: property 'ConID' missing")};
+                if(!message.hasOwnProperty('conID')) {throw Error("encode: property 'conID' missing")};
                 if(!message.hasOwnProperty('index')) {throw Error("encode: property 'index' missing")};
-                message.encoded = this.encodeQCON(message.ConID, message.index);
+                message.encoded = this.encodeQCON(message.conID, message.index);
                 break;
             case 'SNN':    // 42
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -896,8 +896,8 @@ class cbusLibrary {
             case 'QCVS':   // 84
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
                 if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
-                if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
-                message.encoded = this.encodeQCVS(message.session, message.CV, message.Mode);
+                if(!message.hasOwnProperty('mode')) {throw Error("encode: property 'mode' missing")};
+                message.encoded = this.encodeQCVS(message.session, message.CV, message.mode);
                 break;
             case 'PCVS':   // 85
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
@@ -1002,9 +1002,9 @@ class cbusLibrary {
             case 'WCVS':   // A2
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
                 if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
-                if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
+                if(!message.hasOwnProperty('mode')) {throw Error("encode: property 'mode' missing")};
                 if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
-                message.encoded = this.encodeWCVS(message.session, message.CV, message.Mode, message.value);
+                message.encoded = this.encodeWCVS(message.session, message.CV, message.mode, message.value);
                 break;
             case 'ACON1':   // B0
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -1094,9 +1094,9 @@ class cbusLibrary {
             case 'WCVOA':   // C1
                 if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
                 if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
-                if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
+                if(!message.hasOwnProperty('mode')) {throw Error("encode: property 'mode' missing")};
                 if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
-                message.encoded = this.encodeWCVOA(message.address, message.CV, message.Mode, message.value);
+                message.encoded = this.encodeWCVOA(message.address, message.CV, message.mode, message.value);
                 break;
             case 'FCLK':   // CF
                 if(!message.hasOwnProperty('minutes')) {throw Error("encode: property 'minutes' missing")};
@@ -1869,7 +1869,7 @@ class cbusLibrary {
 
 
     // 41 QCON
-	// RLOC Format: <MjPri><MinPri=2><CANID>]<41><ConID><Index>
+	// RLOC Format: <MjPri><MinPri=2><CANID>]<41><conID><Index>
     //
     decodeQCON(message) {
         return {'encoded': message,
@@ -1883,13 +1883,13 @@ class cbusLibrary {
     }
     /**
     * @desc opCode 41<br>
-    * @param {int} ConID number 0 to 255
+    * @param {int} conID number 0 to 255
     * @param {int} index number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&lt41&gt&ltConID&gt&ltindex&gt
     */
-    encodeQCON(ConID, index) {
-        return this.header({MinPri: 2}) + '41' + decToHex(ConID, 2) + decToHex(index, 2) + ';'
+    encodeQCON(conID, index) {
+        return this.header({MinPri: 2}) + '41' + decToHex(conID, 2) + decToHex(index, 2) + ';'
     }
 
 
@@ -2043,7 +2043,7 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&lt46&gt&ltsession&gt&ltspeed/dir&gt
     */
     encodeDSPD(session, speed, direction) {
-        var speedDir = speed + parseInt((direction == 'Reverse') ? 0 : 128)
+        var speedDir = (speed & 0x7F) + parseInt((direction == 'Reverse') ? 0 : 128)
         return this.header({MinPri: 2}) + '47' + decToHex(session, 2) + decToHex(speedDir, 2) + ';';
     }
     
@@ -2892,7 +2892,7 @@ class cbusLibrary {
     
 
     // 84 QCVS
-    // QCVS Format: [<MjPri><MinPri=2><CANID>]<84><Session><High CV#><Low CV#><Mode>
+    // QCVS Format: [<MjPri><MinPri=2><CANID>]<84><Session><High CV#><Low CV#><mode>
     //
     decodeQCVS(message) {
         return {'encoded': message,
@@ -2901,22 +2901,22 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
                 'CV': parseInt(message.substr(11, 4), 16),
-                'Mode': parseInt(message.substr(15, 2), 16),
+                'mode': parseInt(message.substr(15, 2), 16),
                 'text': "QCVS (84) session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 2), 16) +
-					" Mode " + parseInt(message.substr(15, 2), 16)
+					" mode " + parseInt(message.substr(15, 2), 16)
         }
     }
     /**
     * @desc opCode 83<br>
     * @param {int} session number 0 to 255
     * @param {int} CV number 0 to 65535
-    * @param {int} Mode number 0 to 255
+    * @param {int} mode number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&lt83&gt&ltsession&gt&ltCV hi&gt&ltCV lo&gt&ltMode&gt
     */
-    encodeQCVS(Session, CV, Mode) {
-        return this.header({MinPri: 2}) + '84' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(Mode, 2) + ';'
+    encodeQCVS(Session, CV, mode) {
+        return this.header({MinPri: 2}) + '84' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(mode, 2) + ';'
     }
     
 
@@ -3435,7 +3435,7 @@ class cbusLibrary {
     
 
     // A2 WCVS
-    // WCVS Format: [<MjPri><MinPri=2><CANID>]<A2><Session><High CV#><LowCV#><Mode><CVval>
+    // WCVS Format: [<MjPri><MinPri=2><CANID>]<A2><Session><High CV#><LowCV#><mode><CVval>
     //
     decodeWCVS(message) {
         return {'encoded': message,
@@ -3448,7 +3448,7 @@ class cbusLibrary {
                 'value': parseInt(message.substr(17, 2), 16),
                 'text': "WCVS (A2) Session " + parseInt(message.substr(9, 2), 16) + 
 					" CV " + parseInt(message.substr(11, 4), 16) +
-					" Mode " + parseInt(message.substr(15, 2), 16) +
+					" mode " + parseInt(message.substr(15, 2), 16) +
 					" Value " + parseInt(message.substr(17, 2), 16)
         }
     }
@@ -3479,8 +3479,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16),
                 'text': "ACON1 (B0) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3510,8 +3509,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16), 
                 'text': "ACOF1 (B1) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3572,8 +3570,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16),
                 'text': "ARON1 (B3) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3603,8 +3600,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16),
                 'text': "AROF1 (B4) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3700,8 +3696,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16),
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16),
                 'text': "ASON1 (B8) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3731,8 +3726,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16),
                 'text': "ASOF1 (B9) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3762,8 +3756,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16),
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16),
                 'text': "ARSON1 (BD) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3793,8 +3786,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16),
-                                hex:message.substr(17, 2)},
+                'data1': parseInt(message.substr(17, 2), 16),
                 'text': "ARSOF1 (BE) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16)
@@ -3897,7 +3889,7 @@ class cbusLibrary {
     
 
     // C1 WCVOA
-    // WCVOA Format: [<MjPri><MinPri=2><CANID>]<C1><AddrH><AddrL><High CV#><Low CV#><Mode><Val>
+    // WCVOA Format: [<MjPri><MinPri=2><CANID>]<C1><AddrH><AddrL><High CV#><Low CV#><mode><Val>
     //
     decodeWCVOA(message) {
         return {'encoded': message,
@@ -4002,9 +3994,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "ACON2 (D0) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4036,9 +4027,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "ACOF2 (D1) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4138,9 +4128,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "ARON2 (D4) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4172,9 +4161,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "AROF2 (D5) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4206,9 +4194,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "ASON2 (D8) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4240,9 +4227,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "ASOF2 (D9) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4274,9 +4260,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "ARSON2 (DD) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4308,9 +4293,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                hex:message.substr(17, 4)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
                 'text': "ARSOF2 (DE) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4591,10 +4575,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16),
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16),
                 'text': "ACON3 (F0) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4628,10 +4611,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16),
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16),
                 'text': "ACOF3 (F1) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4696,10 +4678,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16), 
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16), 
                 'text': "ARON3 (F3) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4733,10 +4714,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16), 
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16), 
                 'text': "AROF3 (F4) Node " + parseInt(message.substr(9, 4), 16) + 
 					" eventNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4900,10 +4880,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16),
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16),
                 'text': "ASON3 (F8) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -4937,10 +4916,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16),
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16),
                 'text': "ASOF3 (F9) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -5063,10 +5041,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16), 
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16), 
                 'text': "ARSON3 (FD) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
@@ -5101,10 +5078,9 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'deviceNumber': parseInt(message.substr(13, 4), 16),
-                'eventData': {  data1: parseInt(message.substr(17, 2), 16), 
-                                data2: parseInt(message.substr(19, 2), 16), 
-                                data3: parseInt(message.substr(21, 2), 16), 
-                                hex:message.substr(17, 6)},
+                'data1': parseInt(message.substr(17, 2), 16), 
+                'data2': parseInt(message.substr(19, 2), 16), 
+                'data3': parseInt(message.substr(21, 2), 16), 
                 'text': "ARSOF3 (FE) Node " + parseInt(message.substr(9, 4), 16) + 
 					" deviceNumber " + parseInt(message.substr(13, 4), 16) +
                     " data1 " + parseInt(message.substr(17, 2), 16) +
