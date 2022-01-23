@@ -626,9 +626,28 @@ class cbusLibrary {
         return output
     }
 
+    encode(message){
+        if(message.hasOwnProperty('ID_TYPE')) {
+            switch (message['ID_TYPE']) {
+                case 'X':
+                    // encode extended message
+                    break;
+                case 'S':
+                    return this.encodeStandardMessage(message);
+                    break;
+                default:
+                    throw Error('encode: ID_TYPE ' + message.ID_TYPE + ' not supported');
+                    break;
+            }
+        }
+        else{
+            // assume its a standard message if no ID type supplied
+            return this.encodeStandardMessage(message);
+        }
+    }
 
     /**
-    * @desc encode a CBUS message<br>
+    * @desc encode a standard CBUS message<br>
     * This will encode a 11 bit ID CBUS message from a supplied JSON object into a 'grid connect' ascii format<br>
     * The supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode<br>
     * If the correct JSON properties for the parameters for the opcode are not present, an exception will be thrown<br>
@@ -637,7 +656,7 @@ class cbusLibrary {
     * @return {Object} returns the original input JSON object with the resultant encoded CBUS message added using the 'encoded' property
     *
     */
-    encode(message){
+    encodeStandardMessage(message){
         if(message.hasOwnProperty('mnemonic')) {
             switch (message['mnemonic']) {
             case 'ACK':     // 00
