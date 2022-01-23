@@ -107,7 +107,7 @@ class cbusLibrary {
     * @desc Decode a CBUS message<br>
     * This will decode both 11 bit ID CBUS messages and also 29 bit extended messages, as these are identified in the message itself 
     * @param {String} message CAN BUS message in 'Grid connect' ASCII format
-    * @return {String} Decoded properties as a JSON structure - content dependant on specific message, 
+    * @return {Object} Decoded properties as a JSON structure - content dependant on specific message, 
     * but always has 'encoded', 'ID_TYPE' & 'text' elements<br>
     * 'ID_TYPE' will be either 'S' (11 bit CBUS message) or 'X' (29 bit extended message) - or blank if not valid
     *
@@ -623,12 +623,12 @@ class cbusLibrary {
 
     /**
     * @desc encode a CBUS message<br>
-    * This will encode a 11 bit ID CBUS message from a supplied JSON object into a 'grid connect' ascii format
-    * the supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode
-    * If the correct JSON properties for the parameters for the opcode are not present, an exception will be thrown
-    * The JSON properties shared by both encode() & decode() are identical (note decode() may return more properties than encode() requires)
-    * @param (JSON object) CBUS message properties as a JSON object - content dependant on specific CBUS opcode
-    * @return {JSON object} returns the input JSON object with the encoded CBUS message added with the 'encoded' key
+    * This will encode a 11 bit ID CBUS message from a supplied JSON object into a 'grid connect' ascii format<br>
+    * the supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode<br>
+    * If the correct JSON properties for the parameters for the opcode are not present, an exception will be thrown<br>
+    * The JSON properties shared by both encode() & decode() are identical - however note decode() may return more properties than encode() requires<br>
+    * @param {Object} message - CBUS message properties as a JSON object - content dependant on specific CBUS opcode, but must always contain 'mnemonic'
+    * @return {Object} returns the input JSON object with the encoded CBUS message added with the 'encoded' key
     *
     */
     encode(message){
