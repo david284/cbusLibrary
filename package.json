@@ -9,7 +9,7 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests/*.spec.js --exit",
     "_comment_1_": "  need to invoke the following using npm run jsdoc  ",
-    "jsdoc": "jsdoc cbuslibrary.js -r overview.md --verbose"
+    "jsdoc": "jsdoc cbuslibrary.js -r index.md --verbose"
   },
   "repository": {
     "type": "git",
