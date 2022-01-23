@@ -7,7 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha ./tests/*.spec.js --exit"
+    "test": "./node_modules/.bin/mocha ./tests/*.spec.js --exit",
+    "_comment_1_": "  need to invoke the following using npm run jsdoc  ",
+    "jsdoc": "jsdoc cbuslibrary.js -r overview.md --verbose"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "chai": "^4.2.0",
+    "jsdoc": "^3.6.7",
     "mocha": "^8.1.1",
     "mocha-param": "2.0.1",
     "winston": "^3.3.3"

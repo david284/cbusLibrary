@@ -105,10 +105,13 @@ class cbusLibrary {
 
     /**
     * @desc Decode a CBUS message<br>
-    * This will decode both 11 bit ID CBUS messages and also 29 bit extended messages, as these are identified in the message itself 
-    * @param {String} message CAN BUS message in 'Grid connect' ASCII format
+    * This will decode both 11 bit ID CBUS messages and also 29 bit extended messages, as these are identified in the message itself <br>
+    * The actual CBUS messsage is expected to be in 'Grid connect' ASCII format, either as a plain string<br>
+    * or as the 'encoded' property in a JSON object<br>
+    * NOTE: doesn't preserve the original input JSON, but creates new JSON object as output
+    * @param {String} message CAN BUS message in a plain string or JSON format ('Grid connect' ASCII)
     * @return {Object} Decoded properties as a JSON structure - content dependant on specific message, 
-    * but always has 'encoded', 'ID_TYPE' & 'text' elements<br>
+    * but will always have 'encoded' as the original input message, and also 'ID_TYPE' & 'text' elements<br>
     * 'ID_TYPE' will be either 'S' (11 bit CBUS message) or 'X' (29 bit extended message) - or blank if not valid
     *
     * @example
@@ -145,16 +148,19 @@ class cbusLibrary {
     *    }
     */
     decode(message) {
-                    if (( message.substr(1, 1) == 'S' ) & (message.length >= 9)) {
-                        return this.decodeStandardMessage(message)
-                    } else if (( message.substr(1, 1) == 'X' ) & (message.length >= 11)) {
-                        return this.decodeExtendedMessage(message)
-                    } else {
-                        return {'encoded': message,
-                                'ID_TYPE': '',
-                                'text': 'Unsupported message',
-                        }
-                    }
+        if(message.hasOwnProperty('encoded')) {
+            message = message.encoded;
+        }
+        if (( message.substr(1, 1) == 'S' ) & (message.length >= 9)) {
+            return this.decodeStandardMessage(message)
+        } else if (( message.substr(1, 1) == 'X' ) & (message.length >= 11)) {
+            return this.decodeExtendedMessage(message)
+        } else {
+            return {'encoded': message,
+                    'ID_TYPE': '',
+                    'text': 'Unsupported message',
+            }
+        }
     }
 
     decodeStandardMessage(message) {
@@ -624,11 +630,11 @@ class cbusLibrary {
     /**
     * @desc encode a CBUS message<br>
     * This will encode a 11 bit ID CBUS message from a supplied JSON object into a 'grid connect' ascii format<br>
-    * the supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode<br>
+    * The supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode<br>
     * If the correct JSON properties for the parameters for the opcode are not present, an exception will be thrown<br>
     * The JSON properties shared by both encode() & decode() are identical - however note decode() may return more properties than encode() requires<br>
     * @param {Object} message - CBUS message properties as a JSON object - content dependant on specific CBUS opcode, but must always contain 'mnemonic'
-    * @return {Object} returns the input JSON object with the encoded CBUS message added with the 'encoded' key
+    * @return {Object} returns the original input JSON object with the resultant encoded CBUS message added using the 'encoded' property
     *
     */
     encode(message){

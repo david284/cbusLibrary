@@ -260,17 +260,21 @@ describe('cbusMessage tests', function(){
 		winston.info({message: 'cbusMessage test: Generic encode ' + JSON.stringify(encode)});
 		expect(encode.mnemonic).to.equal(value.test.mnemonic, 'mnemonic');
         expect(encode.encoded).to.equal(value.expected, 'encoded');
-        var decode = cbusLib.decode(encode.encoded);
+        // now run encoded value into the decoder to see if encode/decode json matches
+        // checks that decode() will accept JSON
+        var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: decode result ' + JSON.stringify(decode)});
-
+        // check all encode JSON properties exist in decode result (may be extra properties in decode we're not worried about)
         winston.info({message: 'cbusMessage test: --------------------------'});
             Object.entries(value.test).forEach(function([key, item]){
                 winston.info({message: 'cbusMessage test: ' + key + ' : ' + item});
                 expect(decode[key].toString()).to.equal(value.test[key]);
             });
         winston.info({message: 'cbusMessage test: --------------------------'});
-
-
+        // now check that if we put the decode back into the encode, we stll get the same encoding
+        var encode2 = cbusLib.encode(decode);
+        expect(encode2.encoded).to.equal(value.expected, 'encoded#2');
+		winston.info({message: 'cbusMessage test: encode2 ' + JSON.stringify(encode2)});
 	})
 
 
