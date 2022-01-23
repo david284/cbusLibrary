@@ -623,9 +623,12 @@ class cbusLibrary {
 
     /**
     * @desc encode a CBUS message<br>
-    * This will encode a 11 bit ID CBUS message from a supplied JSON object
-    * @param CBUS message properties as a JSON object - content dependant on specific CBUS opcode
-    * @return {String} encoded CBUS message in 'grid connect' ascii format
+    * This will encode a 11 bit ID CBUS message from a supplied JSON object into a 'grid connect' ascii format
+    * the supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode
+    * If the correct JSON properties for the parameters for the opcode are not present, an exception will be thrown
+    * The JSON properties shared by both encode() & decode() are identical (note decode() may return more properties than encode() requires)
+    * @param (JSON object) CBUS message properties as a JSON object - content dependant on specific CBUS opcode
+    * @return {JSON object} returns the input JSON object with the encoded CBUS message added with the 'encoded' key
     *
     */
     encode(message){
