@@ -1,3 +1,4 @@
+
 # cbusLibrary
 ### Library for decoding and encoding CBUS Layout Control Bus (LCB) messages, including extended messages used for firmware download
 There is a very comprehensive set of tests for this - see <strong>tests</strong> section further below. <br>
@@ -59,8 +60,12 @@ example extended (29 bit Id) message decode:
     
 
 ### encoding
-for encoding, each format of message has it's own function, as the type & number of parameters vary with opCode
+For encoding standard CBUS messages, there's one function encode() thats takes a JSON object, which needs the 'mnemonic' for the specific opcode, and any parameters the opcode requires<br>
+The format of the JSON object follows exactly the same syntax as the result from the decode() function above<br>
+Each opcode also it's own function, that has individual parameters, as the type & number of parameters vary with opCode
 <ul style="list-style-type:none;"><li>var encode = cbusLib.encodeEVLRN(nodeNumber, eventNumber, VariableIndex, eventVariableValue);</li></ul>
+
+There are only separate functions for encoding extended CBUS messages currently
 
 ## eventName
 Typically, in a message the node number represents the sending module of the message. 
