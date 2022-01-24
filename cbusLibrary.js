@@ -1407,12 +1407,16 @@ class cbusLibrary {
                             if(!message.hasOwnProperty('CPDTH')) {throw Error("encode: property 'CPDTH' missing")};
                             message.encoded = this.encode_EXT_PUT_CONTROL(message.address, message.CTLBT, message.SPCMD, message.CPDTL, message.CPDTH);
                         }
-                        if (message.type == 'DATA') {
+                        else if (message.type == 'DATA') {
                             if(!message.hasOwnProperty('data')) {throw Error("encode: property 'data' missing")};
                             message.encoded = this.encode_EXT_PUT_DATA(message.data);
                         }
+                        else {
+                            throw Error('encode extended: type \'' + message.type + '\' not supported');
+                        }
+                            
                     } else {
-                        throw Error('encode: \'' + message.type + '\' not supported');
+                        throw Error("encode: property \'type\' missing");
                     }
                     break;
                 case 'GET':

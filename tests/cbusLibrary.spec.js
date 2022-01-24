@@ -249,6 +249,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ARSON3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NFD00010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ARSOF3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NFE00010002030405;'});
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte5':'6', 'byte6':'7'}, 'expected': ':SB780NFF01020304050607;'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': ':X00080000N0100000002030405;'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': ':X00080001N0102030405060708;'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"RESPONSE","response":'1'}, 'expected': ':X80080000N01;'});
 		return testCases;
 	}
 
@@ -268,7 +271,8 @@ describe('cbusMessage tests', function(){
         winston.info({message: 'cbusMessage test: --------------------------'});
             Object.entries(value.test).forEach(function([key, item]){
                 winston.info({message: 'cbusMessage test: ' + key + ' : ' + item});
-                expect(decode[key].toString()).to.equal(value.test[key]);
+                // ensure we compare like with like, so convert both sides to strings
+                expect(decode[key].toString()).to.equal(value.test[key].toString());
             });
         winston.info({message: 'cbusMessage test: --------------------------'});
         // now check that if we put the decode back into the encode, we stll get the same encoding
@@ -626,6 +630,21 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte5':'6', 'byte6':'7'}, 'expected': 'encode: property \'byte4\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte6':'7'}, 'expected': 'encode: property \'byte5\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte5':'6'}, 'expected': 'encode: property \'byte6\' missing'});
+		testCases.push({'test':{"operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'mnemonic\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'operation\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'type\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'address\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'CTLBT\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'SPCMD\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTH":"5"}, 'expected': 'encode: property \'CPDTL\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4"}, 'expected': 'encode: property \'CPDTH\' missing'});
+		testCases.push({'test':{"operation":"PUT","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode: property \'mnemonic\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode: property \'operation\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode: property \'type\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"DATA"}, 'expected': 'encode: property \'data\' missing'});
+		testCases.push({'test':{"operation":"RESPONSE","response":'1'}, 'expected': 'encode: property \'mnemonic\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","response":'1'}, 'expected': 'encode: property \'operation\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"RESPONSE"}, 'expected': 'encode: property \'response\' missing'});
 		return testCases;
 	}
 
@@ -6275,6 +6294,10 @@ describe('cbusMessage tests', function(){
 		expect(decode.type).to.equal('DATA', 'type');
         expect(decode.text).to.include('PUT', 'text operation');
         expect(decode.text).to.include('DATA', 'text type');
+        // ok - try encoding the decode, to see if we still get the expected encode
+        var encode2 = cbusLib.encode(decode);
+		winston.info({message: 'cbusMessage test: encode2 ' + JSON.stringify(encode2)});
+		expect(encode2.encoded).to.equal(expected, 'encoded');
     })
 
 
@@ -6306,6 +6329,10 @@ describe('cbusMessage tests', function(){
 		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
 		expect(decode.operation).to.equal('RESPONSE', 'operation');
 		expect(decode.response).to.equal(value.response, 'response');
+        // ok - try encoding the decode, to see if we still get the expected encode
+        var encode2 = cbusLib.encode(decode);
+		winston.info({message: 'cbusMessage test: encode2 ' + JSON.stringify(encode2)});
+		expect(encode2.encoded).to.equal(expected, 'encoded');
     })
 
 
