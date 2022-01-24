@@ -633,8 +633,7 @@ class cbusLibrary {
                     return this.encodeStandardMessage(message);
                     break;
                 case 'X':
-                    // encode extended message
-//                    return this.encodeExtendedMessage(message);
+                    return this.encodeExtendedMessage(message);
                     break;
                 default:
                     throw Error('encode: ID_TYPE ' + message.ID_TYPE + ' not supported');
@@ -1400,17 +1399,17 @@ class cbusLibrary {
             switch (message.operation) {
                 case 'PUT':
                     if(message.hasOwnProperty('type')){
-                        if (message.type = 'CONTROL') {
+                        if (message.type == 'CONTROL') {
                             if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
                             if(!message.hasOwnProperty('CTLBT')) {throw Error("encode: property 'CTLBT' missing")};
                             if(!message.hasOwnProperty('SPCMD')) {throw Error("encode: property 'SPCMD' missing")};
                             if(!message.hasOwnProperty('CPDTL')) {throw Error("encode: property 'CPDTL' missing")};
                             if(!message.hasOwnProperty('CPDTH')) {throw Error("encode: property 'CPDTH' missing")};
-                            message.encoded = encode_EXT_PUT_CONTROL(message.address, message.CTLBT, message.SPCMD, message.CPDTL, message.CPDTH);
+                            message.encoded = this.encode_EXT_PUT_CONTROL(message.address, message.CTLBT, message.SPCMD, message.CPDTL, message.CPDTH);
                         }
-                        if (message.type = 'DATA') {
+                        if (message.type == 'DATA') {
                             if(!message.hasOwnProperty('data')) {throw Error("encode: property 'data' missing")};
-                            message.encoded = encode_EXT_PUT_DATA(message.data);
+                            message.encoded = this.encode_EXT_PUT_DATA(message.data);
                         }
                     } else {
                         throw Error('encode: \'' + message.type + '\' not supported');
@@ -1420,12 +1419,13 @@ class cbusLibrary {
                     break;
                 case 'RESPONSE':
                     if(!message.hasOwnProperty('response')) {throw Error("encode: property 'response' missing")};
-                    message.encoded = encode_EXT_RESPONSE(message.response);
+                    message.encoded = this.encode_EXT_RESPONSE(message.response);
                     break;
                 default:
                      throw Error('encode extended: \'' + message.operation + '\' not supported');
                    break;
             }
+            return message;
         } else {
             throw Error("encode: property \'operation\' missing");
         }

@@ -6187,6 +6187,10 @@ describe('cbusMessage tests', function(){
         expect(decode.CPDTH).to.equal(value.CPDTH, 'CPDTH');
         expect(decode.text).to.include('PUT', 'text operation');
         expect(decode.text).to.include('CONTROL', 'text type');
+        // ok - try encoding the decode, to see if we still get the expected encode
+        var encode2 = cbusLib.encode(decode);
+		winston.info({message: 'cbusMessage test: encode2 ' + JSON.stringify(encode2)});
+		expect(encode2.encoded).to.equal(expected, 'encoded');
     })
 
 
