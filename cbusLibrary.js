@@ -3029,9 +3029,11 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
                 'eventNumber': parseInt(message.substr(13, 4), 16),
+                'eventIdentifier': message.substr(9, 8),
                 'eventData': {hex:''},
                 'text': "ACON (90) Node " + parseInt(message.substr(9, 4), 16) + 
-					" eventNumber " + parseInt(message.substr(13, 4), 16)
+					" eventNumber " + parseInt(message.substr(13, 4), 16) +
+                    " eventIdentifier " + message.substr(9, 8)
         }
     }
     /**

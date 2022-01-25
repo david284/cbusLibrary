@@ -2775,6 +2775,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
         expect(decode.eventData.hex).to.equal('', 'eventdata.hex');
 		expect(decode.mnemonic).to.equal('ACON', 'mnemonic');
 		expect(decode.opCode).to.equal('90', 'opCode');
