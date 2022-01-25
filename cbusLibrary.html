@@ -317,7 +317,7 @@
 
 
 <div class="description">
-    encode a CBUS message<br>This will encode a 11 bit ID CBUS message from a supplied JSON object into a 'grid connect' ascii format<br>The supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode<br>If the correct JSON properties for the parameters for the opcode are not present, an exception will be thrown<br>The JSON properties shared by both encode() & decode() are identical - however note decode() may return more properties than encode() requires<br>
+    encode a CBUS message<br>This will encode either a 11 bit 'standard' or 29 bit 'extended' ID CBUS message from a supplied JSON object into a 'grid connect' ascii format<br>If the correct JSON properties for the parameters for the encoding are not present, an exception will be thrown<br>The JSON properties shared by both encode() & decode() are identical - however note decode() may return more properties than encode() requires<br>
 </div>
 
 
@@ -369,7 +369,7 @@
 
             
 
-            <td class="description last">CBUS message properties as a JSON object - content dependant on specific CBUS opcode, but must always contain 'mnemonic'</td>
+            <td class="description last">CBUS message properties as a JSON object</td>
         </tr>
 
     
@@ -410,7 +410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line640">line 640</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line638">line 638</a>
     </li></ul></dd>
     
 
@@ -661,7 +661,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1389">line 1389</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1459">line 1459</a>
     </li></ul></dd>
     
 
@@ -820,7 +820,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1402">line 1402</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1472">line 1472</a>
     </li></ul></dd>
     
 
@@ -979,7 +979,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1422">line 1422</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1492">line 1492</a>
     </li></ul></dd>
     
 
@@ -1253,7 +1253,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4828">line 4828</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4923">line 4923</a>
     </li></ul></dd>
     
 
@@ -1363,7 +1363,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1442">line 1442</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1512">line 1512</a>
     </li></ul></dd>
     
 
@@ -1545,7 +1545,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3010">line 3010</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3082">line 3082</a>
     </li></ul></dd>
     
 
@@ -1750,7 +1750,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3535">line 3535</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3616">line 3616</a>
     </li></ul></dd>
     
 
@@ -1978,7 +1978,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4056">line 4056</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4144">line 4144</a>
     </li></ul></dd>
     
 
@@ -2229,7 +2229,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4643">line 4643</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4737">line 4737</a>
     </li></ul></dd>
     
 
@@ -2411,7 +2411,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2983">line 2983</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3054">line 3054</a>
     </li></ul></dd>
     
 
@@ -2616,7 +2616,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3505">line 3505</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3585">line 3585</a>
     </li></ul></dd>
     
 
@@ -2844,7 +2844,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4023">line 4023</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4110">line 4110</a>
     </li></ul></dd>
     
 
@@ -3095,7 +3095,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4607">line 4607</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4700">line 4700</a>
     </li></ul></dd>
     
 
@@ -3277,7 +3277,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1948">line 1948</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2018">line 2018</a>
     </li></ul></dd>
     
 
@@ -3551,7 +3551,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4872">line 4872</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4967">line 4967</a>
     </li></ul></dd>
     
 
@@ -3733,7 +3733,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3037">line 3037</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3110">line 3110</a>
     </li></ul></dd>
     
 
@@ -3915,7 +3915,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3091">line 3091</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3166">line 3166</a>
     </li></ul></dd>
     
 
@@ -4120,7 +4120,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3626">line 3626</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3708">line 3708</a>
     </li></ul></dd>
     
 
@@ -4348,7 +4348,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4190">line 4190</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4278">line 4278</a>
     </li></ul></dd>
     
 
@@ -4599,7 +4599,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4746">line 4746</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4842">line 4842</a>
     </li></ul></dd>
     
 
@@ -4781,7 +4781,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3064">line 3064</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3138">line 3138</a>
     </li></ul></dd>
     
 
@@ -4986,7 +4986,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3596">line 3596</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3677">line 3677</a>
     </li></ul></dd>
     
 
@@ -5214,7 +5214,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4157">line 4157</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4244">line 4244</a>
     </li></ul></dd>
     
 
@@ -5465,7 +5465,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4710">line 4710</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4805">line 4805</a>
     </li></ul></dd>
     
 
@@ -5647,7 +5647,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3370">line 3370</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3449">line 3449</a>
     </li></ul></dd>
     
 
@@ -5852,7 +5852,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3812">line 3812</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3898">line 3898</a>
     </li></ul></dd>
     
 
@@ -6080,7 +6080,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4322">line 4322</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4414">line 4414</a>
     </li></ul></dd>
     
 
@@ -6331,7 +6331,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5110">line 5110</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5209">line 5209</a>
     </li></ul></dd>
     
 
@@ -6513,7 +6513,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3343">line 3343</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3421">line 3421</a>
     </li></ul></dd>
     
 
@@ -6718,7 +6718,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3782">line 3782</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3867">line 3867</a>
     </li></ul></dd>
     
 
@@ -6946,7 +6946,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4289">line 4289</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4380">line 4380</a>
     </li></ul></dd>
     
 
@@ -7197,7 +7197,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5073">line 5073</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5171">line 5171</a>
     </li></ul></dd>
     
 
@@ -7307,7 +7307,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1589">line 1589</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1659">line 1659</a>
     </li></ul></dd>
     
 
@@ -7489,7 +7489,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3231">line 3231</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3307">line 3307</a>
     </li></ul></dd>
     
 
@@ -7694,7 +7694,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3752">line 3752</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3836">line 3836</a>
     </li></ul></dd>
     
 
@@ -7922,7 +7922,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4256">line 4256</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4346">line 4346</a>
     </li></ul></dd>
     
 
@@ -8173,7 +8173,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4948">line 4948</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5045">line 5045</a>
     </li></ul></dd>
     
 
@@ -8355,7 +8355,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3204">line 3204</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3279">line 3279</a>
     </li></ul></dd>
     
 
@@ -8560,7 +8560,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3722">line 3722</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3805">line 3805</a>
     </li></ul></dd>
     
 
@@ -8788,7 +8788,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4223">line 4223</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4312">line 4312</a>
     </li></ul></dd>
     
 
@@ -9039,7 +9039,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4912">line 4912</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5008">line 5008</a>
     </li></ul></dd>
     
 
@@ -9221,7 +9221,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3258">line 3258</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3335">line 3335</a>
     </li></ul></dd>
     
 
@@ -9331,7 +9331,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1505">line 1505</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1575">line 1575</a>
     </li></ul></dd>
     
 
@@ -9490,7 +9490,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2463">line 2463</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2533">line 2533</a>
     </li></ul></dd>
     
 
@@ -9672,7 +9672,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2779">line 2779</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2849">line 2849</a>
     </li></ul></dd>
     
 
@@ -9854,7 +9854,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2623">line 2623</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2693">line 2693</a>
     </li></ul></dd>
     
 
@@ -10013,7 +10013,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1828">line 1828</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1898">line 1898</a>
     </li></ul></dd>
     
 
@@ -10287,7 +10287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4988">line 4988</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5085">line 5085</a>
     </li></ul></dd>
     
 
@@ -10561,7 +10561,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5032">line 5032</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5129">line 5129</a>
     </li></ul></dd>
     
 
@@ -10743,7 +10743,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2080">line 2080</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2150">line 2150</a>
     </li></ul></dd>
     
 
@@ -10925,7 +10925,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2132">line 2132</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2202">line 2202</a>
     </li></ul></dd>
     
 
@@ -11107,7 +11107,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2106">line 2106</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2176">line 2176</a>
     </li></ul></dd>
     
 
@@ -11312,7 +11312,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2540">line 2540</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2610">line 2610</a>
     </li></ul></dd>
     
 
@@ -11471,7 +11471,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1805">line 1805</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1875">line 1875</a>
     </li></ul></dd>
     
 
@@ -11676,7 +11676,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2054">line 2054</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2124">line 2124</a>
     </li></ul></dd>
     
 
@@ -11734,7 +11734,7 @@
     
 
     
-    <h4 class="name" id="encodeENRSP"><span class="type-signature"></span>encodeENRSP<span class="signature">(nodeNumber, eventName, eventIndex)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="encodeENRSP"><span class="type-signature"></span>encodeENRSP<span class="signature">(nodeNumber, eventIdentifier, eventIndex)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -11801,7 +11801,7 @@
 
         <tr>
             
-                <td class="name"><code>eventName</code></td>
+                <td class="name"><code>eventIdentifier</code></td>
             
 
             <td class="type">
@@ -11881,7 +11881,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4673">line 4673</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4767">line 4767</a>
     </li></ul></dd>
     
 
@@ -12040,7 +12040,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2486">line 2486</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2556">line 2556</a>
     </li></ul></dd>
     
 
@@ -12245,7 +12245,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2597">line 2597</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2667">line 2667</a>
     </li></ul></dd>
     
 
@@ -12355,7 +12355,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1568">line 1568</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1638">line 1638</a>
     </li></ul></dd>
     
 
@@ -12583,7 +12583,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4125">line 4125</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4211">line 4211</a>
     </li></ul></dd>
     
 
@@ -12811,7 +12811,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4091">line 4091</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4178">line 4178</a>
     </li></ul></dd>
     
 
@@ -13062,7 +13062,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4785">line 4785</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4880">line 4880</a>
     </li></ul></dd>
     
 
@@ -13244,7 +13244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2649">line 2649</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2719">line 2719</a>
     </li></ul></dd>
     
 
@@ -13426,7 +13426,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3119">line 3119</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3193">line 3193</a>
     </li></ul></dd>
     
 
@@ -13585,7 +13585,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1851">line 1851</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1921">line 1921</a>
     </li></ul></dd>
     
 
@@ -13767,7 +13767,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2511">line 2511</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2581">line 2581</a>
     </li></ul></dd>
     
 
@@ -13972,7 +13972,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2808">line 2808</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2878">line 2878</a>
     </li></ul></dd>
     
 
@@ -14200,7 +14200,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3402">line 3402</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3481">line 3481</a>
     </li></ul></dd>
     
 
@@ -14451,7 +14451,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3848">line 3848</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3934">line 3934</a>
     </li></ul></dd>
     
 
@@ -14725,7 +14725,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4361">line 4361</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4453">line 4453</a>
     </li></ul></dd>
     
 
@@ -15022,7 +15022,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5152">line 5152</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line5251">line 5251</a>
     </li></ul></dd>
     
 
@@ -15319,7 +15319,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3982">line 3982</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4068">line 4068</a>
     </li></ul></dd>
     
 
@@ -15501,7 +15501,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2567">line 2567</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2637">line 2637</a>
     </li></ul></dd>
     
 
@@ -15611,7 +15611,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1484">line 1484</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1554">line 1554</a>
     </li></ul></dd>
     
 
@@ -15793,7 +15793,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2023">line 2023</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2093">line 2093</a>
     </li></ul></dd>
     
 
@@ -15952,7 +15952,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1759">line 1759</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1829">line 1829</a>
     </li></ul></dd>
     
 
@@ -16062,7 +16062,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1463">line 1463</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1533">line 1533</a>
     </li></ul></dd>
     
 
@@ -16221,7 +16221,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4481">line 4481</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4573">line 4573</a>
     </li></ul></dd>
     
 
@@ -16403,7 +16403,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2701">line 2701</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2771">line 2771</a>
     </li></ul></dd>
     
 
@@ -16562,7 +16562,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2347">line 2347</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2417">line 2417</a>
     </li></ul></dd>
     
 
@@ -16790,7 +16790,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3659">line 3659</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3741">line 3741</a>
     </li></ul></dd>
     
 
@@ -16949,7 +16949,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2227">line 2227</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2297">line 2297</a>
     </li></ul></dd>
     
 
@@ -17108,7 +17108,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2300">line 2300</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2370">line 2370</a>
     </li></ul></dd>
     
 
@@ -17267,7 +17267,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2323">line 2323</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2393">line 2393</a>
     </li></ul></dd>
     
 
@@ -17426,7 +17426,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2252">line 2252</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2322">line 2322</a>
     </li></ul></dd>
     
 
@@ -17585,7 +17585,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2204">line 2204</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2274">line 2274</a>
     </li></ul></dd>
     
 
@@ -17744,7 +17744,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2277">line 2277</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2347">line 2347</a>
     </li></ul></dd>
     
 
@@ -17926,7 +17926,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2753">line 2753</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2823">line 2823</a>
     </li></ul></dd>
     
 
@@ -18131,7 +18131,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3177">line 3177</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3251">line 3251</a>
     </li></ul></dd>
     
 
@@ -18313,7 +18313,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2675">line 2675</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2745">line 2745</a>
     </li></ul></dd>
     
 
@@ -18518,7 +18518,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3148">line 3148</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3222">line 3222</a>
     </li></ul></dd>
     
 
@@ -18815,7 +18815,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4566">line 4566</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4658">line 4658</a>
     </li></ul></dd>
     
 
@@ -19020,7 +19020,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3287">line 3287</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3364">line 3364</a>
     </li></ul></dd>
     
 
@@ -19202,7 +19202,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1998">line 1998</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2068">line 2068</a>
     </li></ul></dd>
     
 
@@ -19407,7 +19407,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2956">line 2956</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3026">line 3026</a>
     </li></ul></dd>
     
 
@@ -19727,7 +19727,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4457">line 4457</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4549">line 4549</a>
     </li></ul></dd>
     
 
@@ -19955,7 +19955,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3691">line 3691</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3773">line 3773</a>
     </li></ul></dd>
     
 
@@ -20137,7 +20137,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1900">line 1900</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1970">line 1970</a>
     </li></ul></dd>
     
 
@@ -20342,7 +20342,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2927">line 2927</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2997">line 2997</a>
     </li></ul></dd>
     
 
@@ -20501,7 +20501,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1782">line 1782</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1852">line 1852</a>
     </li></ul></dd>
     
 
@@ -20611,7 +20611,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1694">line 1694</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1764">line 1764</a>
     </li></ul></dd>
     
 
@@ -20839,7 +20839,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2840">line 2840</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2910">line 2910</a>
     </li></ul></dd>
     
 
@@ -21090,7 +21090,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3437">line 3437</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3516">line 3516</a>
     </li></ul></dd>
     
 
@@ -21364,7 +21364,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3890">line 3890</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3976">line 3976</a>
     </li></ul></dd>
     
 
@@ -21661,7 +21661,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4407">line 4407</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4499">line 4499</a>
     </li></ul></dd>
     
 
@@ -21866,7 +21866,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3567">line 3567</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3647">line 3647</a>
     </li></ul></dd>
     
 
@@ -21976,7 +21976,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1652">line 1652</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1722">line 1722</a>
     </li></ul></dd>
     
 
@@ -22181,7 +22181,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3316">line 3316</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3393">line 3393</a>
     </li></ul></dd>
     
 
@@ -22340,7 +22340,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1875">line 1875</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1945">line 1945</a>
     </li></ul></dd>
     
 
@@ -22499,7 +22499,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2417">line 2417</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2487">line 2487</a>
     </li></ul></dd>
     
 
@@ -22658,7 +22658,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2440">line 2440</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2510">line 2510</a>
     </li></ul></dd>
     
 
@@ -22817,7 +22817,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2371">line 2371</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2441">line 2441</a>
     </li></ul></dd>
     
 
@@ -22927,7 +22927,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1736">line 1736</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1806">line 1806</a>
     </li></ul></dd>
     
 
@@ -23086,7 +23086,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2181">line 2181</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2251">line 2251</a>
     </li></ul></dd>
     
 
@@ -23196,7 +23196,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1715">line 1715</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1785">line 1785</a>
     </li></ul></dd>
     
 
@@ -23378,7 +23378,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2727">line 2727</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2797">line 2797</a>
     </li></ul></dd>
     
 
@@ -23488,7 +23488,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1673">line 1673</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1743">line 1743</a>
     </li></ul></dd>
     
 
@@ -23598,7 +23598,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1610">line 1610</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1680">line 1680</a>
     </li></ul></dd>
     
 
@@ -23708,7 +23708,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1631">line 1631</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1701">line 1701</a>
     </li></ul></dd>
     
 
@@ -23867,7 +23867,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1923">line 1923</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1993">line 1993</a>
     </li></ul></dd>
     
 
@@ -24049,7 +24049,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2158">line 2158</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2228">line 2228</a>
     </li></ul></dd>
     
 
@@ -24090,6 +24090,165 @@
     <dd>
         
 <span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="encodeStandardMessage"><span class="type-signature"></span>encodeStandardMessage<span class="signature">(message)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    encode a standard CBUS message<br>This will encode a 11 bit ID CBUS message from a supplied JSON object into a 'grid connect' ascii format<br>The supplied JSON must include the mnemonic for the opcode, and any necessary parameters for that specific opcode<br>If the correct JSON properties for the parameters for the opcode are not present, an exception will be thrown<br>The JSON properties shared by both encode() & decode() are identical - however note decode() may return more properties than encode() requires<br>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">CBUS message properties as a JSON object - content dependant on specific CBUS opcode, but must always contain 'mnemonic'</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line668">line 668</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    returns the original input JSON object with the resultant encoded CBUS message added using the 'encoded' property
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
 
 
     </dd>
@@ -24323,7 +24482,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4520">line 4520</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4612">line 4612</a>
     </li></ul></dd>
     
 
@@ -24505,7 +24664,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1973">line 1973</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2043">line 2043</a>
     </li></ul></dd>
     
 
@@ -24615,7 +24774,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1526">line 1526</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1596">line 1596</a>
     </li></ul></dd>
     
 
@@ -24725,7 +24884,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1547">line 1547</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line1617">line 1617</a>
     </li></ul></dd>
     
 
@@ -24930,7 +25089,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2898">line 2898</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2968">line 2968</a>
     </li></ul></dd>
     
 
@@ -25135,7 +25294,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2869">line 2869</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2939">line 2939</a>
     </li></ul></dd>
     
 
@@ -25363,7 +25522,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3927">line 3927</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line4013">line 4013</a>
     </li></ul></dd>
     
 
@@ -25591,7 +25750,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3473">line 3473</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line3552">line 3552</a>
     </li></ul></dd>
     
 
@@ -25750,7 +25909,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2394">line 2394</a>
+        <a href="cbuslibrary.js.html">cbuslibrary.js</a>, <a href="cbuslibrary.js.html#line2464">line 2464</a>
     </li></ul></dd>
     
 
@@ -26099,7 +26258,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Jan 23 2022 15:52:19 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Jan 25 2022 14:52:15 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>

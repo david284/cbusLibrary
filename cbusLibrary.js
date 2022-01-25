@@ -626,6 +626,15 @@ class cbusLibrary {
         return output
     }
 
+    /**
+    * @desc encode a CBUS message<br>
+    * This will encode either a 11 bit 'standard' or 29 bit 'extended' ID CBUS message from a supplied JSON object into a 'grid connect' ascii format<br>
+    * If the correct JSON properties for the parameters for the encoding are not present, an exception will be thrown<br>
+    * The JSON properties shared by both encode() & decode() are identical - however note decode() may return more properties than encode() requires<br>
+    * @param {Object} message - CBUS message properties as a JSON object
+    * @return {Object} returns the original input JSON object with the resultant encoded CBUS message added using the 'encoded' property
+    *
+    */
     encode(message){
         if(message.hasOwnProperty('ID_TYPE')) {
             switch (message['ID_TYPE']) {
