@@ -650,8 +650,13 @@ class cbusLibrary {
             }
         }
         else{
-            // assume its a standard message if no ID type supplied
-            return this.encodeStandardMessage(message);
+            // assume its a standard message if no ID type supplied, so check if 'mnemonic' present
+            if(message.hasOwnProperty('mnemonic')) {
+                return this.encodeStandardMessage(message);
+            }
+            else {
+                throw Error('encode: unable to determine message type - no ID_TYPE present');
+            }
         }
     }
 
@@ -1392,13 +1397,13 @@ class cbusLibrary {
                 message.encoded = this.encodeEXTC6(message.Ext_OPC, message.byte1, message.byte2, message.byte3, message.byte4, message.byte5, message.byte6);
                 break;
             default:
-                throw Error('encode: \'' + message.mnemonic + '\' not supported');
+                throw Error('encode standard: \'' + message.mnemonic + '\' not supported');
                 break;
             }
             return message;
         }
         else {
-                throw Error("encode: property 'mnemonic' missing");
+                throw Error("encode standard: property 'mnemonic' missing");
         }
     }
     
@@ -1409,15 +1414,15 @@ class cbusLibrary {
                 case 'PUT':
                     if(message.hasOwnProperty('type')){
                         if (message.type == 'CONTROL') {
-                            if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
-                            if(!message.hasOwnProperty('CTLBT')) {throw Error("encode: property 'CTLBT' missing")};
-                            if(!message.hasOwnProperty('SPCMD')) {throw Error("encode: property 'SPCMD' missing")};
-                            if(!message.hasOwnProperty('CPDTL')) {throw Error("encode: property 'CPDTL' missing")};
-                            if(!message.hasOwnProperty('CPDTH')) {throw Error("encode: property 'CPDTH' missing")};
+                            if(!message.hasOwnProperty('address')) {throw Error("encode extended: property 'address' missing")};
+                            if(!message.hasOwnProperty('CTLBT')) {throw Error("encode extended: property 'CTLBT' missing")};
+                            if(!message.hasOwnProperty('SPCMD')) {throw Error("encode extended: property 'SPCMD' missing")};
+                            if(!message.hasOwnProperty('CPDTL')) {throw Error("encode extended: property 'CPDTL' missing")};
+                            if(!message.hasOwnProperty('CPDTH')) {throw Error("encode extended: property 'CPDTH' missing")};
                             message.encoded = this.encode_EXT_PUT_CONTROL(message.address, message.CTLBT, message.SPCMD, message.CPDTL, message.CPDTH);
                         }
                         else if (message.type == 'DATA') {
-                            if(!message.hasOwnProperty('data')) {throw Error("encode: property 'data' missing")};
+                            if(!message.hasOwnProperty('data')) {throw Error("encode extended: property 'data' missing")};
                             message.encoded = this.encode_EXT_PUT_DATA(message.data);
                         }
                         else {
@@ -1425,13 +1430,13 @@ class cbusLibrary {
                         }
                             
                     } else {
-                        throw Error("encode: property \'type\' missing");
+                        throw Error("encode extended: property \'type\' missing");
                     }
                     break;
                 case 'GET':
                     break;
                 case 'RESPONSE':
-                    if(!message.hasOwnProperty('response')) {throw Error("encode: property 'response' missing")};
+                    if(!message.hasOwnProperty('response')) {throw Error("encode extended: property 'response' missing")};
                     message.encoded = this.encode_EXT_RESPONSE(message.response);
                     break;
                 default:
@@ -1440,7 +1445,7 @@ class cbusLibrary {
             }
             return message;
         } else {
-            throw Error("encode: property \'operation\' missing");
+            throw Error("encode extended: property \'operation\' missing");
         }
     }
     

@@ -286,8 +286,8 @@ describe('cbusMessage tests', function(){
     //
 	function GetTestCase_encodeFail () {
 		var testCases = [];
-		testCases.push({'test':{'fail':1}, 'expected':'encode: property \'mnemonic\' missing'});
-		testCases.push({'test':{'mnemonic': 'unknown'}, 'expected':'encode: \'unknown\' not supported'});
+		testCases.push({'test':{'fail':1}, 'expected':'encode: unable to determine message type - no ID_TYPE present'});
+		testCases.push({'test':{'mnemonic': 'unknown'}, 'expected':'encode standard: \'unknown\' not supported'});
 		testCases.push({'test':{'mnemonic': 'KLOC'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'QLOC'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'DKEEP'}, 'expected': 'encode: property \'session\' missing'});
@@ -630,21 +630,21 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte5':'6', 'byte6':'7'}, 'expected': 'encode: property \'byte4\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte6':'7'}, 'expected': 'encode: property \'byte5\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC':'1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte5':'6'}, 'expected': 'encode: property \'byte6\' missing'});
-		testCases.push({'test':{"operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'mnemonic\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'operation\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'type\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'address\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'CTLBT\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: property \'SPCMD\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTH":"5"}, 'expected': 'encode: property \'CPDTL\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4"}, 'expected': 'encode: property \'CPDTH\' missing'});
-		testCases.push({'test':{"operation":"PUT","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode: property \'mnemonic\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode: property \'operation\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode: property \'type\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"DATA"}, 'expected': 'encode: property \'data\' missing'});
-		testCases.push({'test':{"operation":"RESPONSE","response":'1'}, 'expected': 'encode: property \'mnemonic\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","response":'1'}, 'expected': 'encode: property \'operation\' missing'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"RESPONSE"}, 'expected': 'encode: property \'response\' missing'});
+		testCases.push({'test':{"operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode: unable to determine message type - no ID_TYPE present'});
+		testCases.push({'test':{"ID_TYPE":"X","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode extended: property \'operation\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode extended: property \'type\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode extended: property \'address\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode extended: property \'CTLBT\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","CPDTL":"4","CPDTH":"5"}, 'expected': 'encode extended: property \'SPCMD\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTH":"5"}, 'expected': 'encode extended: property \'CPDTL\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4"}, 'expected': 'encode extended: property \'CPDTH\' missing'});
+		testCases.push({'test':{"operation":"PUT","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode: unable to determine message type - no ID_TYPE present'});
+		testCases.push({'test':{"ID_TYPE":"X","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode extended: property \'operation\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","data":[1,2,3,4,5,6,7,8]}, 'expected': 'encode extended: property \'type\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"DATA"}, 'expected': 'encode extended: property \'data\' missing'});
+		testCases.push({'test':{"operation":"RESPONSE","response":'1'}, 'expected': 'encode: unable to determine message type - no ID_TYPE present'});
+		testCases.push({'test':{"ID_TYPE":"X","response":'1'}, 'expected': 'encode extended: property \'operation\' missing'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"RESPONSE"}, 'expected': 'encode extended: property \'response\' missing'});
 		return testCases;
 	}
 
