@@ -67,22 +67,16 @@ Each opcode also it's own function, that has individual parameters, as the type 
 
 There are only separate functions for encoding extended CBUS messages currently
 
-## eventName
-Typically, in a message the node number represents the sending module of the message. 
-For 'learning' opCodes, the node/event number combination can represent the event identity stored (or to be stored) in the event table<br>
-'eventName' is a decode function property (in addition to nodeNumber & eventNumber) that holds the node/event number combination in hexadecimal format. 
-This can be easier to use in code to uniquely identify an entry in the stored event table (as opposed to an actual message on the CAN bus)<br>
-Note that the encode functions still requires the individual node & event numbers, this only applies to decodes of specific opCodes<br>
-The exception to this is the encode for 'ENRSP' which expects the four byte eventName as well as the node number<br>
+### eventIdentifier
+An event is identified by 4 bytes made up from either the node number plus the event number in the case of a 'long' event,
+or in a 'short' event just the 2 byte device number (with the top bytes set to zero)<br>
+The 'eventIdentifier' is used to provide the correct value depending on the type of event ('long' or 'short'), in an 8 digit hexadecimal string with leading zero's<br>
+i.e.<br>
+'long' event  = node number + event number<br>
+'short' event =    0000     + device number<br>
+<br>
+The command 'ENRSP' also expects this four byte 'eventIdentifier' as a parameter as well as the node number<br>
 
-<ul style="list-style-type:none;">
-<li>First implemented in the decodes for the following opCodes</li>
-<li>B2 REQEV - read event variable in learn mode</li>
-<li>D2 EVLRN - teach event</li>
-<li>D3 EVANS - response to REQEV</li>
-<li>F2 ENRSP - encode also uses 4 byte eventName as well as nodeNumber</li>
-<li>F5 EVLRNI - teach event with index</li>
-</ul>
 
 ### CAN header (11 bit CAN identifier)
 
@@ -107,19 +101,24 @@ where: &ltA&gt is a bit mapped character, bit 0 being control/data, and bit 1 be
 
 There is a comprehensive suite of unit tests for all the message decode/encodes, which also create a log file
 
-### Run all tests
+### How to run all tests
 <ul style="list-style-type:none;"><li>npm test</li></ul>
-Will run al the tests - note there are more than 18,000 tests, and although doesn't take too long, it does create a huge log file
+Will run al the tests - note there are more than 27,000 tests, and although doesn't take too long, it does create a huge log file
 
-### Run specific test
+### How to run specific test
 You can also run a specific test, which produces a much more workable log file
 <ul style="list-style-type:none;"><li>npm test -- --grep "EVLRN"</li></ul>
 
 ### Tests log file
 For all tests, the log file is created in /tests/logs, and is overwritten on each test run
 
+## Documentation
 
+The project uses JSDocs to generate most of the documentation
 
+### How to run jsdoc 
+<ul style="list-style-type:none;"><li>npm run jsdoc</li></ul>
+This creates the documents in the 'out' folder, and are copied manually in the root project directory when finalised
 
 
 

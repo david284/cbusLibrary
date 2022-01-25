@@ -236,7 +236,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1': '1', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': ':SB780NEF01020304050607;'});
 		testCases.push({'test':{'mnemonic': 'ACON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF000010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF100010002030405;'});
-		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventName':'00000002', 'eventIndex':'3'}, 'expected': ':SB780NF200010000000203;'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventIdentifier':'00000002', 'eventIndex':'3'}, 'expected': ':SB780NF200010000000203;'});
 		testCases.push({'test':{'mnemonic': 'ARON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF300010002030405;'});
 		testCases.push({'test':{'mnemonic': 'AROF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF400010002030405;'});
 		testCases.push({'test':{'mnemonic': 'EVLRNI', 'nodeNumber':'1', 'eventNumber':'2', 'eventNumberIndex':'3', 'eventVariableIndex':'4', 'eventVariableValue':'5'}, 'expected': ':SB780NF500010002030405;'});
@@ -561,9 +561,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber':'2', 'eventNumber':'2', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber':'2', 'eventNumber':'2', 'data1':'3', 'data3':'5'}, 'expected': 'encode: property \'data2\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber':'2', 'eventNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': 'encode: property \'data3\' missing'});
-		testCases.push({'test':{'mnemonic': 'ENRSP', 'eventName': '00000002', 'eventIndex':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
-		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventIndex':'3'}, 'expected': 'encode: property \'eventName\' missing'});
-		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventName':'2'}, 'expected': 'encode: property \'eventIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'eventIdentifier': '00000002', 'eventIndex':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventIndex':'3'}, 'expected': 'encode: property \'eventIdentifier\' missing'});
+		testCases.push({'test':{'mnemonic': 'ENRSP', 'nodeNumber': '1', 'eventIdentifier':'2'}, 'expected': 'encode: property \'eventIndex\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARON3', 'eventNumber': '2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARON3', 'nodeNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'eventNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARON3', 'nodeNumber':'2', 'eventNumber':'2', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'data1\' missing'});
@@ -2798,6 +2798,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
         expect(decode.eventData.hex).to.equal('', 'eventdata.hex');
 		expect(decode.mnemonic).to.equal('ACOF', 'mnemonic');
 		expect(decode.opCode).to.equal('91', 'opCode');
@@ -2846,6 +2847,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
 	})
 
 
@@ -2889,6 +2891,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
 	})
 
 
@@ -2932,6 +2935,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
 	})
 
 
@@ -2971,7 +2975,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal('95', 'opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
-        expect(decode.eventName).to.equal(expected.substr(9,8), 'eventName');
+        expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
 	})
@@ -3097,6 +3101,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
         expect(decode.eventData.hex).to.equal('', 'eventdata.hex');
 		expect(decode.mnemonic).to.equal('ASON', 'mnemonic');
 		expect(decode.opCode).to.equal('98', 'opCode');
@@ -3119,6 +3124,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
         expect(decode.eventData.hex).to.equal('', 'eventdata.hex');
 		expect(decode.mnemonic).to.equal('ASOF', 'mnemonic');
 		expect(decode.opCode).to.equal('99', 'opCode');
@@ -3167,6 +3173,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.deviceNumber).to.equal(value.deviceNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
 	})
 
 
@@ -3296,6 +3303,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.deviceNumber).to.equal(value.deviceNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
 	})
 
 
@@ -3339,6 +3347,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.deviceNumber).to.equal(value.deviceNumber, 'eventNumber');
+        expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
 	})
 
 
@@ -3561,6 +3570,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.mnemonic).to.equal('ACON1', 'mnemonic');
             expect(decode.opCode).to.equal('B0', 'opCode');
@@ -3584,6 +3594,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.mnemonic).to.equal('ACOF1', 'mnemonic');
             expect(decode.opCode).to.equal('B1', 'opCode');
@@ -3637,7 +3648,7 @@ describe('cbusMessage tests', function(){
             expect(decode.opCode).to.equal(value.opCode, 'opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
-            expect(decode.eventName).to.equal(expected.substr(9, 8), 'eventName');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
             expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
@@ -3691,6 +3702,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
 	})
 
@@ -3742,6 +3754,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
 	})
 
@@ -3887,6 +3900,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.mnemonic).to.equal('ASON1', 'mnemonic');
             expect(decode.opCode).to.equal('B8', 'opCode');
@@ -3910,6 +3924,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.mnemonic).to.equal('ASOF1', 'mnemonic');
             expect(decode.opCode).to.equal('B9', 'opCode');
@@ -3965,6 +3980,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
 	})
 
@@ -4016,6 +4032,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
 	})
 
@@ -4337,6 +4354,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.mnemonic).to.equal('ACON2', 'mnemonic');
@@ -4361,6 +4379,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.mnemonic).to.equal('ACOF2', 'mnemonic');
@@ -4420,7 +4439,7 @@ describe('cbusMessage tests', function(){
         expect(decode.opCode).to.equal(value.opCode, 'opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
-        expect(decode.eventName).to.equal(expected.substr(9, 8), 'eventName');
+        expect(decode.eventIdentifier).to.equal(expected.substr(9, 8), 'eventIdentifier');
         expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
         expect(decode.eventVariableValue).to.equal(value.eventVariableValue, 'eventVariableValue');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
@@ -4481,7 +4500,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
-            expect(decode.eventName).to.equal(expected.substr(9, 8), 'eventName');
+            expect(decode.eventIdentifier).to.equal(expected.substr(9, 8), 'eventIdentifier');
             expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
             expect(decode.eventVariableValue).to.equal(value.eventVariableValue, 'eventVariableValue');
 	})
@@ -4540,6 +4559,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
 	})
@@ -4598,6 +4618,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
 	})
@@ -4650,6 +4671,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.mnemonic).to.equal('ASON2', 'mnemonic');
@@ -4674,6 +4696,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.mnemonic).to.equal('ASOF2', 'mnemonic');
@@ -4736,6 +4759,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data1');
 	})
@@ -4794,6 +4818,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data1');
 	})
@@ -5265,6 +5290,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.data3).to.equal(value.data3, 'data3');
@@ -5290,6 +5316,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.data3).to.equal(value.data3, 'data3');
@@ -5309,25 +5336,25 @@ describe('cbusMessage tests', function(){
 			if (NN == 2) nodeNumber = 1;
 			if (NN == 3) nodeNumber = 65535;
             for (EV = 1; EV < 4; EV++) {
-                if (EV == 1) eventName = '00000000';
-                if (EV == 2) eventName = '00000001';
-                if (EV == 3) eventName = 'FFFFFFFF';
+                if (EV == 1) eventIdentifier = '00000000';
+                if (EV == 2) eventIdentifier = '00000001';
+                if (EV == 3) eventIdentifier = 'FFFFFFFF';
                 for (EVindex = 1; EVindex < 4; EVindex++) {
                     if (EVindex == 1) eventIndex = 0;
                     if (EVindex == 2) eventIndex = 1;
                     if (EVindex == 3) eventIndex = 255;
-					testCases.push({'nodeNumber':nodeNumber, 'eventName':eventName, 'eventIndex':eventIndex});
+					testCases.push({'nodeNumber':nodeNumber, 'eventIdentifier':eventIdentifier, 'eventIndex':eventIndex});
 				}
 			}
 		}
 		return testCases;
 	}
 
-	itParam("ENRSP test nodeNumber ${value.nodeNumber} eventName ${value.eventName} eventIndex ${value.eventIndex}", GetTestCase_ENRSP(), function (value) {
+	itParam("ENRSP test nodeNumber ${value.nodeNumber} eventIdentifier ${value.eventIdentifier} eventIndex ${value.eventIndex}", GetTestCase_ENRSP(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN ENRSP test ' + JSON.stringify(value)});
         // ENRSP Format: [<MjPri><MinPri=3><CANID>]<F2><NN hi><NN lo><EN3><EN2><EN1><EN0><EN#>
-		expected = ":SB780NF2" + decToHex(value.nodeNumber, 4) + value.eventName + decToHex(value.eventIndex, 2) + ";";
-        var encode = cbusLib.encodeENRSP(value.nodeNumber, value.eventName, value.eventIndex);
+		expected = ":SB780NF2" + decToHex(value.nodeNumber, 4) + value.eventIdentifier + decToHex(value.eventIndex, 2) + ";";
+        var encode = cbusLib.encodeENRSP(value.nodeNumber, value.eventIdentifier, value.eventIndex);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ENRSP encode ' + encode});
 		winston.info({message: 'cbusMessage test: ENRSP decode ' + JSON.stringify(decode)});
@@ -5335,7 +5362,7 @@ describe('cbusMessage tests', function(){
 		expect(decode.encoded).to.equal(expected, 'encoded');
 		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
-        expect(decode.eventName).to.equal(value.eventName, 'eventName');
+        expect(decode.eventIdentifier).to.equal(value.eventIdentifier, 'eventIdentifier');
         expect(decode.eventIndex).to.equal(value.eventIndex, 'eventIndex');
         expect(decode.mnemonic).to.equal('ENRSP', 'mnemonic');
         expect(decode.opCode).to.equal('F2', 'opCode');
@@ -5404,6 +5431,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.eventNumber).to.equal(value.eventNumber, 'param2');
+        expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
         expect(decode.data1).to.equal(value.data1, 'data1');
         expect(decode.data2).to.equal(value.data2, 'data2');
         expect(decode.data3).to.equal(value.data3, 'data3');
@@ -5470,6 +5498,7 @@ describe('cbusMessage tests', function(){
             expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'param2');
+            expect(decode.eventIdentifier).to.equal(decToHex(value.nodeNumber, 4) + decToHex(value.eventNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.data3).to.equal(value.data3, 'data3');
@@ -5532,7 +5561,7 @@ describe('cbusMessage tests', function(){
             expect(decode.opCode).to.equal(value.opCode, 'opCode');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.eventNumber).to.equal(value.eventNumber, 'eventNumber');
-            expect(decode.eventName).to.equal(expected.substr(9, 8), 'eventName');
+            expect(decode.eventIdentifier).to.equal(expected.substr(9, 8), 'eventIdentifier');
             expect(decode.eventNumberIndex).to.equal(value.eventNumberIndex, 'eventNumberIndex');
             expect(decode.eventVariableIndex).to.equal(value.eventVariableIndex, 'eventVariableIndex');
             expect(decode.eventVariableValue).to.equal(value.eventVariableValue, 'eventVariableValue');
@@ -5736,6 +5765,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.data3).to.equal(value.data3, 'data3');
@@ -5761,6 +5791,7 @@ describe('cbusMessage tests', function(){
             expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
             expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
             expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+            expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
             expect(decode.data1).to.equal(value.data1, 'data1');
             expect(decode.data2).to.equal(value.data2, 'data2');
             expect(decode.data3).to.equal(value.data3, 'data3');
@@ -5988,6 +6019,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
         expect(decode.data1).to.equal(value.data1, 'data1');
         expect(decode.data2).to.equal(value.data2, 'data2');
         expect(decode.data3).to.equal(value.data3, 'data3');
@@ -6053,6 +6085,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+        expect(decode.eventIdentifier).to.equal('0000' + decToHex(value.deviceNumber, 4), 'eventIdentifier');        
         expect(decode.data1).to.equal(value.data1, 'data1');
         expect(decode.data2).to.equal(value.data2, 'data2');
         expect(decode.data3).to.equal(value.data3, 'data3');
