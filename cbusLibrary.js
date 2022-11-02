@@ -88,12 +88,12 @@ class cbusLibrary {
         }
     /**
     * setCanHeader
-    * @param {int} MjPri Major priority, two bit number 0 - 2, 3 not allowed
+    * @param {int} MjPri Major priority, two bit number 0 - 3 (3 is allowed, unlike previous assumption)
     * @param {int} CAN_ID 7 bit number, 0 to 127
     */
     setCanHeader(MjPri, CAN_ID) {
         if (MjPri != undefined) { 
-        this.canHeader.MjPri = (MjPri > 2) ? 2 : MjPri}                     // MjPri is two bits, but a value of 3 is n0t allowed
+        this.canHeader.MjPri = (MjPri > 3) ? 3 : MjPri}                     // MjPri is two bits, but a value of 3 is n0t allowed
         if (CAN_ID != undefined) { this.canHeader.CAN_ID = CAN_ID % 128}    // CAN_ID is 7 bits, 0 to 127
     }
 
@@ -3586,7 +3586,7 @@ class cbusLibrary {
                 'SequenceCount': parseInt(message.substr(13, 2), 16),
                 'StatusByte1': parseInt(message.substr(15, 2), 16),
                 'StatusByte2': parseInt(message.substr(17, 2), 16),
-                'text': "HEARTB (A2) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+                'text': "HEARTB (AB) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
 					" SequenceCount " + parseInt(message.substr(13, 2), 16) +
 					" StatusByte1 " + parseInt(message.substr(15, 2), 16) +
 					" StatusByte2 " + parseInt(message.substr(17, 2), 16)
