@@ -57,8 +57,8 @@ class cbusLibrary {
     // header() provides the prefix to add to CBUS data to compose a transmittable message
     // CAN uses a bitwise arbitration scheme whereby the header with the lowest value has priority
     // So higher values have lower priority
-    // The CAN protocol prohibits a sequence of 7 or more 1 bits at the start of the header, so a
-    // MjPri. of 11 in binary (3 in decimal) is not used
+    // It was origianlly believed that The CAN protocol prohibits a sequence of 7 or more 1 bits at the start of the header, so a
+    // MjPri. of 11 in binary (3 in decimal) is not used - HOWEVER, this has subsequently been shown not to be the case, so 3 can be used
     //
     header({
                     MjPri = this.canHeader.MjPri,
@@ -66,7 +66,8 @@ class cbusLibrary {
                     CAN_ID = this.canHeader.CAN_ID
         } = {}) {
         // ensure all variables don't exceed the appropriate number of bits for encoding
-        if (MjPri > 2) {MjPri = 2}      // MjPri is two bits, but a value of 3 is not allowed
+//        if (MjPri > 2) {MjPri = 2}      // MjPri is two bits, but a value of 3 is not allowed **** no longer true ****
+		MjPri = MjPri % 4				// MjPri is two bits, 0 to 3
         MinPri = MinPri % 4             // MinPri is two bits, 0 to 3
         CAN_ID = CAN_ID % 128           // CAN_ID is 7 bits, 0 to 127
 		var identifier = parseInt(MjPri << 14) + parseInt(MinPri << 12) + parseInt(CAN_ID << 5) 
@@ -425,7 +426,11 @@ class cbusLibrary {
         case 'A2':
             return this.decodeWCVS(message);
             break;
-        // A3 - AF reserved
+        // A3 - AA reserved
+        case 'AB':
+            return this.decodeHEARTB(message);
+            break;
+        // AC - AF reserved
         case 'B0':
             return this.decodeACON1(message);
             break;
@@ -1047,6 +1052,13 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('mode')) {throw Error("encode: property 'mode' missing")};
                 if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
                 message.encoded = this.encodeWCVS(message.session, message.CV, message.mode, message.value);
+                break;
+            case 'HEARTB':   // AB
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('SequenceCount')) {throw Error("encode: property 'SequenceCount' missing")};
+                if(!message.hasOwnProperty('StatusByte1')) {throw Error("encode: property 'StatusByte1' missing")};
+                if(!message.hasOwnProperty('StatusByte2')) {throw Error("encode: property 'StatusByte2' missing")};
+                message.encoded = this.encodeHEARTB(message.nodeNumber, message.SequenceCount, message.StatusByte1, message.StatusByte2);
                 break;
             case 'ACON1':   // B0
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -3559,6 +3571,41 @@ class cbusLibrary {
                             decToHex(CV, 4) + 
                             decToHex(mode, 2) + 
                             decToHex(value, 2) + ';'
+    }
+    
+
+    // AB HEARTB
+    // HEARTB Format: [<MjPri><MinPri><CANID>]<0xAB><NodeNumberHi><NodeNumberlo<SequenceCnt><StatusByte1><StatusByte2>
+    //
+    decodeHEARTB(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'HEARTB',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'SequenceCount': parseInt(message.substr(13, 2), 16),
+                'StatusByte1': parseInt(message.substr(15, 2), 16),
+                'StatusByte2': parseInt(message.substr(17, 2), 16),
+                'text': "HEARTB (A2) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+					" SequenceCount " + parseInt(message.substr(13, 2), 16) +
+					" StatusByte1 " + parseInt(message.substr(15, 2), 16) +
+					" StatusByte2 " + parseInt(message.substr(17, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode AB<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} SequenceCount 0 to 255
+    * @param {int} StatusByte1 2 to 255
+    * @param {int} StatusByte2 3 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltAB&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltSequenceCnt#&gt&ltStatusByte1#&gt&StatusByte2&gt
+    */
+    encodeHEARTB(nodeNumber, SequenceCount, StatusByte1, StatusByte2) {
+        return this.header({MinPri: 3}) + 'AB' + decToHex(nodeNumber, 4) + 
+                            decToHex(SequenceCount, 2) + 
+                            decToHex(StatusByte1, 2) + 
+                            decToHex(StatusByte2, 2) + ';'
     }
     
 
