@@ -271,7 +271,10 @@ class cbusLibrary {
         case '4C':
             return this.decodeSSTAT(message);
             break;
-        // 4D - 4F reserved
+        // 4D - 4E reserved
+        case '4F':
+            return this.decodeNNRSM(message);
+            break;
 		case '50':
             return this.decodeRQNN(message);
             break;
@@ -801,6 +804,10 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
                 if(!message.hasOwnProperty('status')) {throw Error("encode: property 'status' missing")};
                 message.encoded = this.encodeSSTAT(message.session, message.status);
+                break;
+            case 'NNRSM':    // 4F
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNRSM(message.nodeNumber);
                 break;
             case 'RQNN':    // 50
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -2244,6 +2251,30 @@ class cbusLibrary {
     */
     encodeSSTAT(session, status) {
             return this.header({MinPri: 3}) + '4C' + decToHex(session, 2) + decToHex(status, 2) + ';'
+    }
+
+
+    // 4F NNRSM
+	// NNRSM Format: Format: [<MjPri><MinPri=3><CANID>]<4F><NN hi><NN lo>
+    //
+    decodeNNRSM(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'NNRSM',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'text': 'NNRSM (4F) NodeNumber ' + parseInt(message.substr(9, 4), 16),
+        }
+    }
+    /**
+    * @desc opCode 4F<br>
+    * @param {int} session number 0 to 255
+    * @param {int} status 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt4C&gt&ltnodeNumber&gt
+    */
+    encodeNNRSM(nodeNumber) {
+            return this.header({MinPri: 3}) + '4F' + decToHex(nodeNumber, 4) + ';'
     }
 
 
