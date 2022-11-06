@@ -216,7 +216,10 @@ class cbusLibrary {
         case '11':
             return this.decodeRQMN(message);
             break;
-        // 12 - 20 reserved
+        case '12':
+            return this.decodeGSTOP(message);
+            break;
+        // 13 - 20 reserved
         case '21':
             return this.decodeKLOC(message);
             break;
@@ -725,6 +728,9 @@ class cbusLibrary {
                 break;
             case 'RQMN':    // 11
                 message.encoded = this.encodeRQMN();
+                break;
+            case 'GSTOP':    // 12
+                message.encoded = this.encodeGSTOP();
                 break;
             case 'KLOC':    // 21
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
@@ -1829,6 +1835,27 @@ class cbusLibrary {
     */
     encodeRQMN() {//Request Node Parameters
         return this.header({MinPri: 2}) + '11' + ';'
+    }
+
+
+    // 12 GSTOP
+    // GSTOP Format: [<MjPri><MinPri=1><CANID>]<12>
+    //
+    decodeGSTOP(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'GSTOP',
+                'opCode': message.substr(7, 2),
+                'text': 'GSTOP (12)',
+        }
+    }
+    /**
+    * @desc opCode 12<br>
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=0&gt&ltCANID&gt]&lt12&gt
+    */
+    encodeGSTOP() {
+        return this.header({MinPri: 1}) + '12' + ';'
     }
 
 
