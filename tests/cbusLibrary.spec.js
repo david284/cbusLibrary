@@ -154,6 +154,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DFNON', 'session': '1', 'functionNumber': '2'}, 'expected': ':SA780N490102;'});
 		testCases.push({'test':{'mnemonic': 'DFNOF', 'session': '1', 'functionNumber': '2'}, 'expected': ':SA780N4A0102;'});
 		testCases.push({'test':{'mnemonic': 'SSTAT', 'session': '1', 'status': '2'}, 'expected': ':SB780N4C0102;'});
+		testCases.push({'test':{'mnemonic': 'NNRSM', 'nodeNumber': '1'}, 'expected': ':SB780N4F0001;'});
 		testCases.push({'test':{'mnemonic': 'RQNN', 'nodeNumber': '1'}, 'expected': ':SB780N500001;'});
 		testCases.push({'test':{'mnemonic': 'NNREL', 'nodeNumber': '1'}, 'expected': ':SB780N510001;'});
 		testCases.push({'test':{'mnemonic': 'NNACK', 'nodeNumber': '1'}, 'expected': ':SB780N520001;'});
@@ -317,6 +318,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DFNOF', 'session':'1'}, 'expected': 'encode: property \'functionNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'SSTAT', 'status': '2'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'SSTAT', 'session':'1'}, 'expected': 'encode: property \'status\' missing'});
+		testCases.push({'test':{'mnemonic': 'NNRSM'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'RQNN'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'NNREL'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'NNACK'}, 'expected': 'encode: property \'nodeNumber\' missing'});
@@ -1574,6 +1576,37 @@ describe('cbusMessage tests', function(){
 		expect(decode.opCode).to.equal('4C', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ');
         expect(decode.text).to.include('(' + decode.opCode + ')');
+	})
+
+
+    // 4F NNRSM testcases
+    //
+	function GetTestCase_NNRSM () {
+		var testCases = [];
+		for (NN = 1; NN < 4; NN++) {
+			if (NN == 1) nodeNumber = 0;
+			if (NN == 2) nodeNumber = 1;
+			if (NN == 3) nodeNumber = 65535;
+			testCases.push({'nodeNumber':nodeNumber});
+		}
+		return testCases;
+	}
+
+	itParam("NNRSM test nodeNumber ${value.nodeNumber}", GetTestCase_NNRSM(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN NNRSM test ' + JSON.stringify(value)});
+		expected = ":SB780N4F" + decToHex(value.nodeNumber, 4) + ";";
+        var encode = cbusLib.encodeNNRSM(value.nodeNumber);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: NNRSM encode ' + encode});
+		winston.info({message: 'cbusMessage test: NNRSM decode ' + JSON.stringify(decode)});
+		expect(encode).to.equal(expected, 'encode');
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+		expect(decode.mnemonic).to.equal('NNRSM', 'mnemonic');
+		expect(decode.opCode).to.equal('4F', 'opCode');
+        expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
 	})
 
 
