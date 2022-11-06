@@ -137,6 +137,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'QNN'}, 'expected': ':SB780N0D;'});
 		testCases.push({'test':{'mnemonic': 'RQNP'}, 'expected': ':SB780N10;'});
 		testCases.push({'test':{'mnemonic': 'RQMN'}, 'expected': ':SA780N11;'});
+		testCases.push({'test':{'mnemonic': 'GSTOP'}, 'expected': ':S9780N12;'});
 		testCases.push({'test':{'mnemonic': 'KLOC', 'session': '1'}, 'expected': ':SA780N2101;'});
 		testCases.push({'test':{'mnemonic': 'QLOC', 'session': '1'}, 'expected': ':SA780N2201;'});
 		testCases.push({'test':{'mnemonic': 'DKEEP', 'session': '1'}, 'expected': ':SA780N2301;'});
@@ -943,6 +944,25 @@ describe('cbusMessage tests', function(){
 		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
 		expect(decode.mnemonic).to.equal('RQMN', 'mnemonic');
 		expect(decode.opCode).to.equal('11', 'opCode');
+        expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
+	})
+
+
+    // 12 GSTOP
+    //
+	it("GSTOP test", function () {
+		winston.info({message: 'cbusMessage test: BEGIN GSTOP test '});
+		expected = ":S9780N12" + ";";
+        var encode = cbusLib.encodeGSTOP();
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: GSTOP encode ' + encode});
+		winston.info({message: 'cbusMessage test: GSTOP decode ' + JSON.stringify(decode)});
+		expect(encode).to.equal(expected, 'encode');
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+		expect(decode.mnemonic).to.equal('GSTOP', 'mnemonic');
+		expect(decode.opCode).to.equal('12', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
 	})
