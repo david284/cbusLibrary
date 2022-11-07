@@ -483,7 +483,10 @@ class cbusLibrary {
         case 'C1':
             return this.decodeWCVOA(message);
             break;
-        // C2 - CE reserved
+        case 'C2':
+            return this.decodeCABDAT(message);
+            break;
+        // C3 - CE reserved
         case 'CF':
             return this.decodeFCLK(message);
             break;
@@ -1170,6 +1173,14 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('mode')) {throw Error("encode: property 'mode' missing")};
                 if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
                 message.encoded = this.encodeWCVOA(message.address, message.CV, message.mode, message.value);
+                break;
+            case 'CABDAT':   // C2
+                if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
+                if(!message.hasOwnProperty('datcode')) {throw Error("encode: property 'datcode' missing")};
+                if(!message.hasOwnProperty('aspect1')) {throw Error("encode: property 'aspect1' missing")};
+                if(!message.hasOwnProperty('aspect2')) {throw Error("encode: property 'aspect2' missing")};
+                if(!message.hasOwnProperty('speed')) {throw Error("encode: property 'speed' missing")};
+                message.encoded = this.encodeCABDAT(message.address, message.datcode, message.aspect1, message.aspect2, message.speed);
                 break;
             case 'FCLK':   // CF
                 if(!message.hasOwnProperty('minutes')) {throw Error("encode: property 'minutes' missing")};
@@ -2652,7 +2663,7 @@ class cbusLibrary {
         }
     }
     /**
-    * @desc opCode 5D<br>
+    * @desc opCode 5E<br>
     * @param {int} nodeNumber number 0 to 65535
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5E&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
@@ -2676,11 +2687,11 @@ class cbusLibrary {
         }
     }
     /**
-    * @desc opCode 5C<br>
+    * @desc opCode 5F<br>
     * @param {int} Ext_OPC number 0 to 255
     * @param {int} byte1 number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5C&gt&ltExt_OPC&gt&ltbyte1&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5F&gt&ltExt_OPC&gt&ltbyte1&gt
     */
     encodeEXTC1(Ext_OPC, byte1) {
         return this.header({MinPri: 3}) + '5F' + decToHex(Ext_OPC, 2) + decToHex(byte1, 2) + ';'
@@ -4134,7 +4145,7 @@ class cbusLibrary {
                 'CV': parseInt(message.substr(13, 4), 16),
                 'mode': parseInt(message.substr(17, 2), 16),
                 'value': parseInt(message.substr(19, 2), 16),
-                'text': "WCVOA (C1) session " + parseInt(message.substr(9, 2), 16) + 
+                'text': "WCVOA (C1) address " + parseInt(message.substr(9, 4), 16) + 
 					" CV " + parseInt(message.substr(13, 4), 16) +
 					" mode " + parseInt(message.substr(17, 2), 16) +
 					" value " + parseInt(message.substr(19, 2), 16)
@@ -4142,7 +4153,7 @@ class cbusLibrary {
     }
     /**
     * @desc opCode C1<br>
-    * @param {int} session number 0 to 255
+    * @param {int} address number 0 to 65535
     * @param {int} CV number 0 to 65535
     * @param {int} mode number 0 to 255
     * @param {int} value number 0 to 255
@@ -4151,6 +4162,41 @@ class cbusLibrary {
     */
     encodeWCVOA(address, CV, mode, value) {
         return this.header({MinPri: 2}) + 'C1' + decToHex(address, 4) + decToHex(CV, 4) + decToHex(mode, 2) + decToHex(value, 2) + ';'
+    }
+    
+
+    // C2 CABDAT
+    // CABDAT Format: [<MjPri><MinPri=2><CANID>]<0xC2><addrH><addrL><datcode><aspect1><aspect2><speed>
+    //
+    decodeCABDAT(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'CABDAT',
+                'opCode': message.substr(7, 2),
+                'address': parseInt(message.substr(9, 4), 16),
+                'datcode': parseInt(message.substr(13, 2), 16),
+                'aspect1': parseInt(message.substr(13, 2), 16),
+                'aspect2': parseInt(message.substr(17, 2), 16),
+                'speed': parseInt(message.substr(19, 2), 16),
+                'text': "CABDAT (C2) address " + parseInt(message.substr(9, 4), 16) + 
+					" datcode " + parseInt(message.substr(13, 2), 16) +
+					" aspect1 " + parseInt(message.substr(13, 2), 16) +
+					" aspect2 " + parseInt(message.substr(17, 2), 16) +
+					" speed " + parseInt(message.substr(19, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode C2<br>
+    * @param {int} address number 0 to 65535
+    * @param {int} datcode number 0 to 255
+    * @param {int} aspect1 number 0 to 255
+    * @param {int} aspect2 number 0 to 255
+    * @param {int} speed number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltC2&gt&ltaddrH&gt&ltaddrL&gt&ltdatcode&gt&ltaspect1&gt&ltaspect1&gt&ltspeed&gt
+    */
+    encodeCABDAT(address, datcode, aspect1, aspect2, speed) {
+        return this.header({MinPri: 2}) + 'C2' + decToHex(address, 4) + decToHex(datcode, 2) + decToHex(aspect1, 2) + decToHex(aspect2, 2) + decToHex(speed, 2) + ';'
     }
     
 
