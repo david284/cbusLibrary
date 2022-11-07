@@ -85,8 +85,8 @@ class cbusLibrary {
     // header() provides the prefix to add to CBUS data to compose a transmittable message
     // CAN uses a bitwise arbitration scheme whereby the header with the lowest value has priority
     // So higher values have lower priority
-    // The CAN protocol prohibits a sequence of 7 or more 1 bits at the start of the header, so a
-    // MjPri. of 11 in binary (3 in decimal) is not used
+    // It was origianlly believed that The CAN protocol prohibits a sequence of 7 or more 1 bits at the start of the header, so a
+    // MjPri. of 11 in binary (3 in decimal) is not used - HOWEVER, this has subsequently been shown not to be the case, so 3 can be used
     //
     header({
                     MjPri = this.canHeader.MjPri,
@@ -94,7 +94,8 @@ class cbusLibrary {
                     CAN_ID = this.canHeader.CAN_ID
         } = {}) {
         // ensure all variables don't exceed the appropriate number of bits for encoding
-        if (MjPri > 2) {MjPri = 2}      // MjPri is two bits, but a value of 3 is not allowed
+//        if (MjPri > 2) {MjPri = 2}      // MjPri is two bits, but a value of 3 is not allowed **** no longer true ****
+		MjPri = MjPri % 4				// MjPri is two bits, 0 to 3
         MinPri = MinPri % 4             // MinPri is two bits, 0 to 3
         CAN_ID = CAN_ID % 128           // CAN_ID is 7 bits, 0 to 127
 		var identifier = parseInt(MjPri &lt;&lt; 14) + parseInt(MinPri &lt;&lt; 12) + parseInt(CAN_ID &lt;&lt; 5) 
@@ -115,12 +116,12 @@ class cbusLibrary {
         }
     /**
     * setCanHeader
-    * @param {int} MjPri Major priority, two bit number 0 - 2, 3 not allowed
+    * @param {int} MjPri Major priority, two bit number 0 - 3 (3 is allowed, unlike previous assumption)
     * @param {int} CAN_ID 7 bit number, 0 to 127
     */
     setCanHeader(MjPri, CAN_ID) {
         if (MjPri != undefined) { 
-        this.canHeader.MjPri = (MjPri > 2) ? 2 : MjPri}                     // MjPri is two bits, but a value of 3 is n0t allowed
+        this.canHeader.MjPri = (MjPri > 3) ? 3 : MjPri}                     // MjPri is two bits, but a value of 3 is n0t allowed
         if (CAN_ID != undefined) { this.canHeader.CAN_ID = CAN_ID % 128}    // CAN_ID is 7 bits, 0 to 127
     }
 
@@ -243,7 +244,10 @@ class cbusLibrary {
         case '11':
             return this.decodeRQMN(message);
             break;
-        // 12 - 20 reserved
+        case '12':
+            return this.decodeGSTOP(message);
+            break;
+        // 13 - 20 reserved
         case '21':
             return this.decodeKLOC(message);
             break;
@@ -298,7 +302,10 @@ class cbusLibrary {
         case '4C':
             return this.decodeSSTAT(message);
             break;
-        // 4D - 4F reserved
+        // 4D - 4E reserved
+        case '4F':
+            return this.decodeNNRSM(message);
+            break;
 		case '50':
             return this.decodeRQNN(message);
             break;
@@ -453,7 +460,11 @@ class cbusLibrary {
         case 'A2':
             return this.decodeWCVS(message);
             break;
-        // A3 - AF reserved
+        // A3 - AA reserved
+        case 'AB':
+            return this.decodeHEARTB(message);
+            break;
+        // AC - AF reserved
         case 'B0':
             return this.decodeACON1(message);
             break;
@@ -678,8 +689,13 @@ class cbusLibrary {
             }
         }
         else{
-            // assume its a standard message if no ID type supplied
-            return this.encodeStandardMessage(message);
+            // assume its a standard message if no ID type supplied, so check if 'mnemonic' present
+            if(message.hasOwnProperty('mnemonic')) {
+                return this.encodeStandardMessage(message);
+            }
+            else {
+                throw Error('encode: unable to determine message type - no ID_TYPE present');
+            }
         }
     }
 
@@ -740,6 +756,9 @@ class cbusLibrary {
                 break;
             case 'RQMN':    // 11
                 message.encoded = this.encodeRQMN();
+                break;
+            case 'GSTOP':    // 12
+                message.encoded = this.encodeGSTOP();
                 break;
             case 'KLOC':    // 21
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
@@ -819,6 +838,10 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('session')) {throw Error("encode: property 'session' missing")};
                 if(!message.hasOwnProperty('status')) {throw Error("encode: property 'status' missing")};
                 message.encoded = this.encodeSSTAT(message.session, message.status);
+                break;
+            case 'NNRSM':    // 4F
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNRSM(message.nodeNumber);
                 break;
             case 'RQNN':    // 50
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -1070,6 +1093,13 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('mode')) {throw Error("encode: property 'mode' missing")};
                 if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
                 message.encoded = this.encodeWCVS(message.session, message.CV, message.mode, message.value);
+                break;
+            case 'HEARTB':   // AB
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('SequenceCount')) {throw Error("encode: property 'SequenceCount' missing")};
+                if(!message.hasOwnProperty('StatusByte1')) {throw Error("encode: property 'StatusByte1' missing")};
+                if(!message.hasOwnProperty('StatusByte2')) {throw Error("encode: property 'StatusByte2' missing")};
+                message.encoded = this.encodeHEARTB(message.nodeNumber, message.SequenceCount, message.StatusByte1, message.StatusByte2);
                 break;
             case 'ACON1':   // B0
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -1420,13 +1450,13 @@ class cbusLibrary {
                 message.encoded = this.encodeEXTC6(message.Ext_OPC, message.byte1, message.byte2, message.byte3, message.byte4, message.byte5, message.byte6);
                 break;
             default:
-                throw Error('encode: \'' + message.mnemonic + '\' not supported');
+                throw Error('encode standard: \'' + message.mnemonic + '\' not supported');
                 break;
             }
             return message;
         }
         else {
-                throw Error("encode: property 'mnemonic' missing");
+                throw Error("encode standard: property 'mnemonic' missing");
         }
     }
     
@@ -1437,15 +1467,15 @@ class cbusLibrary {
                 case 'PUT':
                     if(message.hasOwnProperty('type')){
                         if (message.type == 'CONTROL') {
-                            if(!message.hasOwnProperty('address')) {throw Error("encode: property 'address' missing")};
-                            if(!message.hasOwnProperty('CTLBT')) {throw Error("encode: property 'CTLBT' missing")};
-                            if(!message.hasOwnProperty('SPCMD')) {throw Error("encode: property 'SPCMD' missing")};
-                            if(!message.hasOwnProperty('CPDTL')) {throw Error("encode: property 'CPDTL' missing")};
-                            if(!message.hasOwnProperty('CPDTH')) {throw Error("encode: property 'CPDTH' missing")};
+                            if(!message.hasOwnProperty('address')) {throw Error("encode extended: property 'address' missing")};
+                            if(!message.hasOwnProperty('CTLBT')) {throw Error("encode extended: property 'CTLBT' missing")};
+                            if(!message.hasOwnProperty('SPCMD')) {throw Error("encode extended: property 'SPCMD' missing")};
+                            if(!message.hasOwnProperty('CPDTL')) {throw Error("encode extended: property 'CPDTL' missing")};
+                            if(!message.hasOwnProperty('CPDTH')) {throw Error("encode extended: property 'CPDTH' missing")};
                             message.encoded = this.encode_EXT_PUT_CONTROL(message.address, message.CTLBT, message.SPCMD, message.CPDTL, message.CPDTH);
                         }
                         else if (message.type == 'DATA') {
-                            if(!message.hasOwnProperty('data')) {throw Error("encode: property 'data' missing")};
+                            if(!message.hasOwnProperty('data')) {throw Error("encode extended: property 'data' missing")};
                             message.encoded = this.encode_EXT_PUT_DATA(message.data);
                         }
                         else {
@@ -1453,13 +1483,13 @@ class cbusLibrary {
                         }
                             
                     } else {
-                        throw Error("encode: property \'type\' missing");
+                        throw Error("encode extended: property \'type\' missing");
                     }
                     break;
                 case 'GET':
                     break;
                 case 'RESPONSE':
-                    if(!message.hasOwnProperty('response')) {throw Error("encode: property 'response' missing")};
+                    if(!message.hasOwnProperty('response')) {throw Error("encode extended: property 'response' missing")};
                     message.encoded = this.encode_EXT_RESPONSE(message.response);
                     break;
                 default:
@@ -1468,7 +1498,7 @@ class cbusLibrary {
             }
             return message;
         } else {
-            throw Error("encode: property \'operation\' missing");
+            throw Error("encode extended: property \'operation\' missing");
         }
     }
     
@@ -1833,6 +1863,27 @@ class cbusLibrary {
     */
     encodeRQMN() {//Request Node Parameters
         return this.header({MinPri: 2}) + '11' + ';'
+    }
+
+
+    // 12 GSTOP
+    // GSTOP Format: [&lt;MjPri>&lt;MinPri=1>&lt;CANID>]&lt;12>
+    //
+    decodeGSTOP(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'GSTOP',
+                'opCode': message.substr(7, 2),
+                'text': 'GSTOP (12)',
+        }
+    }
+    /**
+    * @desc opCode 12&lt;br>
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string&lt;br>
+    * Format: [&amp;ltMjPri&amp;gt&amp;ltMinPri=0&amp;gt&amp;ltCANID&amp;gt]&amp;lt12&amp;gt
+    */
+    encodeGSTOP() {
+        return this.header({MinPri: 1}) + '12' + ';'
     }
 
 
@@ -2255,6 +2306,30 @@ class cbusLibrary {
     */
     encodeSSTAT(session, status) {
             return this.header({MinPri: 3}) + '4C' + decToHex(session, 2) + decToHex(status, 2) + ';'
+    }
+
+
+    // 4F NNRSM
+	// NNRSM Format: Format: [&lt;MjPri>&lt;MinPri=3>&lt;CANID>]&lt;4F>&lt;NN hi>&lt;NN lo>
+    //
+    decodeNNRSM(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'NNRSM',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'text': 'NNRSM (4F) NodeNumber ' + parseInt(message.substr(9, 4), 16),
+        }
+    }
+    /**
+    * @desc opCode 4F&lt;br>
+    * @param {int} session number 0 to 255
+    * @param {int} status 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string&lt;br>
+    * Format: [&amp;ltMjPri&amp;gt&amp;ltMinPri=3&amp;gt&amp;ltCANID&amp;gt]&amp;lt4C&amp;gt&amp;ltnodeNumber&amp;gt
+    */
+    encodeNNRSM(nodeNumber) {
+            return this.header({MinPri: 3}) + '4F' + decToHex(nodeNumber, 4) + ';'
     }
 
 
@@ -3582,6 +3657,41 @@ class cbusLibrary {
                             decToHex(CV, 4) + 
                             decToHex(mode, 2) + 
                             decToHex(value, 2) + ';'
+    }
+    
+
+    // AB HEARTB
+    // HEARTB Format: [&lt;MjPri>&lt;MinPri>&lt;CANID>]&lt;0xAB>&lt;NodeNumberHi>&lt;NodeNumberlo&lt;SequenceCnt>&lt;StatusByte1>&lt;StatusByte2>
+    //
+    decodeHEARTB(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'HEARTB',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'SequenceCount': parseInt(message.substr(13, 2), 16),
+                'StatusByte1': parseInt(message.substr(15, 2), 16),
+                'StatusByte2': parseInt(message.substr(17, 2), 16),
+                'text': "HEARTB (AB) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+					" SequenceCount " + parseInt(message.substr(13, 2), 16) +
+					" StatusByte1 " + parseInt(message.substr(15, 2), 16) +
+					" StatusByte2 " + parseInt(message.substr(17, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode AB&lt;br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} SequenceCount 0 to 255
+    * @param {int} StatusByte1 2 to 255
+    * @param {int} StatusByte2 3 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string&lt;br>
+    * Format: [&amp;ltMjPri&amp;gt&amp;ltMinPri=2&amp;gt&amp;ltCANID&amp;gt]&amp;ltAB&amp;gt&amp;ltnodeNumber hi&amp;gt&amp;ltnodeNumber lo&amp;gt&amp;ltSequenceCnt#&amp;gt&amp;ltStatusByte1#&amp;gt&amp;StatusByte2&amp;gt
+    */
+    encodeHEARTB(nodeNumber, SequenceCount, StatusByte1, StatusByte2) {
+        return this.header({MinPri: 3}) + 'AB' + decToHex(nodeNumber, 4) + 
+                            decToHex(SequenceCount, 2) + 
+                            decToHex(StatusByte1, 2) + 
+                            decToHex(StatusByte2, 2) + ';'
     }
     
 
@@ -5309,7 +5419,7 @@ module.exports = new cbusLibrary();
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Jan 25 2022 14:52:15 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Mon Nov 07 2022 18:56:05 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>
