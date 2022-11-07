@@ -4175,7 +4175,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'address': parseInt(message.substr(9, 4), 16),
                 'datcode': parseInt(message.substr(13, 2), 16),
-                'aspect1': parseInt(message.substr(13, 2), 16),
+                'aspect1': parseInt(message.substr(15, 2), 16),
                 'aspect2': parseInt(message.substr(17, 2), 16),
                 'speed': parseInt(message.substr(19, 2), 16),
                 'text': "CABDAT (C2) address " + parseInt(message.substr(9, 4), 16) + 
