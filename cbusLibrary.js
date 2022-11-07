@@ -320,7 +320,9 @@ class cbusLibrary {
         case '5D':
             return this.decodeENUM(message);
             break;
-        // 5E reserved
+        case '5E':
+            return this.decodeNNRST(message);
+            break;
         case '5F':
             return this.decodeEXTC1(message);
             break;
@@ -870,6 +872,10 @@ class cbusLibrary {
             case 'ENUM':   // 5D
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 message.encoded = this.encodeENUM(message.nodeNumber);
+                break;
+            case 'NNRST':   // 5E
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                message.encoded = this.encodeNNRST(message.nodeNumber);
                 break;
             case 'EXTC1':   // 5F
                 if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
@@ -2630,6 +2636,29 @@ class cbusLibrary {
     */
     encodeENUM(nodeNumber) {
         return this.header({MinPri: 3}) + '5D' + decToHex(nodeNumber, 4) + ';'
+    }
+
+
+    // 5E NNRST
+	// NNRST Format: [<MjPri><MinPri=3><CANID>]<5E><NN hi><NN lo>
+    //
+    decodeNNRST(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'NNRST',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'text': "NNRST (5E) Node " + parseInt(message.substr(9, 4), 16),
+        }
+    }
+    /**
+    * @desc opCode 5D<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt5E&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt
+    */
+    encodeNNRST(nodeNumber) {
+        return this.header({MinPri: 3}) + '5E' + decToHex(nodeNumber, 4) + ';'
     }
 
 
