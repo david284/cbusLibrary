@@ -182,6 +182,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'RQNPN', 'nodeNumber': '1', 'parameterIndex':'2'}, 'expected': ':SB780N73000102;'});
 		testCases.push({'test':{'mnemonic': 'NUMEV', 'nodeNumber': '1', 'eventCount':'2'}, 'expected': ':SB780N74000102;'});
 		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber': '1', 'CAN_ID':'2'}, 'expected': ':SB780N75000102;'});
+		testCases.push({'test':{'mnemonic': 'MODE', 'nodeNumber': '1', 'Mode':'2'}, 'expected': ':SB780N76000102;'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3'}, 'expected': ':SB780N7F010203;'});
 		testCases.push({'test':{'mnemonic': 'RDCC3', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4'}, 'expected': ':SA780N8001020304;'});
 		testCases.push({'test':{'mnemonic': 'WCVO', 'session': '1', 'CV':'2', 'value':'3'}, 'expected': ':SA780N8201000203;'});
@@ -361,6 +362,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'NUMEV', 'nodeNumber':'2'}, 'expected': 'encode: property \'eventCount\' missing'});
 		testCases.push({'test':{'mnemonic': 'CANID', 'CAN_ID': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber':'2'}, 'expected': 'encode: property \'CAN_ID\' missing'});
+		testCases.push({'test':{'mnemonic': 'MODE', 'Mode': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'MODE', 'nodeNumber':'2'}, 'expected': 'encode: property \'Mode\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'byte1':'2', 'byte2':'3'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC':'1', 'byte2':'3'}, 'expected': 'encode: property \'byte1\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC':'1', 'byte1':'2'}, 'expected': 'encode: property \'byte2\' missing'});
@@ -2539,6 +2542,48 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.CAN_ID).to.equal(value.CAN_ID, 'CAN_ID');
+	})
+
+
+    // 76 MODE testcases
+    //
+	function GetTestCase_MODE () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    testCases.push({'mnemonic':'MODE', 
+                                'opCode':'76', 
+                                'nodeNumber':arg1, 
+                                'Mode':arg2});
+                }
+		}
+		return testCases;
+	}
+
+    // 76 MODE
+    //
+	itParam("MODE test nodeNumber ${value.nodeNumber} Mode ${value.Mode}", GetTestCase_MODE(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.Mode, 2) + ";";
+        var encode = cbusLib.encodeMODE(value.nodeNumber, value.Mode);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(encode).to.equal(expected, 'encode');
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.Mode).to.equal(value.Mode, 'Mode');
 	})
 
 

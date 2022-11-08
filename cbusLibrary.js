@@ -2984,7 +2984,7 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
                 'Mode': parseInt(message.substr(13, 2), 16),
-                'text': "MODE (75) Node Number " + parseInt(message.substr(9, 4), 16) + 
+                'text': "MODE (76) Node Number " + parseInt(message.substr(9, 4), 16) + 
 					" Mode " + parseInt(message.substr(13, 2), 16)
         }
     }
