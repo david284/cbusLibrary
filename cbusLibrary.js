@@ -361,7 +361,10 @@ class cbusLibrary {
         case '76':
             return this.decodeMODE(message);
             break;
-        // 77 - 7E reserved
+        case '77':
+            return this.decodeRDGN(message);
+            break;
+        // 78 - 7E reserved
         case '7F':
             return this.decodeEXTC2(message);
             break;
@@ -944,6 +947,11 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
                 message.encoded = this.encodeMODE(message.nodeNumber, message.Mode);
+                break;
+            case 'RDGN':   // 77
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('Diag')) {throw Error("encode: property 'Diag' missing")};
+                message.encoded = this.encodeRDGN(message.nodeNumber, message.Diag);
                 break;
             case 'EXTC2':   // 7F
                 if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
@@ -2997,6 +3005,32 @@ class cbusLibrary {
     */
     encodeMODE(nodeNumber, Mode) {
         return this.header({MinPri: 3}) + '76' + decToHex(nodeNumber, 4) + decToHex(Mode, 2) + ';'
+    }
+    
+
+    // 77 RDGN
+    // RDGN Format: [<MjPri><MinPri=3><CANID>]<77><NN hi><NN lo><Mode>
+    //
+    decodeRDGN(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'RDGN',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'Diag': parseInt(message.substr(13, 2), 16),
+                'text': "RDGN (77) Node Number " + parseInt(message.substr(9, 4), 16) + 
+					" Diag " + parseInt(message.substr(13, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode 77<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @param {int} Diag number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltMode&gt
+    */
+    encodeRDGN(nodeNumber, Diag) {
+        return this.header({MinPri: 3}) + '77' + decToHex(nodeNumber, 4) + decToHex(Diag, 2) + ';'
     }
     
 
