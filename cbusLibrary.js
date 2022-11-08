@@ -364,7 +364,10 @@ class cbusLibrary {
         case '77':
             return this.decodeRDGN(message);
             break;
-        // 78 - 7E reserved
+        case '78':
+            return this.decodeRQSD(message);
+            break;
+        // 79 - 7E reserved
         case '7F':
             return this.decodeEXTC2(message);
             break;
@@ -952,6 +955,11 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 if(!message.hasOwnProperty('Diag')) {throw Error("encode: property 'Diag' missing")};
                 message.encoded = this.encodeRDGN(message.nodeNumber, message.Diag);
+                break;
+            case 'RQSD':   // 78
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
+                message.encoded = this.encodeRQSD(message.nodeNumber, message.ServiceNumber);
                 break;
             case 'EXTC2':   // 7F
                 if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
@@ -3027,10 +3035,36 @@ class cbusLibrary {
     * @param {int} nodeNumber number 0 to 65535
     * @param {int} Diag number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltMode&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltDiag&gt
     */
     encodeRDGN(nodeNumber, Diag) {
         return this.header({MinPri: 3}) + '77' + decToHex(nodeNumber, 4) + decToHex(Diag, 2) + ';'
+    }
+    
+
+    // 78 RQSD
+    // RQSD Format: [<MjPri><MinPri=3><CANID>]<78><NN hi><NN lo><ServiceNumber>
+    //
+    decodeRQSD(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'RQSD',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'ServiceNumber': parseInt(message.substr(13, 2), 16),
+                'text': "RQSD (78) Node Number " + parseInt(message.substr(9, 4), 16) + 
+					" ServiceNumber " + parseInt(message.substr(13, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode 78<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @param {int} ServiceNumber number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceNumber&gt
+    */
+    encodeRQSD(nodeNumber, ServiceNumber) {
+        return this.header({MinPri: 3}) + '78' + decToHex(nodeNumber, 4) + decToHex(ServiceNumber, 2) + ';'
     }
     
 
