@@ -953,8 +953,8 @@ class cbusLibrary {
                 break;
             case 'RDGN':   // 77
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                if(!message.hasOwnProperty('Diag')) {throw Error("encode: property 'Diag' missing")};
-                message.encoded = this.encodeRDGN(message.nodeNumber, message.Diag);
+                if(!message.hasOwnProperty('DiagnosticNumber')) {throw Error("encode: property 'DiagnosticNumber' missing")};
+                message.encoded = this.encodeRDGN(message.nodeNumber, message.DiagnosticNumber);
                 break;
             case 'RQSD':   // 78
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -3025,20 +3025,20 @@ class cbusLibrary {
                 'mnemonic': 'RDGN',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
-                'Diag': parseInt(message.substr(13, 2), 16),
+                'DiagnosticNumber': parseInt(message.substr(13, 2), 16),
                 'text': "RDGN (77) Node Number " + parseInt(message.substr(9, 4), 16) + 
-					" Diag " + parseInt(message.substr(13, 2), 16)
+					" DiagnosticNumber " + parseInt(message.substr(13, 2), 16)
         }
     }
     /**
     * @desc opCode 77<br>
     * @param {int} nodeNumber number 0 to 65535
-    * @param {int} Diag number 0 to 255
+    * @param {int} DiagnosticNumber number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltDiag&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltDiagnosticNumber&gt
     */
-    encodeRDGN(nodeNumber, Diag) {
-        return this.header({MinPri: 3}) + '77' + decToHex(nodeNumber, 4) + decToHex(Diag, 2) + ';'
+    encodeRDGN(nodeNumber, DiagnosticNumber) {
+        return this.header({MinPri: 3}) + '77' + decToHex(nodeNumber, 4) + decToHex(DiagnosticNumber, 2) + ';'
     }
     
 

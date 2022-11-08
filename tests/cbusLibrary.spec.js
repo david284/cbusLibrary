@@ -183,7 +183,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'NUMEV', 'nodeNumber': '1', 'eventCount':'2'}, 'expected': ':SB780N74000102;'});
 		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber': '1', 'CAN_ID':'2'}, 'expected': ':SB780N75000102;'});
 		testCases.push({'test':{'mnemonic': 'MODE', 'nodeNumber': '1', 'Mode':'2'}, 'expected': ':SB780N76000102;'});
-		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber': '1', 'Diag':'2'}, 'expected': ':SB780N77000102;'});
+		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber': '1', 'DiagnosticNumber':'2'}, 'expected': ':SB780N77000102;'});
 		testCases.push({'test':{'mnemonic': 'RQSD', 'nodeNumber': '1', 'ServiceNumber':'2'}, 'expected': ':SB780N78000102;'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3'}, 'expected': ':SB780N7F010203;'});
 		testCases.push({'test':{'mnemonic': 'RDCC3', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4'}, 'expected': ':SA780N8001020304;'});
@@ -366,8 +366,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber':'2'}, 'expected': 'encode: property \'CAN_ID\' missing'});
 		testCases.push({'test':{'mnemonic': 'MODE', 'Mode': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'MODE', 'nodeNumber':'2'}, 'expected': 'encode: property \'Mode\' missing'});
-		testCases.push({'test':{'mnemonic': 'RDGN', 'Diag': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
-		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber':'2'}, 'expected': 'encode: property \'Diag\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDGN', 'DiagnosticNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber':'2'}, 'expected': 'encode: property \'DiagnosticNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'RQSD', 'ServiceNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'RQSD', 'nodeNumber':'2'}, 'expected': 'encode: property \'ServiceNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'byte1':'2', 'byte2':'3'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
@@ -2608,7 +2608,7 @@ describe('cbusMessage tests', function(){
                     testCases.push({'mnemonic':'RDGN', 
                                 'opCode':'77', 
                                 'nodeNumber':arg1, 
-                                'Diag':arg2});
+                                'DiagnosticNumber':arg2});
                 }
 		}
 		return testCases;
@@ -2616,10 +2616,10 @@ describe('cbusMessage tests', function(){
 
     // 77 RDGN
     //
-	itParam("RDGN test nodeNumber ${value.nodeNumber} Diag ${value.Diag}", GetTestCase_RDGN(), function (value) {
+	itParam("RDGN test nodeNumber ${value.nodeNumber} DiagnosticNumber ${value.DiagnosticNumber}", GetTestCase_RDGN(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.Diag, 2) + ";";
-        var encode = cbusLib.encodeRDGN(value.nodeNumber, value.Diag);
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.DiagnosticNumber, 2) + ";";
+        var encode = cbusLib.encodeRDGN(value.nodeNumber, value.DiagnosticNumber);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
@@ -2631,7 +2631,7 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
-        expect(decode.Diag).to.equal(value.Diag, 'Diag');
+        expect(decode.DiagnosticNumber).to.equal(value.DiagnosticNumber, 'DiagnosticNumber');
 	})
 
 
