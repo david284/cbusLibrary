@@ -358,7 +358,10 @@ class cbusLibrary {
         case '75':
             return this.decodeCANID(message);
             break;
-        // 76 - 7E reserved
+        case '76':
+            return this.decodeMODE(message);
+            break;
+        // 77 - 7E reserved
         case '7F':
             return this.decodeEXTC2(message);
             break;
@@ -936,6 +939,11 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 if(!message.hasOwnProperty('CAN_ID')) {throw Error("encode: property 'CAN_ID' missing")};
                 message.encoded = this.encodeCANID(message.nodeNumber, message.CAN_ID);
+                break;
+            case 'MODE':   // 76
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('Mode')) {throw Error("encode: property 'Mode' missing")};
+                message.encoded = this.encodeMODE(message.nodeNumber, message.Mode);
                 break;
             case 'EXTC2':   // 7F
                 if(!message.hasOwnProperty('Ext_OPC')) {throw Error("encode: property 'Ext_OPC' missing")};
@@ -2963,6 +2971,32 @@ class cbusLibrary {
     */
     encodeCANID(nodeNumber, CAN_ID) {
         return this.header({MinPri: 3}) + '75' + decToHex(nodeNumber, 4) + decToHex(CAN_ID, 2) + ';'
+    }
+    
+
+    // 76 MODE
+    // MODE Format: [<MjPri><MinPri=3><CANID>]<76><NN hi><NN lo><Mode>
+    //
+    decodeMODE(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'MODE',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'Mode': parseInt(message.substr(13, 2), 16),
+                'text': "MODE (75) Node Number " + parseInt(message.substr(9, 4), 16) + 
+					" Mode " + parseInt(message.substr(13, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode 76<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @param {int} Mode number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt76&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltMode&gt
+    */
+    encodeMODE(nodeNumber, Mode) {
+        return this.header({MinPri: 3}) + '76' + decToHex(nodeNumber, 4) + decToHex(Mode, 2) + ';'
     }
     
 
