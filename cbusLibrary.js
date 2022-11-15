@@ -361,9 +361,7 @@ class cbusLibrary {
         case '76':
             return this.decodeMODE(message);
             break;
-        case '77':
-            return this.decodeRDGN(message);
-            break;
+        // 77 reserved
         case '78':
             return this.decodeRQSD(message);
             break;
@@ -387,7 +385,10 @@ class cbusLibrary {
         case '85':
             return this.decodePCVS(message);
             break;
-        // 86 - 8F reserved
+        case '87':
+            return this.decodeRDGN(message);
+            break;
+        // 88 - 8F reserved
         case '90':
             return this.decodeACON(message);
             break;
@@ -951,11 +952,6 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('ModeNumber')) {throw Error("encode: property 'ModeNumber' missing")};
                 message.encoded = this.encodeMODE(message.nodeNumber, message.ModeNumber);
                 break;
-            case 'RDGN':   // 77
-                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                if(!message.hasOwnProperty('DiagnosticNumber')) {throw Error("encode: property 'DiagnosticNumber' missing")};
-                message.encoded = this.encodeRDGN(message.nodeNumber, message.DiagnosticNumber);
-                break;
             case 'RQSD':   // 78
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
@@ -997,6 +993,12 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('CV')) {throw Error("encode: property 'CV' missing")};
                 if(!message.hasOwnProperty('value')) {throw Error("encode: property 'value' missing")};
                 message.encoded = this.encodePCVS(message.session, message.CV, message.value);
+                break;
+            case 'RDGN':   // 87
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
+                if(!message.hasOwnProperty('DiagnosticCode')) {throw Error("encode: property 'DiagnosticCode' missing")};
+                message.encoded = this.encodeRDGN(message.nodeNumber, message.ServiceNumber, message.DiagnosticCode);
                 break;
             case 'ACON':   // 90
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -3016,32 +3018,6 @@ class cbusLibrary {
     }
     
 
-    // 77 RDGN
-    // RDGN Format: [<MjPri><MinPri=3><CANID>]<77><NN hi><NN lo><Mode>
-    //
-    decodeRDGN(message) {
-        return {'encoded': message,
-                'ID_TYPE': 'S',
-                'mnemonic': 'RDGN',
-                'opCode': message.substr(7, 2),
-                'nodeNumber': parseInt(message.substr(9, 4), 16),
-                'DiagnosticNumber': parseInt(message.substr(13, 2), 16),
-                'text': "RDGN (77) Node Number " + parseInt(message.substr(9, 4), 16) + 
-					" DiagnosticNumber " + parseInt(message.substr(13, 2), 16)
-        }
-    }
-    /**
-    * @desc opCode 77<br>
-    * @param {int} nodeNumber number 0 to 65535
-    * @param {int} DiagnosticNumber number 0 to 255
-    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltDiagnosticNumber&gt
-    */
-    encodeRDGN(nodeNumber, DiagnosticNumber) {
-        return this.header({MinPri: 3}) + '77' + decToHex(nodeNumber, 4) + decToHex(DiagnosticNumber, 2) + ';'
-    }
-    
-
     // 78 RQSD
     // RQSD Format: [<MjPri><MinPri=3><CANID>]<78><NN hi><NN lo><ServiceNumber>
     //
@@ -3242,6 +3218,35 @@ class cbusLibrary {
     */
     encodePCVS(Session, CV, value) {
         return this.header({MinPri: 2}) + '85' + decToHex(Session, 2) + decToHex(CV, 4) + decToHex(value, 2) + ';'
+    }
+    
+
+    // 87 RDGN
+    // RDGN Format: [<MjPri><MinPri=3><CANID>]<87><NN hi><NN lo><ServiceNumber><DiagnosticCode>
+    //
+    decodeRDGN(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'RDGN',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'ServiceNumber': parseInt(message.substr(13, 2), 16),
+                'DiagnosticCode': parseInt(message.substr(15, 2), 16),
+                'text': "RDGN (87) Node Number " + parseInt(message.substr(9, 4), 16) + 
+					" ServiceNumber " + parseInt(message.substr(13, 2), 16) +
+					" DiagnosticCode " + parseInt(message.substr(15, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode 87<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @param {int} ServiceNumber number 0 to 255
+    * @param {int} DiagnosticCode number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceNumber&gt&ltDiagnosticCode&gt
+    */
+    encodeRDGN(nodeNumber, ServiceNumber, DiagnosticCode) {
+        return this.header({MinPri: 3}) + '87' + decToHex(nodeNumber, 4) + decToHex(ServiceNumber, 2) + decToHex(DiagnosticCode, 2) + ';'
     }
     
 

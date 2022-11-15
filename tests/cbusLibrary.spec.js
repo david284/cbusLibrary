@@ -183,7 +183,6 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'NUMEV', 'nodeNumber': '1', 'eventCount':'2'}, 'expected': ':SB780N74000102;'});
 		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber': '1', 'CAN_ID':'2'}, 'expected': ':SB780N75000102;'});
 		testCases.push({'test':{'mnemonic': 'MODE', 'nodeNumber': '1', 'ModeNumber':'2'}, 'expected': ':SB780N76000102;'});
-		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber': '1', 'DiagnosticNumber':'2'}, 'expected': ':SB780N77000102;'});
 		testCases.push({'test':{'mnemonic': 'RQSD', 'nodeNumber': '1', 'ServiceNumber':'2'}, 'expected': ':SB780N78000102;'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3'}, 'expected': ':SB780N7F010203;'});
 		testCases.push({'test':{'mnemonic': 'RDCC3', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4'}, 'expected': ':SA780N8001020304;'});
@@ -191,6 +190,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'WCVB', 'session': '1', 'CV':'2', 'value':'3'}, 'expected': ':SA780N8301000203;'});
 		testCases.push({'test':{'mnemonic': 'QCVS', 'session': '1', 'CV':'2', 'mode':'3'}, 'expected': ':SA780N8401000203;'});
 		testCases.push({'test':{'mnemonic': 'PCVS', 'session': '1', 'CV':'2', 'value':'3'}, 'expected': ':SA780N8501000203;'});
+		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber': '1', 'ServiceNumber':'2',  'DiagnosticCode':'3'}, 'expected': ':SB780N8700010203;'});
 		testCases.push({'test':{'mnemonic': 'ACON', 'nodeNumber': '1', 'eventNumber':'2'}, 'expected': ':SB780N9000010002;'});
 		testCases.push({'test':{'mnemonic': 'ACOF', 'nodeNumber': '1', 'eventNumber':'2'}, 'expected': ':SB780N9100010002;'});
 		testCases.push({'test':{'mnemonic': 'AREQ', 'nodeNumber': '1', 'eventNumber':'2'}, 'expected': ':SB780N9200010002;'});
@@ -366,8 +366,6 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'CANID', 'nodeNumber':'2'}, 'expected': 'encode: property \'CAN_ID\' missing'});
 		testCases.push({'test':{'mnemonic': 'MODE', 'ModeNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'MODE', 'nodeNumber':'2'}, 'expected': 'encode: property \'ModeNumber\' missing'});
-		testCases.push({'test':{'mnemonic': 'RDGN', 'DiagnosticNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
-		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber':'2'}, 'expected': 'encode: property \'DiagnosticNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'RQSD', 'ServiceNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'RQSD', 'nodeNumber':'2'}, 'expected': 'encode: property \'ServiceNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'EXTC2', 'byte1':'2', 'byte2':'3'}, 'expected': 'encode: property \'Ext_OPC\' missing'});
@@ -389,6 +387,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PCVS', 'CV':'1', 'value':'3'}, 'expected': 'encode: property \'session\' missing'});
 		testCases.push({'test':{'mnemonic': 'PCVS', 'session':'1', 'value':'3'}, 'expected': 'encode: property \'CV\' missing'});
 		testCases.push({'test':{'mnemonic': 'PCVS', 'session':'1', 'CV':'2'}, 'expected': 'encode: property \'value\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDGN', 'ServiceNumber':2, 'DiagnosticCode': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber':'1', 'DiagnosticCode': '3'}, 'expected': 'encode: property \'ServiceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber':'1', 'ServiceNumber': '2'}, 'expected': 'encode: property \'DiagnosticCode\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACON', 'eventNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACON', 'nodeNumber':'2'}, 'expected': 'encode: property \'eventNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACOF', 'eventNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
@@ -2593,48 +2594,6 @@ describe('cbusMessage tests', function(){
 	})
 
 
-    // 77 RDGN testcases
-    //
-	function GetTestCase_RDGN () {
-		var testCases = [];
-		for (a1 = 1; a1 < 4; a1++) {
-			if (a1 == 1) arg1 = 0;
-			if (a1 == 2) arg1 = 1;
-			if (a1 == 3) arg1 = 65535;
-                for (a2 = 1; a2 < 4; a2++) {
-                    if (a2 == 1) arg2 = 0;
-                    if (a2 == 2) arg2 = 1;
-                    if (a2 == 3) arg2 = 255;
-                    testCases.push({'mnemonic':'RDGN', 
-                                'opCode':'77', 
-                                'nodeNumber':arg1, 
-                                'DiagnosticNumber':arg2});
-                }
-		}
-		return testCases;
-	}
-
-    // 77 RDGN
-    //
-	itParam("RDGN test nodeNumber ${value.nodeNumber} DiagnosticNumber ${value.DiagnosticNumber}", GetTestCase_RDGN(), function (value) {
-		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.DiagnosticNumber, 2) + ";";
-        var encode = cbusLib.encodeRDGN(value.nodeNumber, value.DiagnosticNumber);
-        var decode = cbusLib.decode(encode);
-		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-		expect(encode).to.equal(expected, 'encode');
-		expect(decode.encoded).to.equal(expected, 'encoded');
-		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
-		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
-		expect(decode.opCode).to.equal(value.opCode, 'opCode');
-        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
-        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
-        expect(decode.DiagnosticNumber).to.equal(value.DiagnosticNumber, 'DiagnosticNumber');
-	})
-
-
     // 78 RQSD testcases
     //
 	function GetTestCase_RQSD () {
@@ -2971,6 +2930,55 @@ describe('cbusMessage tests', function(){
         expect(decode.session).to.equal(value.session, 'session');
         expect(decode.CV).to.equal(value.CV, 'CV');
         expect(decode.value).to.equal(value.value, 'value');
+	})
+
+
+    // 87 RDGN testcases
+    //
+	function GetTestCase_RDGN () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+						testCases.push({'mnemonic':'RDGN', 
+									'opCode':'87', 
+									'nodeNumber':arg1, 
+									'ServiceNumber':arg2,
+									'DiagnosticCode':arg3});
+					}
+                }
+		}
+		return testCases;
+	}
+
+    // 87 RDGN
+    //
+	itParam("RDGN test nodeNumber ${value.nodeNumber} ServiceNumber ${value.ServiceNumber} DiagnosticCode ${value.DiagnosticCode}", GetTestCase_RDGN(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceNumber, 2) + decToHex(value.DiagnosticCode, 2) + ";";
+        var encode = cbusLib.encodeRDGN(value.nodeNumber, value.ServiceNumber, value.DiagnosticCode);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(encode).to.equal(expected, 'encode');
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.ServiceNumber).to.equal(value.ServiceNumber, 'ServiceNumber');
+        expect(decode.DiagnosticCode).to.equal(value.DiagnosticCode, 'DiagnosticCode');
 	})
 
 
