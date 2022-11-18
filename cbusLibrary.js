@@ -396,7 +396,11 @@ class cbusLibrary {
         case '8C':
             return this.decodeSD(message);
             break;
-        // 8D - 8F reserved
+        // 8D - 8D reserved
+        case '8E':
+            return this.decodeNVSETRD(message);
+            break;
+        // 8F reserved
         case '90':
             return this.decodeACON(message);
             break;
@@ -1019,6 +1023,12 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
                 if(!message.hasOwnProperty('ServiceVersion')) {throw Error("encode: property 'ServiceVersion' missing")};
                 message.encoded = this.encodeSD(message.nodeNumber, message.ServiceNumber, message.ServiceVersion);
+                break;
+            case 'NVSETRD':   // 8E
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('nodeVariableIndex')) {throw Error("encode: property 'nodeVariableIndex' missing")};
+                if(!message.hasOwnProperty('nodeVariableValue')) {throw Error("encode: property 'nodeVariableValue' missing")};
+                message.encoded = this.encodeNVSETRD(message.nodeNumber, message.nodeVariableIndex, message.nodeVariableValue);
                 break;
             case 'ACON':   // 90
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -3322,6 +3332,35 @@ class cbusLibrary {
     */
     encodeSD(nodeNumber, ServiceNumber, ServiceVersion) {
         return this.header({MinPri: 3}) + '8C' + decToHex(nodeNumber, 4) + decToHex(ServiceNumber, 2) + decToHex(ServiceVersion, 2) + ';'
+    }
+    
+
+    // 8E NVSETRD
+    // NVSETRD Format: [<MjPri><MinPri=3><CANID>]<8E><NN hi><NN lo><nodeVariableIndex><nodeVariableValue>
+    //
+    decodeNVSETRD(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'NVSETRD',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'nodeVariableIndex': parseInt(message.substr(13, 2), 16),
+                'nodeVariableValue': parseInt(message.substr(15, 2), 16),
+                'text': "NVSETRD (8E) Node Number " + parseInt(message.substr(9, 4), 16) + 
+					" nodeVariableIndex " + parseInt(message.substr(13, 2), 16) +
+					" nodeVariableValue " + parseInt(message.substr(15, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode 8E<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @param {int} nodeVariableIndex number 0 to 255
+    * @param {int} nodeVariableValue number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt8E&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltnodeVariableIndex&gt&ltnodeVariableValue&gt
+    */
+    encodeNVSETRD(nodeNumber, nodeVariableIndex, nodeVariableValue) {
+        return this.header({MinPri: 3}) + '8E' + decToHex(nodeNumber, 4) + decToHex(nodeVariableIndex, 2) + decToHex(nodeVariableValue, 2) + ';'
     }
     
 

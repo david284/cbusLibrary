@@ -193,6 +193,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PCVS', 'session': '1', 'CV':'2', 'value':'3'}, 'expected': ':SA780N8501000203;'});
 		testCases.push({'test':{'mnemonic': 'RDGN', 'nodeNumber': '1', 'ServiceNumber':'2',  'DiagnosticCode':'3'}, 'expected': ':SB780N8700010203;'});
 		testCases.push({'test':{'mnemonic': 'SD', 'nodeNumber': '1', 'ServiceNumber':'2',  'ServiceVersion':'3'}, 'expected': ':SB780N8C00010203;'});
+		testCases.push({'test':{'mnemonic': 'NVSETRD', 'nodeNumber': '1', 'nodeVariableIndex':'2',  'nodeVariableValue':'3'}, 'expected': ':SB780N8E00010203;'});
 		testCases.push({'test':{'mnemonic': 'ACON', 'nodeNumber': '1', 'eventNumber':'2'}, 'expected': ':SB780N9000010002;'});
 		testCases.push({'test':{'mnemonic': 'ACOF', 'nodeNumber': '1', 'eventNumber':'2'}, 'expected': ':SB780N9100010002;'});
 		testCases.push({'test':{'mnemonic': 'AREQ', 'nodeNumber': '1', 'eventNumber':'2'}, 'expected': ':SB780N9200010002;'});
@@ -397,6 +398,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'SD', 'ServiceNumber':2, 'ServiceVersion': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'SD', 'nodeNumber':'1', 'ServiceVersion': '3'}, 'expected': 'encode: property \'ServiceNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'SD', 'nodeNumber':'1', 'ServiceNumber': '2'}, 'expected': 'encode: property \'ServiceVersion\' missing'});
+		testCases.push({'test':{'mnemonic': 'NVSETRD', 'nodeVariableIndex':2, 'nodeVariableValue': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'NVSETRD', 'nodeNumber':'1', 'nodeVariableValue': '3'}, 'expected': 'encode: property \'nodeVariableIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'NVSETRD', 'nodeNumber':'1', 'nodeVariableIndex': '2'}, 'expected': 'encode: property \'nodeVariableValue\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACON', 'eventNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACON', 'nodeNumber':'2'}, 'expected': 'encode: property \'eventNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ACOF', 'eventNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
@@ -3072,6 +3076,55 @@ describe('cbusMessage tests', function(){
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.ServiceNumber).to.equal(value.ServiceNumber, 'ServiceNumber');
         expect(decode.ServiceVersion).to.equal(value.ServiceVersion, 'ServiceVersion');
+	})
+
+
+    // 8E NVSETRD testcases
+    //
+	function GetTestCase_NVSETRD () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+						testCases.push({'mnemonic':'NVSETRD', 
+									'opCode':'8E', 
+									'nodeNumber':arg1, 
+									'nodeVariableIndex':arg2,
+									'nodeVariableValue':arg3});
+					}
+                }
+		}
+		return testCases;
+	}
+
+    // 8E NVSETRD
+    //
+	itParam("NVSETRD test nodeNumber ${value.nodeNumber} nodeVariableIndex ${value.nodeVariableIndex} nodeVariableValue ${value.nodeVariableValue}", GetTestCase_NVSETRD(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.nodeVariableIndex, 2) + decToHex(value.nodeVariableValue, 2) + ";";
+        var encode = cbusLib.encodeNVSETRD(value.nodeNumber, value.nodeVariableIndex, value.nodeVariableValue);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(encode).to.equal(expected, 'encode');
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.nodeVariableIndex).to.equal(value.nodeVariableIndex, 'nodeVariableIndex');
+        expect(decode.nodeVariableValue).to.equal(value.nodeVariableValue, 'nodeVariableValue');
 	})
 
 
