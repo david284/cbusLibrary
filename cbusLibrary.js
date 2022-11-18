@@ -562,7 +562,11 @@ class cbusLibrary {
         case 'E3':
             return this.decodeSTAT(message);
             break;
-        // E4 - EE reserved
+        // E4 - E6 reserved
+        case 'E7':
+            return this.decodeESD(message);
+            break;
+        // E8 - EE reserved
         case 'F0':
             return this.decodeACON3(message);
             break;
@@ -1368,6 +1372,15 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('minor')) {throw Error("encode: property 'minor' missing")};
                 if(!message.hasOwnProperty('build')) {throw Error("encode: property 'build' missing")};
                 message.encoded = this.encodeSTAT(message.nodeNumber, message.CS, message.flags, message.major, message.minor, message.build);
+                break;
+            case 'ESD':    // E7
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
+                if(!message.hasOwnProperty('Data1')) {throw Error("encode: property 'Data1' missing")};
+                if(!message.hasOwnProperty('Data2')) {throw Error("encode: property 'Data2' missing")};
+                if(!message.hasOwnProperty('Data3')) {throw Error("encode: property 'Data3' missing")};
+                if(!message.hasOwnProperty('Data4')) {throw Error("encode: property 'Data4' missing")};
+                message.encoded = this.encodeESD(message.nodeNumber, message.ServiceNumber, message.Data1, message.Data2, message.Data3, message.Data4);
                 break;
             case 'PARAMS':       // EF
                 if(!message.hasOwnProperty('param1')) {throw Error("encode: property 'param1' missing")};
@@ -5061,6 +5074,50 @@ class cbusLibrary {
                                             decToHex(major, 2) +
                                             decToHex(minor, 2) +
                                             decToHex(build, 2) + ';'
+    }
+    
+
+    // E7 ESD
+    // ESD Format: [<MjPri><MinPri=2><CANID>]<E7><NN hi><NN lo><ServiceNumber><Data1>
+    //               <Data2><Data3><Data4>   
+    //
+    decodeESD(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'ESD',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'ServiceNumber': parseInt(message.substr(13, 2), 16),
+                'Data1': parseInt(message.substr(15, 2), 16),
+                'Data2': parseInt(message.substr(17,2), 16),
+                'Data3': parseInt(message.substr(19, 2), 16),
+                'Data4': parseInt(message.substr(21, 2), 16),
+                'text': "ESD (E7) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                                " ServiceNumber " + parseInt(message.substr(13, 2), 16) +
+                                " Data1 " + parseInt(message.substr(15, 2), 16) +
+                                " Data2 " + parseInt(message.substr(17, 2), 16) +
+                                " Data3 " + parseInt(message.substr(19, 2), 16) +
+                                " Data4 " + parseInt(message.substr(21, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode E7<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} ServiceNumber 0 to 255
+    * @param {int} Data1 0 to 255
+    * @param {int} Data2 0 to 255
+    * @param {int} Data3 0 to 255
+    * @param {int} Data4 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltE7&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceNumber&gt&ltData1&gt&ltData2&gt&ltData3&gt&ltData4&gt
+    */
+    encodeESD(nodeNumber, ServiceNumber, Data1, Data2, Data3, Data4) {
+        return this.header({MinPri: 2}) + 'E7'  + decToHex(nodeNumber, 4) +
+                                            decToHex(ServiceNumber, 2) +
+                                            decToHex(Data1, 2) +
+                                            decToHex(Data2, 2) +
+                                            decToHex(Data3, 2) +
+                                            decToHex(Data4, 2) + ';'
     }
     
 

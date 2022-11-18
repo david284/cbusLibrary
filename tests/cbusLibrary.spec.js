@@ -245,6 +245,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PLOC', 'session': '1', 'address':'2', 'speed':'3', 'direction':'Forward', 'Fn1':'5', 'Fn2':'6', 'Fn3':'7'}, 'expected': ':SA780NE101000283050607;'});
 		testCases.push({'test':{'mnemonic': 'NAME', 'name': '1234567'}, 'expected': ':SB780NE231323334353637;'});
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5', 'build':'6'}, 'expected': ':SA780NE300010203040506;'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceNumber':'2', 'Data1':'3', 'Data2':'4', 'Data3':'5', 'Data4':'6'}, 'expected': ':SA780NE700010203040506;'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1': '1', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': ':SB780NEF01020304050607;'});
 		testCases.push({'test':{'mnemonic': 'ACON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF000010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF100010002030405;'});
@@ -586,6 +587,12 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'minor':'5', 'build':'6'}, 'expected': 'encode: property \'major\' missing'});
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'build':'6'}, 'expected': 'encode: property \'minor\' missing'});
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5'}, 'expected': 'encode: property \'build\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'ServiceNumber':'2', 'Data1':'3', 'Data2':'5', 'Data3':'4', 'Data4':'6'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'Data1':'3', 'Data2':'4', 'Data3':'5', 'Data4':'6'}, 'expected': 'encode: property \'ServiceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceNumber':'2', 'Data2':'4', 'Data3':'5', 'Data4':'6'}, 'expected': 'encode: property \'Data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceNumber':'2', 'Data1':'3', 'Data3':'5', 'Data4':'6'}, 'expected': 'encode: property \'Data2\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceNumber':'2', 'Data1':'3', 'Data2':'4', 'Data4':'6'}, 'expected': 'encode: property \'Data3\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceNumber':'2', 'Data1':'3', 'Data2':'4', 'Data3':'5'}, 'expected': 'encode: property \'Data4\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param1\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param2\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param3\' missing'});
@@ -5726,6 +5733,77 @@ describe('cbusMessage tests', function(){
         expect(decode.major).to.equal(value.major, 'major');
         expect(decode.minor).to.equal(value.minor, 'minor');
         expect(decode.build).to.equal(value.build, 'build');
+	})
+
+
+    // E7 ESD testcases
+    //
+	function GetTestCase_ESD () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+                for (a2 = 1; a2 < 4; a2++) {
+                    if (a2 == 1) arg2 = 0;
+                    if (a2 == 2) arg2 = 1;
+                    if (a2 == 3) arg2 = 255;
+                    for (a3 = 1; a3 < 4; a3++) {
+                        if (a3 == 1) arg3 = 0;
+                        if (a3 == 2) arg3 = 1;
+                        if (a3 == 3) arg3 = 255;
+                        for (a4 = 1; a4 < 4; a4++) {
+                            if (a4 == 1) arg4 = 0;
+                            if (a4 == 2) arg4 = 1;
+                            if (a4 == 3) arg4 = 255;
+                            for (a5 = 1; a5 < 4; a5++) {
+                                if (a5 == 1) arg5 = 0;
+                                if (a5 == 2) arg5 = 1;
+                                if (a5 == 3) arg5 = 255;
+                                for (a6 = 1; a6 < 4; a6++) {
+                                    if (a6 == 1) arg6 = 0;
+                                    if (a6 == 2) arg6 = 1;
+                                    if (a6 == 3) arg6 = 255;
+                                    testCases.push({'mnemonic':'ESD', 
+                                                    'opCode':'E7', 
+                                                    'nodeNumber':arg1, 
+                                                    'ServiceNumber':arg2, 
+                                                    'Data1':arg3, 
+                                                    'Data2':arg4, 
+                                                    'Data3':arg5, 
+                                                    'Data4':arg6});
+                                }
+                            }
+                        }
+                    }
+                }
+		}
+		return testCases;
+	}
+
+    // E7 ESD
+    //
+	itParam("ESD test nodeNumber ${value.nodeNumber} ServiceNumber ${value.ServiceNumber} Data1 ${value.Data1} Data2 ${value.Data2} Data3 ${value.Data3} Data4 ${value.Data4}", 
+    GetTestCase_ESD(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+		expected = ":SA780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceNumber, 2) + decToHex(value.Data1, 2) + decToHex(value.Data2, 2) + decToHex(value.Data3, 2) + decToHex(value.Data4, 2) + ";";
+        var encode = cbusLib.encodeESD(value.nodeNumber, value.ServiceNumber, value.Data1, value.Data2, value.Data3, value.Data4);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+		expect(encode).to.equal(expected, 'encode');
+		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+		expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+		expect(decode.opCode).to.equal(value.opCode, 'opCode');
+        expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.ServiceNumber).to.equal(value.ServiceNumber, 'ServiceNumber');
+        expect(decode.Data1).to.equal(value.Data1, 'Data1');
+        expect(decode.Data2).to.equal(value.Data2, 'Data2');
+        expect(decode.Data3).to.equal(value.Data3, 'Data3');
+        expect(decode.Data4).to.equal(value.Data4, 'Data4');
 	})
 
 
