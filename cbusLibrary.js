@@ -482,7 +482,9 @@ class cbusLibrary {
         case 'B6':
             return this.decodePNN(message);
             break;
-        // B7 - reserved
+        case 'B7':
+            return this.decodeDGN(message);
+            break;
         case 'B8':
             return this.decodeASON1(message);
             break;
@@ -1181,6 +1183,13 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('moduleId')) {throw Error("encode: property 'moduleId' missing")};
                 if(!message.hasOwnProperty('flags')) {throw Error("encode: property 'flags' missing")};
                 message.encoded = this.encodePNN(message.nodeNumber, message.manufacturerId, message.moduleId, message.flags);
+                break;
+            case 'DGN':   // B7
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
+                if(!message.hasOwnProperty('DiagnosticCode')) {throw Error("encode: property 'DiagnosticCode' missing")};
+                if(!message.hasOwnProperty('DiagnosticValue')) {throw Error("encode: property 'DiagnosticValue' missing")};
+                message.encoded = this.encodeDGN(message.nodeNumber, message.ServiceNumber, message.DiagnosticCode, message.DiagnosticValue);
                 break;
             case 'ASON1':   // B8
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -4146,7 +4155,37 @@ class cbusLibrary {
     }
 
 
-    
+    // B7 DGN
+    // DGN Format: [<MjPri><MinPri=3><CANID>]<B7><NN Hi><NN Lo><ServiceNumber><DiagnosticCode><DiagnosticValue>
+    //
+    decodeDGN(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'DGN',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'ServiceNumber': parseInt(message.substr(13, 2), 16), 
+                'DiagnosticCode': parseInt(message.substr(15, 2), 16), 
+                'DiagnosticValue': parseInt(message.substr(17, 2), 16),
+                'text': "DGN (B7) Node " + parseInt(message.substr(9, 4), 16) + 
+					" ServiceNumber " + parseInt(message.substr(13, 2), 16) + 
+					" DiagnosticCode " + parseInt(message.substr(15, 2), 16) + 
+					" DiagnosticValue " + parseInt(message.substr(17, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode B7<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} ServiceNumber 0 to 255
+    * @param {int} DiagnosticCode  0 to 255
+    * @param {int} DiagnosticValue 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltB7&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceNumber&gt&ltDiagnosticCode&gt&ltDiagnosticValue&gt
+    */
+    encodeDGN(nodeNumber, ServiceNumber, DiagnosticCode, DiagnosticValue) {
+        return this.header({MinPri: 3}) + 'B7' + decToHex(nodeNumber, 4) + decToHex(ServiceNumber, 2) + decToHex(DiagnosticCode, 2) + decToHex(DiagnosticValue, 2) + ';'
+    }
+
 
     // B8 ASON1
     // ASON1 Format: [<MjPri><MinPri=3><CANID>]<B8><NN hi><NN lo><DN hi><DN lo><data1>
