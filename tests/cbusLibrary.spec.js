@@ -175,6 +175,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DFUN', 'session': '1', 'Fn1': '2', 'Fn2':'3'}, 'expected': ':SA780N60010203;'});
 		testCases.push({'test':{'mnemonic': 'GLOC', 'address': '1', 'flags':'2'}, 'expected': ':SA780N61000102;'});
 		testCases.push({'test':{'mnemonic': 'ERR', 'data1': '1', 'data2':'2', 'errorNumber': '3'}, 'expected': ':SA780N63010203;'});
+		testCases.push({'test':{'mnemonic': 'SQU', 'nodeNumber': '1', 'capacityIndex':'2'}, 'expected': ':S8780N66000102;'});
 		testCases.push({'test':{'mnemonic': 'CMDERR', 'nodeNumber': '1', 'errorNumber':'2'}, 'expected': ':SB780N6F000102;'});
 		testCases.push({'test':{'mnemonic': 'EVNLF', 'nodeNumber': '1', 'EVSPC':'2'}, 'expected': ':SB780N70000102;'});
 		testCases.push({'test':{'mnemonic': 'NVRD', 'nodeNumber': '1', 'nodeVariableIndex':'2'}, 'expected': ':SB780N71000102;'});
@@ -350,6 +351,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ERR', 'data2':'2', 'errorNumber': '3'}, 'expected': 'encode: property \'data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'ERR', 'data1':'2', 'errorNumber': '3'}, 'expected': 'encode: property \'data2\' missing'});
 		testCases.push({'test':{'mnemonic': 'ERR', 'data1':'2', 'data2': '3'}, 'expected': 'encode: property \'errorNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'SQU', 'capacityIndex': '2'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'SQU', 'nodeNumber':'1'}, 'expected': 'encode: property \'capacityIndex\' missing'});
 		testCases.push({'test':{'mnemonic': 'CMDERR', 'errorNumber': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'CMDERR', 'nodeNumber':'2'}, 'expected': 'encode: property \'errorNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'EVNLF', 'EVSPC': '3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
@@ -2278,6 +2281,43 @@ describe('cbusMessage tests', function(){
         expect(decode.errorNumber).to.equal(value.errorNumber, 'errorNumber');
 		expect(decode.mnemonic).to.equal('ERR', 'mnemonic');
 		expect(decode.opCode).to.equal('63', 'opCode');
+        expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
+        expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
+	})
+
+
+    // 66 SQU
+    //
+	function GetTestCase_SQU () {
+		var testCases = [];
+		for (NN = 1; NN < 4; NN++) {
+			if (NN == 1) nodeNumber = 0;
+			if (NN == 2) nodeNumber = 1;
+			if (NN == 3) nodeNumber = 65535;
+			for (a2 = 1; a2 < 4; a2++) {
+				if (a2 == 1) arg2 = 0;
+				if (a2 == 2) arg2 = 1;
+				if (a2 == 3) arg2 = 255;
+				testCases.push({'nodeNumber':nodeNumber, 'capacityIndex':arg2});
+			}
+		}
+		return testCases;
+	}
+
+	itParam("SQU test nodeNumber ${value.nodeNumber} capacityIndex ${value.capacityIndex}", GetTestCase_SQU(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN SQU test ' + JSON.stringify(value)});
+		expected = ":S8780N66" + decToHex(value.nodeNumber, 4) + decToHex(value.capacityIndex, 2) + ";";
+        var encode = cbusLib.encodeSQU(value.nodeNumber, value.capacityIndex);
+        var decode = cbusLib.decode(encode);
+		winston.info({message: 'cbusMessage test: SQU encode ' + encode});
+		winston.info({message: 'cbusMessage test: SQU decode ' + JSON.stringify(decode)});
+		expect(encode).to.equal(expected, 'encode');
+		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+        expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+        expect(decode.capacityIndex).to.equal(value.capacityIndex, 'capacityIndex');
+		expect(decode.mnemonic).to.equal('SQU', 'mnemonic');
+		expect(decode.opCode).to.equal('66', 'opCode');
         expect(decode.text).to.include(decode.mnemonic + ' ', 'text mnemonic');
         expect(decode.text).to.include('(' + decode.opCode + ')', 'text opCode');
 	})

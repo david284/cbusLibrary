@@ -336,7 +336,11 @@ class cbusLibrary {
         case '63':
             return this.decodeERR(message);
             break;
-        // 64 - 6E reserved
+        // 64 - 65 reserved
+        case '66':
+            return this.decodeSQU(message);
+            break;
+        // 67 - 6E reserved
         case '6F':
             return this.decodeCMDERR(message);
             break;
@@ -514,6 +518,7 @@ class cbusLibrary {
             break;
         case 'D4':
             return this.decodeARON2(message);
+			
             break;
         case 'D5':
             return this.decodeAROF2(message);
@@ -911,6 +916,11 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
                 if(!message.hasOwnProperty('errorNumber')) {throw Error("encode: property 'errorNumber' missing")};
                 message.encoded = this.encodeERR(message.data1, message.data2, message.errorNumber);
+                break;
+            case 'SQU':   // 66
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('capacityIndex')) {throw Error("encode: property 'capacityIndex' missing")};
+                message.encoded = this.encodeSQU(message.nodeNumber, message.capacityIndex);
                 break;
             case 'CMDERR':   // 6F
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -2341,7 +2351,7 @@ class cbusLibrary {
     * @param {int} session number 0 to 255
     * @param {int} status 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt4C&gt&ltnodeNumber&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt4F&gt&ltnodeNumber&gt
     */
     encodeNNRSM(nodeNumber) {
             return this.header({MinPri: 3}) + '4F' + decToHex(nodeNumber, 4) + ';'
@@ -2810,6 +2820,32 @@ class cbusLibrary {
     }
 
     
+    // 66 SQU
+	// SQU Format: Format: [<MjPri><MinPri=0><CANID>]<66><NN hi><NN lo><capacityIndex>
+    //
+    decodeSQU(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'SQU',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+				'capacityIndex': parseInt(message.substr(13, 2), 16),
+                'text': 'SQU (66) NodeNumber ' + parseInt(message.substr(9, 4), 16) + 
+					" capacityIndex " + parseInt(message.substr(13, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode 66<br>
+    * @param {int} node Number 0 to 65535
+    * @param {int} capacityIndex 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt66&gt&ltnodeNumber&gt&ltcapacityIndex&gt
+    */
+    encodeSQU(nodeNumber, capacityIndex) {
+            return this.header({MinPri: 0}) + '66' + decToHex(nodeNumber, 4) + decToHex(capacityIndex, 2) + ';'
+    }
+
+
     // 6F CMDERR
     // CMDERR Format: [<MjPri><MinPri=3><CANID>]<6F><NN hi><NN lo><Error number>
     //
