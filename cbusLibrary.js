@@ -392,7 +392,11 @@ class cbusLibrary {
         case '87':
             return this.decodeRDGN(message);
             break;
-        // 88 - 8F reserved
+        // 88 - 8B reserved
+        case '8C':
+            return this.decodeSD(message);
+            break;
+        // 8D - 8F reserved
         case '90':
             return this.decodeACON(message);
             break;
@@ -1009,6 +1013,12 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
                 if(!message.hasOwnProperty('DiagnosticCode')) {throw Error("encode: property 'DiagnosticCode' missing")};
                 message.encoded = this.encodeRDGN(message.nodeNumber, message.ServiceNumber, message.DiagnosticCode);
+                break;
+            case 'SD':   // 8C
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('ServiceNumber')) {throw Error("encode: property 'ServiceNumber' missing")};
+                if(!message.hasOwnProperty('ServiceVersion')) {throw Error("encode: property 'ServiceVersion' missing")};
+                message.encoded = this.encodeSD(message.nodeNumber, message.ServiceNumber, message.ServiceVersion);
                 break;
             case 'ACON':   // 90
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -3279,10 +3289,39 @@ class cbusLibrary {
     * @param {int} ServiceNumber number 0 to 255
     * @param {int} DiagnosticCode number 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt77&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceNumber&gt&ltDiagnosticCode&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt87&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceNumber&gt&ltDiagnosticCode&gt
     */
     encodeRDGN(nodeNumber, ServiceNumber, DiagnosticCode) {
         return this.header({MinPri: 3}) + '87' + decToHex(nodeNumber, 4) + decToHex(ServiceNumber, 2) + decToHex(DiagnosticCode, 2) + ';'
+    }
+    
+
+    // 8C SD
+    // SD Format: [<MjPri><MinPri=3><CANID>]<8C><NN hi><NN lo><ServiceNumber><ServiceVersion>
+    //
+    decodeSD(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'SD',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'ServiceNumber': parseInt(message.substr(13, 2), 16),
+                'ServiceVersion': parseInt(message.substr(15, 2), 16),
+                'text': "SD (8C) Node Number " + parseInt(message.substr(9, 4), 16) + 
+					" ServiceNumber " + parseInt(message.substr(13, 2), 16) +
+					" ServiceVersion " + parseInt(message.substr(15, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode 8C<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @param {int} ServiceNumber number 0 to 255
+    * @param {int} ServiceVersion number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt8C&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceNumber&gt&ltServiceVersion&gt
+    */
+    encodeSD(nodeNumber, ServiceNumber, ServiceVersion) {
+        return this.header({MinPri: 3}) + '8C' + decToHex(nodeNumber, 4) + decToHex(ServiceNumber, 2) + decToHex(ServiceVersion, 2) + ';'
     }
     
 
