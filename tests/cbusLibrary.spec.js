@@ -220,7 +220,6 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'AROF1', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3'}, 'expected': ':SB780NB40001000203;'});
 		testCases.push({'test':{'mnemonic': 'NEVAL', 'nodeNumber': '1', 'eventIndex':'2', 'eventVariableIndex':'3', 'eventVariableValue':'4'}, 'expected': ':SB780NB50001020304;'});
 		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber': '1', 'manufacturerId':'2', 'moduleId':'3', 'flags':'4'}, 'expected': ':SB780NB60001020304;'});
-		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber': '1', 'ServiceIndex':'2', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': ':SB780NB70001020304;'});
 		testCases.push({'test':{'mnemonic': 'ASON1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NB80001000203;'});
 		testCases.push({'test':{'mnemonic': 'ASOF1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NB90001000203;'});
 		testCases.push({'test':{'mnemonic': 'ARSON1', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3'}, 'expected': ':SB780NBD0001000203;'});
@@ -229,6 +228,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6'}, 'expected': ':SA780NC0010203040506;'});
 		testCases.push({'test':{'mnemonic': 'WCVOA', 'address': '1', 'CV':'2', 'mode':'3', 'value':'4'}, 'expected': ':SA780NC1000100020304;'});
 		testCases.push({'test':{'mnemonic': 'CABDAT', 'address': '1', 'datcode':'2', 'aspect1':'3', 'aspect2':'4', 'speed':'5'}, 'expected': ':SA780NC2000102030405;'});
+		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber': '1', 'ServiceIndex':'2', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': ':SB780NC70001020304;'});
 		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes': '1', 'hours':'2', 'dayOfWeek':'3', 'dayOfMonth':'4', 'month':'5',  'div':'6', 'temperature':'7'}, 'expected': ':SB780NCF010253060407;'});
 		testCases.push({'test':{'mnemonic': 'ACON2', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': ':SB780ND0000100020304;'});
 		testCases.push({'test':{'mnemonic': 'ACOF2', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': ':SB780ND1000100020304;'});
@@ -478,10 +478,6 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber':'1', 'moduleId':'3', 'flags':'4'}, 'expected': 'encode: property \'manufacturerId\' missing'});
 		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber':'1', 'manufacturerId':'2', 'flags':'4'}, 'expected': 'encode: property \'moduleId\' missing'});
 		testCases.push({'test':{'mnemonic': 'PNN', 'nodeNumber':'1', 'manufacturerId':'2', 'moduleId':'3'}, 'expected': 'encode: property \'flags\' missing'});
-		testCases.push({'test':{'mnemonic': 'DGN', 'ServiceIndex':'2', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': 'encode: property \'nodeNumber\' missing'});
-		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber':'1', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': 'encode: property \'ServiceIndex\' missing'});
-		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber':'1', 'ServiceIndex':'2', 'DiagnosticValue':'4'}, 'expected': 'encode: property \'DiagnosticCode\' missing'});
-		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber':'1', 'ServiceIndex':'2', 'DiagnosticCode':'3'}, 'expected': 'encode: property \'DiagnosticValue\' missing'});
 		testCases.push({'test':{'mnemonic': 'ASON1', 'deviceNumber': '2', 'data1':'3'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ASON1', 'nodeNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'deviceNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ASON1', 'nodeNumber':'2', 'deviceNumber':'2'}, 'expected': 'encode: property \'data1\' missing'});
@@ -514,6 +510,10 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'CABDAT', 'address':'1', 'datcode':'2', 'aspect2':'4', 'speed':'5'}, 'expected': 'encode: property \'aspect1\' missing'});
 		testCases.push({'test':{'mnemonic': 'CABDAT', 'address':'1', 'datcode':'2', 'aspect1':'3', 'speed':'5'}, 'expected': 'encode: property \'aspect2\' missing'});
 		testCases.push({'test':{'mnemonic': 'CABDAT', 'address':'1', 'datcode':'2', 'aspect1':'3', 'aspect2':'4'}, 'expected': 'encode: property \'speed\' missing'});
+		testCases.push({'test':{'mnemonic': 'DGN', 'ServiceIndex':'2', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber':'1', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': 'encode: property \'ServiceIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber':'1', 'ServiceIndex':'2', 'DiagnosticValue':'4'}, 'expected': 'encode: property \'DiagnosticCode\' missing'});
+		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber':'1', 'ServiceIndex':'2', 'DiagnosticCode':'3'}, 'expected': 'encode: property \'DiagnosticValue\' missing'});
 		testCases.push({'test':{'mnemonic': 'FCLK', 'hours':'2', 'dayOfWeek':'3', 'dayOfMonth':'4', 'month':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'minutes\' missing'});
 		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'dayOfWeek':'3', 'dayOfMonth':'4', 'month':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'hours\' missing'});
 		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes':'2', 'hours':'3', 'dayOfMonth':'4', 'month':'5', 'div':'5', 'temperature':'6'}, 'expected': 'encode: property \'dayOfWeek\' missing'});
@@ -4323,64 +4323,6 @@ describe('cbusMessage tests', function(){
 	})
 
 
-    // B7 DGN testcases
-    //
-	function GetTestCase_DGN () {
-		var testCases = [];
-		for (a1 = 1; a1 < 4; a1++) {
-			if (a1 == 1) arg1 = 0;
-			if (a1 == 2) arg1 = 1;
-			if (a1 == 3) arg1 = 65535;
-            for (a2 = 1; a2 < 4; a2++) {
-                if (a2 == 1) arg2 = 0;
-                if (a2 == 2) arg2 = 1;
-                if (a2 == 3) arg2 = 255;
-                for (a3 = 1; a3 < 4; a3++) {
-                    if (a3 == 1) arg3 = 0;
-                    if (a3 == 2) arg3 = 1;
-                    if (a3 == 3) arg3 = 255;
-					for (a4 = 1; a4 < 4; a4++) {
-						if (a4 == 1) arg4 = 0;
-						if (a4 == 2) arg4 = 1;
-						if (a4 == 3) arg4 = 255;
-						testCases.push({'mnemonic':'DGN', 
-										'opCode':'B7', 
-										'nodeNumber':arg1, 
-										'ServiceIndex':arg2,
-										'DiagnosticCode':arg3,
-										'DiagnosticValue':arg4,
-						})
-					}
-				}
-            }
-		}
-		return testCases;
-	}
-
-    // B7 DGN
-    //
-	itParam("DGN test nodeNumber ${value.nodeNumber} ServiceIndex ${value.ServiceIndex} DiagnosticCode ${value.DiagnosticCode} DiagnosticValue ${value.DiagnosticValue}", 
-        GetTestCase_DGN(), function (value) {
-            winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-            expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceIndex, 2) + decToHex(value.DiagnosticCode, 2) + decToHex(value.DiagnosticValue, 2) + ";";
-            var encode = cbusLib.encodeDGN(value.nodeNumber, value.ServiceIndex, value.DiagnosticCode, value.DiagnosticValue);
-            var decode = cbusLib.decode(encode);
-            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-            expect(encode).to.equal(expected, 'encode');
-            expect(decode.encoded).to.equal(expected, 'encoded');
-            expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
-            expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
-            expect(decode.opCode).to.equal(value.opCode, 'opCode');
-            expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
-            expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
-            expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
-            expect(decode.ServiceIndex).to.equal(value.ServiceIndex, 'deviceNumber');
-            expect(decode.DiagnosticCode).to.equal(value.DiagnosticCode, 'DiagnosticCode');
-            expect(decode.DiagnosticValue).to.equal(value.DiagnosticValue, 'DiagnosticValue');
-	})
-
-
     // B8/B9 ASON1 & ASOF1 test cases
     //
 	function GetTestCase_ASONF1 () {
@@ -4810,6 +4752,64 @@ describe('cbusMessage tests', function(){
         expect(decode.aspect1).to.equal(value.aspect1, 'aspect1');
         expect(decode.aspect2).to.equal(value.aspect2, 'aspect2');
         expect(decode.speed).to.equal(value.speed, 'speed');
+	})
+
+
+    // C7 DGN testcases
+    //
+	function GetTestCase_DGN () {
+		var testCases = [];
+		for (a1 = 1; a1 < 4; a1++) {
+			if (a1 == 1) arg1 = 0;
+			if (a1 == 2) arg1 = 1;
+			if (a1 == 3) arg1 = 65535;
+            for (a2 = 1; a2 < 4; a2++) {
+                if (a2 == 1) arg2 = 0;
+                if (a2 == 2) arg2 = 1;
+                if (a2 == 3) arg2 = 255;
+                for (a3 = 1; a3 < 4; a3++) {
+                    if (a3 == 1) arg3 = 0;
+                    if (a3 == 2) arg3 = 1;
+                    if (a3 == 3) arg3 = 255;
+					for (a4 = 1; a4 < 4; a4++) {
+						if (a4 == 1) arg4 = 0;
+						if (a4 == 2) arg4 = 1;
+						if (a4 == 3) arg4 = 255;
+						testCases.push({'mnemonic':'DGN', 
+										'opCode':'C7', 
+										'nodeNumber':arg1, 
+										'ServiceIndex':arg2,
+										'DiagnosticCode':arg3,
+										'DiagnosticValue':arg4,
+						})
+					}
+				}
+            }
+		}
+		return testCases;
+	}
+
+    // C7 DGN
+    //
+	itParam("DGN test nodeNumber ${value.nodeNumber} ServiceIndex ${value.ServiceIndex} DiagnosticCode ${value.DiagnosticCode} DiagnosticValue ${value.DiagnosticValue}", 
+        GetTestCase_DGN(), function (value) {
+            winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+            expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceIndex, 2) + decToHex(value.DiagnosticCode, 2) + decToHex(value.DiagnosticValue, 2) + ";";
+            var encode = cbusLib.encodeDGN(value.nodeNumber, value.ServiceIndex, value.DiagnosticCode, value.DiagnosticValue);
+            var decode = cbusLib.decode(encode);
+            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+            winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+            expect(encode).to.equal(expected, 'encode');
+            expect(decode.encoded).to.equal(expected, 'encoded');
+            expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+            expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+            expect(decode.opCode).to.equal(value.opCode, 'opCode');
+            expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+            expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+            expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+            expect(decode.ServiceIndex).to.equal(value.ServiceIndex, 'deviceNumber');
+            expect(decode.DiagnosticCode).to.equal(value.DiagnosticCode, 'DiagnosticCode');
+            expect(decode.DiagnosticValue).to.equal(value.DiagnosticValue, 'DiagnosticValue');
 	})
 
 
