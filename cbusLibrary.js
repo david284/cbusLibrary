@@ -3977,7 +3977,7 @@ class cbusLibrary {
                 'requestOpCode': parseInt(message.substr(13, 2), 16),
                 'serviceType': parseInt(message.substr(15, 2), 16),
                 'result': parseInt(message.substr(17, 2), 16),
-                'text': "HEARTB (AB) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+                'text': "GRSP (AF) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
 					" requestOpCode " + parseInt(message.substr(13, 2), 16) +
 					" serviceType " + parseInt(message.substr(15, 2), 16) +
 					" result " + parseInt(message.substr(17, 2), 16)
@@ -3993,7 +3993,7 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltAF&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltrequestOpCode&gt&ltserviceType&gt&ltresult&gt
     */
     encodeGRSP(nodeNumber, requestOpCode, serviceType, result) {
-        return this.header({MinPri: 3}) + 'AB' + decToHex(nodeNumber, 4) + 
+        return this.header({MinPri: 3}) + 'AF' + decToHex(nodeNumber, 4) + 
                             decToHex(requestOpCode, 2) + 
                             decToHex(serviceType, 2) + 
                             decToHex(result, 2) + ';'
