@@ -460,7 +460,10 @@ class cbusLibrary {
         case 'AB':
             return this.decodeHEARTB(message);
             break;
-        // AC - AF reserved
+        // AC - AE reserved
+        case 'AF':
+            return this.decodeGRSP(message);
+            break;
         case 'B0':
             return this.decodeACON1(message);
             break;
@@ -1145,6 +1148,13 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('StatusByte1')) {throw Error("encode: property 'StatusByte1' missing")};
                 if(!message.hasOwnProperty('StatusByte2')) {throw Error("encode: property 'StatusByte2' missing")};
                 message.encoded = this.encodeHEARTB(message.nodeNumber, message.SequenceCount, message.StatusByte1, message.StatusByte2);
+                break;
+            case 'GRSP':   // AF
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('requestOpCode')) {throw Error("encode: property 'requestOpCode' missing")};
+                if(!message.hasOwnProperty('serviceType')) {throw Error("encode: property 'serviceType' missing")};
+                if(!message.hasOwnProperty('result')) {throw Error("encode: property 'result' missing")};
+                message.encoded = this.encodeGRSP(message.nodeNumber, message.requestOpCode, message.serviceType, message.result);
                 break;
             case 'ACON1':   // B0
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -3952,6 +3962,41 @@ class cbusLibrary {
                             decToHex(SequenceCount, 2) + 
                             decToHex(StatusByte1, 2) + 
                             decToHex(StatusByte2, 2) + ';'
+    }
+    
+
+    // AF GRSP
+    // GRSP Format: [<MjPri><MinPri><CANID>]<0xAF><NodeNumberHi><NodeNumberlo<requestOpCode><serviceType><result>
+    //
+    decodeGRSP(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'GRSP',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16), 
+                'requestOpCode': parseInt(message.substr(13, 2), 16),
+                'serviceType': parseInt(message.substr(15, 2), 16),
+                'result': parseInt(message.substr(17, 2), 16),
+                'text': "HEARTB (AB) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
+					" requestOpCode " + parseInt(message.substr(13, 2), 16) +
+					" serviceType " + parseInt(message.substr(15, 2), 16) +
+					" result " + parseInt(message.substr(17, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode AF<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {int} requestOpCode 0 to 255
+    * @param {int} serviceType 2 to 255
+    * @param {int} result 3 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltAF&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltrequestOpCode&gt&ltserviceType&gt&ltresult&gt
+    */
+    encodeGRSP(nodeNumber, requestOpCode, serviceType, result) {
+        return this.header({MinPri: 3}) + 'AB' + decToHex(nodeNumber, 4) + 
+                            decToHex(requestOpCode, 2) + 
+                            decToHex(serviceType, 2) + 
+                            decToHex(result, 2) + ';'
     }
     
 
