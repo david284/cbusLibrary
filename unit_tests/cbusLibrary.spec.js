@@ -213,7 +213,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'RDCC4', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5'}, 'expected': ':SA780NA00102030405;'});
 		testCases.push({'test':{'mnemonic': 'WCVS', 'session': '1', 'CV':'2', 'mode':'3', 'value':'4'}, 'expected': ':SA780NA20100020304;'});
 		testCases.push({'test':{'mnemonic': 'HEARTB', 'nodeNumber': '1', 'SequenceCount':'2', 'StatusByte1':'3', 'StatusByte2':'4'}, 'expected': ':SB780NAB0001020304;'});
-		testCases.push({'test':{'mnemonic': 'GRSP', 'nodeNumber': '1', 'requestOpCode':'2', 'serviceType':'3', 'result':'4'}, 'expected': ':SB780NAF0001020304;'});
+		testCases.push({'test':{'mnemonic': 'GRSP', 'nodeNumber': '1', 'requestOpCode':'02', 'serviceType':'3', 'result':'4'}, 'expected': ':SB780NAF0001020304;'});
 		testCases.push({'test':{'mnemonic': 'ACON1', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3'}, 'expected': ':SB780NB00001000203;'});
 		testCases.push({'test':{'mnemonic': 'ACOF1', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3'}, 'expected': ':SB780NB10001000203;'});
 		testCases.push({'test':{'mnemonic': 'REQEV', 'nodeNumber': '1', 'eventNumber':'2', 'eventVariableIndex':'3'}, 'expected': ':SB780NB20001000203;'});
@@ -4007,9 +4007,9 @@ describe('cbusMessage tests', function(){
 			if (a1 == 2) arg1 = 1;
 			if (a1 == 3) arg1 = 65535;
 			for (a2 = 1; a2 < 4; a2++) {
-				if (a2 == 1) arg2 = 0;
-				if (a2 == 2) arg2 = 1;
-				if (a2 == 3) arg2 = 255;
+				if (a2 == 1) arg2 = '00';
+				if (a2 == 2) arg2 = '01';
+				if (a2 == 3) arg2 = 'FF';
 				for (a3 = 1; a3 < 4; a3++) {
 					if (a3 == 1) arg3 = 0;
 					if (a3 == 2) arg3 = 1;
@@ -4034,10 +4034,10 @@ describe('cbusMessage tests', function(){
 
     // AF GRSP
     //
-	itParam("GRSP test nodeNumber ${value.nodeNumber} requestOpCode ${value.requestOpCode} serviceType ${value.serviceType} result ${value.result}", 
+	itParam("GRSP test ${JSON.stringify(value)}", 
         GetTestCase_GRSP(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.requestOpCode, 2) + decToHex(value.serviceType, 2) + decToHex(value.result, 2) + ";";
+		expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + value.requestOpCode + decToHex(value.serviceType, 2) + decToHex(value.result, 2) + ";";
         var encode = cbusLib.encodeGRSP(value.nodeNumber, value.requestOpCode, value.serviceType, value.result);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});

@@ -3974,11 +3974,11 @@ class cbusLibrary {
                 'mnemonic': 'GRSP',
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16), 
-                'requestOpCode': parseInt(message.substr(13, 2), 16),
+                'requestOpCode': message.substr(13, 2),
                 'serviceType': parseInt(message.substr(15, 2), 16),
                 'result': parseInt(message.substr(17, 2), 16),
                 'text': "GRSP (AF) nodeNumber " + parseInt(message.substr(9, 4), 16) + 
-					" requestOpCode " + parseInt(message.substr(13, 2), 16) +
+					" requestOpCode " + message.substr(13, 2) +
 					" serviceType " + parseInt(message.substr(15, 2), 16) +
 					" result " + parseInt(message.substr(17, 2), 16)
         }
@@ -3986,7 +3986,7 @@ class cbusLibrary {
     /**
     * @desc opCode AF<br>
     * @param {int} nodeNumber 0 to 65535
-    * @param {int} requestOpCode 0 to 255
+    * @param {string} requestOpCode '00' to 'FF' (hex encoded 0-255)
     * @param {int} serviceType 2 to 255
     * @param {int} result 3 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
@@ -3994,7 +3994,7 @@ class cbusLibrary {
     */
     encodeGRSP(nodeNumber, requestOpCode, serviceType, result) {
         return this.header({MinPri: 3}) + 'AF' + decToHex(nodeNumber, 4) + 
-                            decToHex(requestOpCode, 2) + 
+                            requestOpCode.substr(0, 2) + 
                             decToHex(serviceType, 2) + 
                             decToHex(result, 2) + ';'
     }
