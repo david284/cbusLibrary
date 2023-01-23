@@ -392,11 +392,7 @@ class cbusLibrary {
         case '87':
             return this.decodeRDGN(message);
             break;
-        // 88 - 8B reserved
-        case '8C':
-            return this.decodeSD(message);
-            break;
-        // 8D - 8D reserved
+        // 88 - 8E reserved
         case '8E':
             return this.decodeNVSETRD(message);
             break;
@@ -460,7 +456,10 @@ class cbusLibrary {
         case 'AB':
             return this.decodeHEARTB(message);
             break;
-        // AC - AE reserved
+        case 'AC':
+            return this.decodeSD(message);
+            break;
+        // AD - AE reserved
         case 'AF':
             return this.decodeGRSP(message);
             break;
@@ -1028,13 +1027,6 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('DiagnosticCode')) {throw Error("encode: property 'DiagnosticCode' missing")};
                 message.encoded = this.encodeRDGN(message.nodeNumber, message.ServiceIndex, message.DiagnosticCode);
                 break;
-            case 'SD':   // 8C
-                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
-                if(!message.hasOwnProperty('ServiceIndex')) {throw Error("encode: property 'ServiceIndex' missing")};
-                if(!message.hasOwnProperty('ServiceType')) {throw Error("encode: property 'ServiceType' missing")};
-                if(!message.hasOwnProperty('ServiceVersion')) {throw Error("encode: property 'ServiceVersion' missing")};
-                message.encoded = this.encodeSD(message.nodeNumber, message.ServiceIndex, message.ServiceType, message.ServiceVersion);
-                break;
             case 'NVSETRD':   // 8E
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 if(!message.hasOwnProperty('nodeVariableIndex')) {throw Error("encode: property 'nodeVariableIndex' missing")};
@@ -1148,6 +1140,13 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('StatusByte1')) {throw Error("encode: property 'StatusByte1' missing")};
                 if(!message.hasOwnProperty('StatusByte2')) {throw Error("encode: property 'StatusByte2' missing")};
                 message.encoded = this.encodeHEARTB(message.nodeNumber, message.SequenceCount, message.StatusByte1, message.StatusByte2);
+                break;
+            case 'SD':   // AC
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('ServiceIndex')) {throw Error("encode: property 'ServiceIndex' missing")};
+                if(!message.hasOwnProperty('ServiceType')) {throw Error("encode: property 'ServiceType' missing")};
+                if(!message.hasOwnProperty('ServiceVersion')) {throw Error("encode: property 'ServiceVersion' missing")};
+                message.encoded = this.encodeSD(message.nodeNumber, message.ServiceIndex, message.ServiceType, message.ServiceVersion);
                 break;
             case 'GRSP':   // AF
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -3340,38 +3339,6 @@ class cbusLibrary {
     }
     
 
-    // 8C SD
-    // SD Format: [<MjPri><MinPri=3><CANID>]<8C><NN hi><NN lo><ServiceIndex><ServiceType><ServiceVersion>
-    //
-    decodeSD(message) {
-        return {'encoded': message,
-                'ID_TYPE': 'S',
-                'mnemonic': 'SD',
-                'opCode': message.substr(7, 2),
-                'nodeNumber': parseInt(message.substr(9, 4), 16),
-                'ServiceIndex': parseInt(message.substr(13, 2), 16),
-                'ServiceType': parseInt(message.substr(15, 2), 16),
-                'ServiceVersion': parseInt(message.substr(17, 2), 16),
-                'text': "SD (8C) Node Number " + parseInt(message.substr(9, 4), 16) + 
-					" ServiceIndex " + parseInt(message.substr(13, 2), 16) +
-					" ServiceType " + parseInt(message.substr(15, 2), 16) +
-					" ServiceVersion " + parseInt(message.substr(17, 2), 16)
-        }
-    }
-    /**
-    * @desc opCode 8C<br>
-    * @param {int} nodeNumber number 0 to 65535
-    * @param {int} ServiceIndex number 0 to 255
-    * @param {int} ServiceType number 0 to 255
-    * @param {int} ServiceVersion number 0 to 255
-    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&lt8C&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceIndex&gt&ltServiceType&gt&ltServiceVersion&gt
-    */
-    encodeSD(nodeNumber, ServiceIndex, ServiceType, ServiceVersion) {
-        return this.header({MinPri: 3}) + '8C' + decToHex(nodeNumber, 4) + decToHex(ServiceIndex, 2) + decToHex(ServiceType, 2) + decToHex(ServiceVersion, 2) + ';'
-    }
-    
-
     // 8E NVSETRD
     // NVSETRD Format: [<MjPri><MinPri=3><CANID>]<8E><NN hi><NN lo><nodeVariableIndex><nodeVariableValue>
     //
@@ -3962,6 +3929,38 @@ class cbusLibrary {
                             decToHex(SequenceCount, 2) + 
                             decToHex(StatusByte1, 2) + 
                             decToHex(StatusByte2, 2) + ';'
+    }
+    
+
+    // AC SD
+    // SD Format: [<MjPri><MinPri=3><CANID>]<AC><NN hi><NN lo><ServiceIndex><ServiceType><ServiceVersion>
+    //
+    decodeSD(message) {
+        return {'encoded': message,
+                'ID_TYPE': 'S',
+                'mnemonic': 'SD',
+                'opCode': message.substr(7, 2),
+                'nodeNumber': parseInt(message.substr(9, 4), 16),
+                'ServiceIndex': parseInt(message.substr(13, 2), 16),
+                'ServiceType': parseInt(message.substr(15, 2), 16),
+                'ServiceVersion': parseInt(message.substr(17, 2), 16),
+                'text': "SD (AC) Node Number " + parseInt(message.substr(9, 4), 16) + 
+					" ServiceIndex " + parseInt(message.substr(13, 2), 16) +
+					" ServiceType " + parseInt(message.substr(15, 2), 16) +
+					" ServiceVersion " + parseInt(message.substr(17, 2), 16)
+        }
+    }
+    /**
+    * @desc opCode AC<br>
+    * @param {int} nodeNumber number 0 to 65535
+    * @param {int} ServiceIndex number 0 to 255
+    * @param {int} ServiceType number 0 to 255
+    * @param {int} ServiceVersion number 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltAC&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceIndex&gt&ltServiceType&gt&ltServiceVersion&gt
+    */
+    encodeSD(nodeNumber, ServiceIndex, ServiceType, ServiceVersion) {
+        return this.header({MinPri: 3}) + 'AC' + decToHex(nodeNumber, 4) + decToHex(ServiceIndex, 2) + decToHex(ServiceType, 2) + decToHex(ServiceVersion, 2) + ';'
     }
     
 
