@@ -4491,7 +4491,7 @@ class cbusLibrary {
     
 
     // C7 DGN
-    // DGN Format: [<MjPri><MinPri=3><CANID>]<C7><NN Hi><NN Lo><ServiceIndex><DiagnosticCode><DiagnosticValue>
+    // DGN Format: [<MjPri><MinPri=3><CANID>]<C7><NN Hi><NN Lo><ServiceIndex><DiagnosticCode><DiagnosticValue Hi><DiagnosticValue Lo>
     //
     decodeDGN(message) {
         return {'encoded': message,
@@ -4501,11 +4501,11 @@ class cbusLibrary {
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
                 'ServiceIndex': parseInt(message.substr(13, 2), 16), 
                 'DiagnosticCode': parseInt(message.substr(15, 2), 16), 
-                'DiagnosticValue': parseInt(message.substr(17, 2), 16),
+                'DiagnosticValue': parseInt(message.substr(17, 4), 16),
                 'text': "DGN (C7) Node " + parseInt(message.substr(9, 4), 16) + 
 					" ServiceIndex " + parseInt(message.substr(13, 2), 16) + 
 					" DiagnosticCode " + parseInt(message.substr(15, 2), 16) + 
-					" DiagnosticValue " + parseInt(message.substr(17, 2), 16)
+					" DiagnosticValue " + parseInt(message.substr(17, 4), 16)
         }
     }
     /**
@@ -4515,10 +4515,10 @@ class cbusLibrary {
     * @param {int} DiagnosticCode  0 to 255
     * @param {int} DiagnosticValue 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltC7&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceIndex&gt&ltDiagnosticCode&gt&ltDiagnosticValue&gt
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltC7&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceIndex&gt&ltDiagnosticCode&gt&ltDiagnosticValue Hi&gt&ltDiagnosticValue Lo&gt
     */
     encodeDGN(nodeNumber, ServiceIndex, DiagnosticCode, DiagnosticValue) {
-        return this.header({MinPri: 3}) + 'C7' + decToHex(nodeNumber, 4) + decToHex(ServiceIndex, 2) + decToHex(DiagnosticCode, 2) + decToHex(DiagnosticValue, 2) + ';'
+        return this.header({MinPri: 3}) + 'C7' + decToHex(nodeNumber, 4) + decToHex(ServiceIndex, 2) + decToHex(DiagnosticCode, 2) + decToHex(DiagnosticValue, 4) + ';'
     }
 
 

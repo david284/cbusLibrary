@@ -229,7 +229,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'RDCC5', 'repetitions': '1', 'byte0':'2', 'byte1':'3', 'byte2':'4', 'byte3':'5', 'byte4':'6'}, 'expected': ':SA780NC0010203040506;'});
 		testCases.push({'test':{'mnemonic': 'WCVOA', 'address': '1', 'CV':'2', 'mode':'3', 'value':'4'}, 'expected': ':SA780NC1000100020304;'});
 		testCases.push({'test':{'mnemonic': 'CABDAT', 'address': '1', 'datcode':'2', 'aspect1':'3', 'aspect2':'4', 'speed':'5'}, 'expected': ':SA780NC2000102030405;'});
-		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber': '1', 'ServiceIndex':'2', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': ':SB780NC70001020304;'});
+		testCases.push({'test':{'mnemonic': 'DGN', 'nodeNumber': '1', 'ServiceIndex':'2', 'DiagnosticCode':'3', 'DiagnosticValue':'4'}, 'expected': ':SB780NC7000102030004;'});
 		testCases.push({'test':{'mnemonic': 'FCLK', 'minutes': '1', 'hours':'2', 'dayOfWeek':'3', 'dayOfMonth':'4', 'month':'5',  'div':'6', 'temperature':'7'}, 'expected': ':SB780NCF010253060407;'});
 		testCases.push({'test':{'mnemonic': 'ACON2', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': ':SB780ND0000100020304;'});
 		testCases.push({'test':{'mnemonic': 'ACOF2', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': ':SB780ND1000100020304;'});
@@ -4837,7 +4837,7 @@ describe('cbusMessage tests', function(){
 					for (a4 = 1; a4 < 4; a4++) {
 						if (a4 == 1) arg4 = 0;
 						if (a4 == 2) arg4 = 1;
-						if (a4 == 3) arg4 = 255;
+						if (a4 == 3) arg4 = 65535;
 						testCases.push({'mnemonic':'DGN', 
 										'opCode':'C7', 
 										'nodeNumber':arg1, 
@@ -4854,10 +4854,10 @@ describe('cbusMessage tests', function(){
 
     // C7 DGN
     //
-	itParam("DGN test nodeNumber ${value.nodeNumber} ServiceIndex ${value.ServiceIndex} DiagnosticCode ${value.DiagnosticCode} DiagnosticValue ${value.DiagnosticValue}", 
+	itParam("DGN test ${JSON.stringify(value)}", 
         GetTestCase_DGN(), function (value) {
             winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-            expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceIndex, 2) + decToHex(value.DiagnosticCode, 2) + decToHex(value.DiagnosticValue, 2) + ";";
+            expected = ":SB780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceIndex, 2) + decToHex(value.DiagnosticCode, 2) + decToHex(value.DiagnosticValue, 4) + ";";
             var encode = cbusLib.encodeDGN(value.nodeNumber, value.ServiceIndex, value.DiagnosticCode, value.DiagnosticValue);
             var decode = cbusLib.decode(encode);
             winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
