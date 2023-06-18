@@ -3520,7 +3520,7 @@ class cbusLibrary {
                 'eventNumber': parseInt(message.substr(13, 4), 16), 
                 'eventIdentifier': message.substr(9, 8),
                 'text': "EVULN (95) nodeNumber " + parseInt(message.substr(9, 4), 16) +
-                    " eventNumber " + parseInt(message.substr(11, 4), 16)
+                    " eventNumber " + parseInt(message.substr(13, 4), 16)
         }
     }
     /**
