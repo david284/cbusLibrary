@@ -5878,6 +5878,145 @@ describe('cbusMessage tests', function(){
 	})
 
 
+  // E9 DTXC testcases
+  //
+  function GetTestCase_DTXC_0 () {
+    var testCases = [];
+    for (a1 = 1; a1 < 4; a1++) {
+      if (a1 == 1) arg1 = 0;
+      if (a1 == 2) arg1 = 1;
+      if (a1 == 3) arg1 = 255;
+      for (a2 = 1; a2 < 4; a2++) {
+        if (a2 == 1) arg2 = 0;
+        if (a2 == 2) arg2 = 1;
+        if (a2 == 3) arg2 = 65535;
+        for (a3 = 1; a3 < 4; a3++) {
+          if (a3 == 1) arg3 = 0;
+          if (a3 == 2) arg3 = 1;
+          if (a3 == 3) arg3 = 65535;
+          for (a4 = 1; a4 < 4; a4++) {
+            if (a4 == 1) arg4 = 0;
+            if (a4 == 2) arg4 = 1;
+            if (a4 == 3) arg4 = 255;
+            testCases.push({'mnemonic':'DTXC', 
+                          'opCode':'E9', 
+                          'streamIdentifier':arg1, 
+                          'sequenceNumber':0, 
+                          'messageLength':arg2, 
+                          'CRC':arg3, 
+                          'flags':arg4});
+          }
+        }
+      }
+    }
+    return testCases;
+  }
+  
+  // E9 DTXC
+  // sequence 0 test
+  //
+  itParam("DTXC_0 test streamIdentifier ${value.streamIdentifier} sequenceNumber ${value.sequenceNumber} messageLength ${value.messageLength} CRC ${value.CRC} flags ${value.flags}", 
+    GetTestCase_DTXC_0(), function (value) {
+    winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+    expected = ":SA780N" + value.opCode + decToHex(value.streamIdentifier, 2) + decToHex(value.sequenceNumber, 2) + decToHex(value.messageLength, 4) + decToHex(value.CRC, 4) + decToHex(value.flags, 2) + ";";
+//          var encode = cbusLib.encodeESD(value.nodeNumber, value.ServiceIndex, value.Data1, value.Data2, value.Data3, value.Data4);
+//    var encode = ":SA780NE900000000000000"
+    var decode = cbusLib.decode(expected);
+//    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+//      expect(encode).to.equal(expected, 'encode');
+    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
+    expect(decode.text).to.include(value.opCode, 'text opCode');
+    expect(decode.streamIdentifier).to.equal(value.streamIdentifier, 'streamIdentifier');
+    expect(decode.sequenceNumber).to.equal(value.sequenceNumber, 'sequenceNumber');
+    expect(decode.messageLength).to.equal(value.messageLength, 'messageLength');
+    expect(decode.CRC).to.equal(value.CRC, 'CRC');
+    expect(decode.flags).to.equal(value.flags, 'flags');
+  })
+
+  
+  function GetTestCase_DTXC_1 () {
+    var testCases = [];
+    for (a1 = 1; a1 < 4; a1++) {
+      if (a1 == 1) arg1 = 0;
+      if (a1 == 2) arg1 = 1;
+      if (a1 == 3) arg1 = 255;
+      for (a2 = 1; a2 < 4; a2++) {
+        if (a2 == 1) arg2 = 1;      // sequence number
+        if (a2 == 2) arg2 = 2;
+        if (a2 == 3) arg2 = 255;
+        for (a3 = 1; a3 < 4; a3++) {
+          if (a3 == 1) arg3 = 0;
+          if (a3 == 2) arg3 = 1;
+          if (a3 == 3) arg3 = 255;
+          for (a4 = 1; a4 < 4; a4++) {
+            if (a4 == 1) arg4 = 0;
+            if (a4 == 2) arg4 = 1;
+            if (a4 == 3) arg4 = 255;
+            for (a5 = 1; a5 < 4; a5++) {
+              if (a5 == 1) arg5 = 0;
+              if (a5 == 2) arg5 = 1;
+              if (a5 == 3) arg5 = 255;
+              for (a6 = 1; a6 < 4; a6++) {
+                if (a6 == 1) arg6 = 0;
+                if (a6 == 2) arg6 = 1;
+                if (a6 == 3) arg6 = 255;
+                for (a7 = 1; a7 < 4; a7++) {
+                  if (a7 == 1) arg7 = 0;
+                  if (a7 == 2) arg7 = 1;
+                  if (a7 == 3) arg7 = 255;
+                  testCases.push({'mnemonic':'DTXC', 
+                              'opCode':'E9', 
+                              'streamIdentifier':arg1, 
+                              'sequenceNumber':arg2, 
+                              'Data1':arg3, 
+                              'Data2':arg4, 
+                              'Data3':arg5, 
+                              'Data4':arg6,
+                              'Data5':arg7});
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return testCases;
+  }
+  
+    // E9 DTXC
+    // sequence 1+ test
+    //
+  itParam("DTXC_1 test streamIdentifier ${value.streamIdentifier} sequenceNumber ${value.sequenceNumber} Data1 ${value.Data1} Data2 ${value.Data2} Data3 ${value.Data3} Data4 ${value.Data4} Data5 ${value.Data5}", 
+    GetTestCase_DTXC_1(), function (value) {
+    winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+    expected = ":SA780N" + value.opCode + decToHex(value.streamIdentifier, 2) + decToHex(value.sequenceNumber, 2) + decToHex(value.Data1, 2) + decToHex(value.Data2, 2) + decToHex(value.Data3, 2) + decToHex(value.Data4, 2) + decToHex(value.Data5, 2) + ";";
+//          var encode = cbusLib.encodeESD(value.nodeNumber, value.ServiceIndex, value.Data1, value.Data2, value.Data3, value.Data4);
+//    var encode = ":SA780NE900000000000000"
+    var decode = cbusLib.decode(expected);
+//    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+//      expect(encode).to.equal(expected, 'encode');
+    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
+    expect(decode.text).to.include(value.opCode, 'text opCode');
+    expect(decode.streamIdentifier).to.equal(value.streamIdentifier, 'streamIdentifier');
+    expect(decode.sequenceNumber).to.equal(value.sequenceNumber, 'sequenceNumber');
+    expect(decode.Data1).to.equal(value.Data1, 'Data1');
+    expect(decode.Data2).to.equal(value.Data2, 'Data2');
+    expect(decode.Data3).to.equal(value.Data3, 'Data3');
+    expect(decode.Data4).to.equal(value.Data4, 'Data4');
+    expect(decode.Data5).to.equal(value.Data5, 'Data5');
+  })
+
+
     // EF PARAMS testcases
     //
 	function GetTestCase_PARAMS () {
@@ -5928,6 +6067,7 @@ describe('cbusMessage tests', function(){
 		}
 		return testCases;
 	}
+
 
     // EF PARAMS
     //
