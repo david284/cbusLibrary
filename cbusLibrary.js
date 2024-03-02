@@ -5208,7 +5208,24 @@ class cbusLibrary {
       output['text'] = JSON.stringify(output)
       return output
     }
-
+    encodeDTXC_Header(streamIdentifier, sequenceNumber, messageLength, CRC, flags) {
+      return this.header({MinPri: 3}) + 'E9' +
+        decToHex(streamIdentifier, 2) + 
+        decToHex(sequenceNumber, 2) + 
+        decToHex(messageLength, 4) + 
+        decToHex(CRC, 4) + 
+        decToHex(flags, 2) + ';'
+    }
+    encodeDTXC_Continuous(streamIdentifier, sequenceNumber, Data1, Data2, Data3, Data4, Data5) {
+      return this.header({MinPri: 3}) + 'E9' +
+        decToHex(streamIdentifier, 2) + 
+        decToHex(sequenceNumber, 2) + 
+        decToHex(Data1, 2) + 
+        decToHex(Data2, 2) + 
+        decToHex(Data3, 2) + 
+        decToHex(Data4, 2) + 
+        decToHex(Data5, 2) + ';'
+    }
 
     // EF PARAMS
     // PARAMS Format: [<MjPri><MinPri=3><CANID>]<EF><PARA 1><PARA 2><PARA 3><PARA 4><PARA 5><PARA 6><PARA 7>

@@ -5918,12 +5918,11 @@ describe('cbusMessage tests', function(){
   itParam("DTXC_0 test streamIdentifier ${value.streamIdentifier} sequenceNumber ${value.sequenceNumber} messageLength ${value.messageLength} CRC ${value.CRC} flags ${value.flags}", 
     GetTestCase_DTXC_0(), function (value) {
     winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-    expected = ":SA780N" + value.opCode + decToHex(value.streamIdentifier, 2) + decToHex(value.sequenceNumber, 2) + decToHex(value.messageLength, 4) + decToHex(value.CRC, 4) + decToHex(value.flags, 2) + ";";
-//          var encode = cbusLib.encodeESD(value.nodeNumber, value.ServiceIndex, value.Data1, value.Data2, value.Data3, value.Data4);
-//    var encode = ":SA780NE900000000000000"
-    var decode = cbusLib.decode(expected);
-//    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-//      expect(encode).to.equal(expected, 'encode');
+    expected = ":SB780N" + value.opCode + decToHex(value.streamIdentifier, 2) + decToHex(value.sequenceNumber, 2) + decToHex(value.messageLength, 4) + decToHex(value.CRC, 4) + decToHex(value.flags, 2) + ";";
+    var encode = cbusLib.encodeDTXC_Header(value.streamIdentifier, value.sequenceNumber, value.messageLength, value.CRC, value.flags);
+    var decode = cbusLib.decode(encode);
+    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+    expect(encode).to.equal(expected, 'encode');
     winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
@@ -5994,12 +5993,11 @@ describe('cbusMessage tests', function(){
   itParam("DTXC_1 test streamIdentifier ${value.streamIdentifier} sequenceNumber ${value.sequenceNumber} Data1 ${value.Data1} Data2 ${value.Data2} Data3 ${value.Data3} Data4 ${value.Data4} Data5 ${value.Data5}", 
     GetTestCase_DTXC_1(), function (value) {
     winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-    expected = ":SA780N" + value.opCode + decToHex(value.streamIdentifier, 2) + decToHex(value.sequenceNumber, 2) + decToHex(value.Data1, 2) + decToHex(value.Data2, 2) + decToHex(value.Data3, 2) + decToHex(value.Data4, 2) + decToHex(value.Data5, 2) + ";";
-//          var encode = cbusLib.encodeESD(value.nodeNumber, value.ServiceIndex, value.Data1, value.Data2, value.Data3, value.Data4);
-//    var encode = ":SA780NE900000000000000"
-    var decode = cbusLib.decode(expected);
-//    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-//      expect(encode).to.equal(expected, 'encode');
+    expected = ":SB780N" + value.opCode + decToHex(value.streamIdentifier, 2) + decToHex(value.sequenceNumber, 2) + decToHex(value.Data1, 2) + decToHex(value.Data2, 2) + decToHex(value.Data3, 2) + decToHex(value.Data4, 2) + decToHex(value.Data5, 2) + ";";
+    var encode = cbusLib.encodeDTXC_Continuous(value.streamIdentifier, value.sequenceNumber, value.Data1, value.Data2, value.Data3, value.Data4, value.Data5);
+    var decode = cbusLib.decode(encode);
+    winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+    expect(encode).to.equal(expected, 'encode');
     winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
