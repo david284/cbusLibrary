@@ -636,47 +636,58 @@ class cbusLibrary {
 
 
     decodeExtendedMessage(message) {
-        var output = {}
-		output['encoded'] = message
-		output['ID_TYPE'] = 'X'
-        if ((message.length >= 27) & (message.substr(0,9) == ':X0008000')){
-            if(parseInt(message.substr(9,1), 16) & 0b0010) {
-               output['operation'] = 'GET' 
-            } else {
-               output['operation'] = 'PUT'
-            }
-            if(parseInt(message.substr(9,1), 16) & 0b0001) {
-                output['type'] = 'DATA'
-                var data = []
-                data.push(parseInt(message.substr(11, 2), 16))
-                data.push(parseInt(message.substr(13, 2), 16))
-                data.push(parseInt(message.substr(15, 2), 16))
-                data.push(parseInt(message.substr(17, 2), 16))
-                data.push(parseInt(message.substr(19, 2), 16))
-                data.push(parseInt(message.substr(21, 2), 16))
-                data.push(parseInt(message.substr(23, 2), 16))
-                data.push(parseInt(message.substr(25, 2), 16))
-                output['data'] = data
-                output['text'] = JSON.stringify(output)
-            } else {
-                output['type'] = 'CONTROL'
-                output['address'] = message.substr(15, 2) + message.substr(13, 2) + message.substr(11, 2)
-                output['RESVD'] = parseInt(message.substr(17, 2), 16)
-                output['CTLBT'] = parseInt(message.substr(19, 2), 16)
-                output['SPCMD'] = parseInt(message.substr(21, 2), 16)
-                output['CPDTL'] = parseInt(message.substr(23, 2), 16)
-                output['CPDTH'] = parseInt(message.substr(25, 2), 16)
-                output['text'] = JSON.stringify(output)
-            }
-        } else if (message.length >= 13) {
-                output['operation'] = 'RESPONSE' 
-                output['response'] = parseInt(message.substr(11, 2), 16)
-                output['text'] = JSON.stringify(output)
+      var output = {}
+      output['encoded'] = message
+      output['ID_TYPE'] = 'X'
+      if ((message.length == 12) & (message.substr(0,9) == ':X0008000')){
+        // no data in CAN frame, so must be an ACK
+        output['operation'] = 'ACK'
+        if(parseInt(message.substr(9,1), 16) & 0b0001) {
+          output['type'] = 'DATA'
         } else {
-                output['Type'] = 'UNKNOWN MESSAGE'
-                output['text'] = JSON.stringify(output)
+          output['type'] = 'CONTROL'
         }
-        return output
+      }
+      else if ((message.length >= 27) & (message.substr(0,9) == ':X0008000')){
+        if(parseInt(message.substr(9,1), 16) & 0b0010) {
+            output['operation'] = 'GET' 
+        } else {
+            output['operation'] = 'PUT'
+        }
+        if(parseInt(message.substr(9,1), 16) & 0b0001) {
+          output['type'] = 'DATA'
+          var data = []
+          data.push(parseInt(message.substr(11, 2), 16))
+          data.push(parseInt(message.substr(13, 2), 16))
+          data.push(parseInt(message.substr(15, 2), 16))
+          data.push(parseInt(message.substr(17, 2), 16))
+          data.push(parseInt(message.substr(19, 2), 16))
+          data.push(parseInt(message.substr(21, 2), 16))
+          data.push(parseInt(message.substr(23, 2), 16))
+          data.push(parseInt(message.substr(25, 2), 16))
+          output['data'] = data
+          output['text'] = JSON.stringify(output)
+        } else {
+          output['type'] = 'CONTROL'
+          output['address'] = message.substr(15, 2) + message.substr(13, 2) + message.substr(11, 2)
+          output['RESVD'] = parseInt(message.substr(17, 2), 16)
+          output['CTLBT'] = parseInt(message.substr(19, 2), 16)
+          output['SPCMD'] = parseInt(message.substr(21, 2), 16)
+          output['CPDTL'] = parseInt(message.substr(23, 2), 16)
+          output['CPDTH'] = parseInt(message.substr(25, 2), 16)
+          output['text'] = JSON.stringify(output)
+        }
+      } 
+      else if (message.length >= 13) {
+        output['operation'] = 'RESPONSE' 
+        output['response'] = parseInt(message.substr(11, 2), 16)
+        output['text'] = JSON.stringify(output)
+      } 
+      else {
+        output['Type'] = 'UNKNOWN MESSAGE'
+        output['text'] = JSON.stringify(output)
+      }
+      return output
     }
 
     /**
@@ -1547,23 +1558,33 @@ class cbusLibrary {
     encodeExtendedMessage(message){
         if(message.hasOwnProperty('operation')) {
             switch (message.operation) {
-                case 'PUT':
+                  case 'ACK':
                     if(message.hasOwnProperty('type')){
-                        if (message.type == 'CONTROL') {
-                            if(!message.hasOwnProperty('address')) {throw Error("encode extended: property 'address' missing")};
-                            if(!message.hasOwnProperty('CTLBT')) {throw Error("encode extended: property 'CTLBT' missing")};
-                            if(!message.hasOwnProperty('SPCMD')) {throw Error("encode extended: property 'SPCMD' missing")};
-                            if(!message.hasOwnProperty('CPDTL')) {throw Error("encode extended: property 'CPDTL' missing")};
-                            if(!message.hasOwnProperty('CPDTH')) {throw Error("encode extended: property 'CPDTH' missing")};
-                            message.encoded = this.encode_EXT_PUT_CONTROL(message.address, message.CTLBT, message.SPCMD, message.CPDTL, message.CPDTH);
-                        }
-                        else if (message.type == 'DATA') {
-                            if(!message.hasOwnProperty('data')) {throw Error("encode extended: property 'data' missing")};
-                            message.encoded = this.encode_EXT_PUT_DATA(message.data);
-                        }
-                        else {
-                            throw Error('encode extended: type \'' + message.type + '\' not supported');
-                        }
+                      if (message.type == 'CONTROL') {
+                        message.encoded = this.encode_EXT_PUT_CONTROL_ACK();
+                      }
+                      else if (message.type == 'DATA') {
+                        message.encoded = this.encode_EXT_PUT_DATA_ACK();
+                      }
+                    }
+                    break;
+                  case 'PUT':
+                    if(message.hasOwnProperty('type')){
+                      if (message.type == 'CONTROL') {
+                          if(!message.hasOwnProperty('address')) {throw Error("encode extended: property 'address' missing")};
+                          if(!message.hasOwnProperty('CTLBT')) {throw Error("encode extended: property 'CTLBT' missing")};
+                          if(!message.hasOwnProperty('SPCMD')) {throw Error("encode extended: property 'SPCMD' missing")};
+                          if(!message.hasOwnProperty('CPDTL')) {throw Error("encode extended: property 'CPDTL' missing")};
+                          if(!message.hasOwnProperty('CPDTH')) {throw Error("encode extended: property 'CPDTH' missing")};
+                          message.encoded = this.encode_EXT_PUT_CONTROL(message.address, message.CTLBT, message.SPCMD, message.CPDTL, message.CPDTH);
+                      }
+                      else if (message.type == 'DATA') {
+                          if(!message.hasOwnProperty('data')) {throw Error("encode extended: property 'data' missing")};
+                          message.encoded = this.encode_EXT_PUT_DATA(message.data);
+                      }
+                      else {
+                          throw Error('encode extended: type \'' + message.type + '\' not supported');
+                      }
                             
                     } else {
                         throw Error("encode extended: property \'type\' missing");
@@ -1594,8 +1615,10 @@ class cbusLibrary {
     * @param {int} CPDTL 0 to 255
     * @param {int} CPDTH 0 to 255
     * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Example :X00080004N000000000D040000;<br>
-    * 29 bit fixed header (:X00080004N.......)
+    * Put is header bit 1 = 0
+    * Control is header bit 0 = 0
+    * Example :X00080000N000000000D040000;<br>
+    * 29 bit fixed header (:X00080000N.......)
     */
     encode_EXT_PUT_CONTROL(address, CTLBT, SPCMD, CPDTL, CPDTH) {
         // Format: <header> ADDRL ADDRH ADDRU RESVD CTLBT SPCMD CPDTL CPDTH
@@ -1604,11 +1627,37 @@ class cbusLibrary {
     
 
     /**
+    * @desc 29 bit Extended CAN Identifier 'Put ACK' firmware download  message<br>
+    * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Put is header bit 1 = 0
+    * Control is header bit 0 = 0
+    */
+    encode_EXT_PUT_CONTROL_ACK() {
+      return ":X00080000N" + ";";
+      // empty CAN messsage
+      }
+      
+  
+    /**
+    * @desc 29 bit Extended CAN Identifier 'Put ACK' firmware download  message<br>
+    * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Put is header bit 1 = 0
+    * Data is header bit 0 = 1
+    */
+    encode_EXT_PUT_DATA_ACK() {
+      return ":X00080001N" + ";";
+      // empty CAN messsage
+      }
+      
+  
+      /**
     * @desc 29 bit Extended CAN Identifier 'Put Data' firmware download message<br>
     * @param {array} data 8 byte data array 
     * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Example :X00080005N20EF04F0FFFFFFFF;<br>
-    * 29 bit fixed header (:X00080004N.......)
+    * Put is header bit 1 = 0
+    * Data is header bit 0 = 1
+    * Example :X00080001N20EF04F0FFFFFFFF;<br>
+    * 29 bit fixed header (:X00080001N.......)
     */
     encode_EXT_PUT_DATA(data) {
 		return ":X00080001N" + 
@@ -1627,6 +1676,8 @@ class cbusLibrary {
     * @desc 29 bit Extended CAN Identifier firmware download 'response' message<br>
     * @param {int} response response number to firmware download control message 
     * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Put is header bit 1 = 0
+    * Control is header bit 0 = 0
     * Example :X80180004N02;<br>
     * 29 bit fixed header (:X80080000N.......)
     */
