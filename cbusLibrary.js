@@ -1608,8 +1608,8 @@ class cbusLibrary {
     * @param {int} CPDTL 0 to 255
     * @param {int} CPDTH 0 to 255
     * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Example :X00080004N000000000D040000;<br>
-    * 29 bit fixed header (:X00080004N.......)
+    * Put is header bit 1 = 0
+    * Control is header bit 0 = 0
     */
     encode_EXT_PUT_CONTROL(address, CTLBT, SPCMD, CPDTL, CPDTH) {
         // Format: <header> ADDRL ADDRH ADDRU RESVD CTLBT SPCMD CPDTL CPDTH
@@ -1645,8 +1645,8 @@ class cbusLibrary {
     * @desc 29 bit Extended CAN Identifier 'Put Data' firmware download message<br>
     * @param {array} data 8 byte data array 
     * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
-    * Example :X00080005N20EF04F0FFFFFFFF;<br>
-    * 29 bit fixed header (:X00080004N.......)
+    * Put is header bit 1 = 0
+    * Data is header bit 0 = 1
     */
     encode_EXT_PUT_DATA(data) {
 		return ":X00080001N" + 
@@ -1672,6 +1672,11 @@ class cbusLibrary {
 		return ":X80080000N" + decToHex(response, 2) + ";";
     }
     
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Standard message decoding & encoding routines
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // 00 ACK
     // ACK Format: [<MjPri><MinPri=2><CANID>]<00>
