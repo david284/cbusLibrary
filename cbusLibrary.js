@@ -632,13 +632,22 @@ class cbusLibrary {
 
     decodeExtendedMessage(message) {
         var output = {}
-		output['encoded'] = message
-		output['ID_TYPE'] = 'X'
-        if ((message.length >= 27) & (message.substr(0,9) == ':X0008000')){
-            if(parseInt(message.substr(9,1), 16) & 0b0010) {
-               output['operation'] = 'GET' 
+        output['encoded'] = message
+        output['ID_TYPE'] = 'X'
+        if ((message.length == 12) & (message.substr(0,9) == ':X0008000')){
+            // no data in CAN frame, so must be an ACK
+            output['operation'] = 'ACK'
+            if(parseInt(message.substr(9,1), 16) & 0b0001) {
+                output['type'] = 'DATA'
             } else {
-               output['operation'] = 'PUT'
+                output['type'] = 'CONTROL'
+            }
+        }
+        else  if ((message.length >= 27) & (message.substr(0,9) == ':X0008000')){
+            if(parseInt(message.substr(9,1), 16) & 0b0010) {
+                output['operation'] = 'GET' 
+            } else {
+                output['operation'] = 'PUT'
             }
             if(parseInt(message.substr(9,1), 16) & 0b0001) {
                 output['type'] = 'DATA'

@@ -6894,6 +6894,35 @@ describe('cbusMessage tests', function(){
 // Extended ID messages
 //
 
+    // extended DATA_ACK
+    //
+	it("CONTROL_ACK test",  function () {
+		winston.info({message: 'CONTROL_ACK test: BEGIN '});
+		expected = ":X00080000N" + ";"
+        var decode = cbusLib.decode(expected);
+		winston.info({message: 'CONTROL_ACK test: decode ' + JSON.stringify(decode)});
+//		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
+		expect(decode.operation).to.equal('ACK', 'operation');
+		expect(decode.type).to.equal('CONTROL', 'type');
+		winston.info({message: 'CONTROL_ACK test: BEGIN '});
+	})
+
+    // extended DATA_ACK
+    //
+	it("DATA_ACK test",  function () {
+		winston.info({message: 'DATA_ACK test: BEGIN '});
+		expected = ":X00080001N" + ";"
+        var decode = cbusLib.decode(expected);
+		winston.info({message: 'DATA_ACK test: decode ' + JSON.stringify(decode)});
+//		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
+		expect(decode.operation).to.equal('ACK', 'operation');
+		expect(decode.type).to.equal('DATA', 'type');
+		winston.info({message: 'DATA_ACK test: BEGIN '});
+	})
+
+
     // PUT CONTROL
     //
 	function GetTestCase_PUT_CONTROL () {
