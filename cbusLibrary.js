@@ -1551,6 +1551,16 @@ class cbusLibrary {
     encodeExtendedMessage(message){
         if(message.hasOwnProperty('operation')) {
             switch (message.operation) {
+                case 'ACK':
+                    if(message.hasOwnProperty('type')){
+                      if (message.type == 'CONTROL') {
+                        message.encoded = this.encode_EXT_PUT_CONTROL_ACK();
+                      }
+                      else if (message.type == 'DATA') {
+                        message.encoded = this.encode_EXT_PUT_DATA_ACK();
+                      }
+                    }
+                    break;
                 case 'PUT':
                     if(message.hasOwnProperty('type')){
                         if (message.type == 'CONTROL') {
@@ -1606,7 +1616,31 @@ class cbusLibrary {
 		return ":X00080000N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + '00' + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
     }
     
-
+    /**
+    * @desc 29 bit Extended CAN Identifier 'Put ACK' firmware download  message<br>
+    * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Put is header bit 1 = 0
+    * Control is header bit 0 = 0
+    */
+    encode_EXT_PUT_CONTROL_ACK() {
+        return ":X00080000N" + ";";
+        // empty CAN messsage
+        }
+        
+    
+      /**
+      * @desc 29 bit Extended CAN Identifier 'Put ACK' firmware download  message<br>
+      * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+      * Put is header bit 1 = 0
+      * Data is header bit 0 = 1
+      */
+      encode_EXT_PUT_DATA_ACK() {
+        return ":X00080001N" + ";";
+        // empty CAN messsage
+        }
+        
+    
+  
     /**
     * @desc 29 bit Extended CAN Identifier 'Put Data' firmware download message<br>
     * @param {array} data 8 byte data array 

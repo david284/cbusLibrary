@@ -6901,7 +6901,7 @@ describe('cbusMessage tests', function(){
 		expected = ":X00080000N" + ";"
         var decode = cbusLib.decode(expected);
 		winston.info({message: 'CONTROL_ACK test: decode ' + JSON.stringify(decode)});
-//		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.encoded).to.equal(expected, 'encoded');
 		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
 		expect(decode.operation).to.equal('ACK', 'operation');
 		expect(decode.type).to.equal('CONTROL', 'type');
@@ -6915,7 +6915,7 @@ describe('cbusMessage tests', function(){
 		expected = ":X00080001N" + ";"
         var decode = cbusLib.decode(expected);
 		winston.info({message: 'DATA_ACK test: decode ' + JSON.stringify(decode)});
-//		expect(decode.encoded).to.equal(expected, 'encoded');
+		expect(decode.encoded).to.equal(expected, 'encoded');
 		expect(decode.ID_TYPE).to.equal('X', 'ID_TYPE');
 		expect(decode.operation).to.equal('ACK', 'operation');
 		expect(decode.type).to.equal('DATA', 'type');
