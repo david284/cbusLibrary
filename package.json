@@ -1,6 +1,6 @@
 {
   "name": "cbuslibrary",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "description": "Library to decode & encode CBUS messages",
   "main": "cbusLibrary.js",
   "directories": {

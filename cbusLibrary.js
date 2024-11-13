@@ -1388,11 +1388,11 @@ class cbusLibrary {
             case 'ESD':    // E7
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 if(!message.hasOwnProperty('ServiceIndex')) {throw Error("encode: property 'ServiceIndex' missing")};
+                if(!message.hasOwnProperty('ServiceType')) {throw Error("encode: property 'ServiceType' missing")};
                 if(!message.hasOwnProperty('Data1')) {throw Error("encode: property 'Data1' missing")};
                 if(!message.hasOwnProperty('Data2')) {throw Error("encode: property 'Data2' missing")};
                 if(!message.hasOwnProperty('Data3')) {throw Error("encode: property 'Data3' missing")};
-                if(!message.hasOwnProperty('Data4')) {throw Error("encode: property 'Data4' missing")};
-                message.encoded = this.encodeESD(message.nodeNumber, message.ServiceIndex, message.Data1, message.Data2, message.Data3, message.Data4);
+                message.encoded = this.encodeESD(message.nodeNumber, message.ServiceIndex, message.ServiceType, message.Data1, message.Data2, message.Data3);
                 break;
             case 'PARAMS':       // EF
                 if(!message.hasOwnProperty('param1')) {throw Error("encode: property 'param1' missing")};
@@ -5128,8 +5128,8 @@ class cbusLibrary {
     
 
     // E7 ESD
-    // ESD Format: [<MjPri><MinPri=2><CANID>]<E7><NN hi><NN lo><ServiceIndex><Data1>
-    //               <Data2><Data3><Data4>   
+    // ESD Format: [<MjPri><MinPri=2><CANID>]<E7><NN hi><NN lo><ServiceIndex><ServiceIndex>
+    //              <Data1><Data2><Data3>
     //
     decodeESD(message) {
         return {'encoded': message,
@@ -5138,36 +5138,36 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'nodeNumber': parseInt(message.substr(9, 4), 16),
                 'ServiceIndex': parseInt(message.substr(13, 2), 16),
-                'Data1': parseInt(message.substr(15, 2), 16),
-                'Data2': parseInt(message.substr(17,2), 16),
-                'Data3': parseInt(message.substr(19, 2), 16),
-                'Data4': parseInt(message.substr(21, 2), 16),
+                'ServiceType': parseInt(message.substr(15, 2), 16),
+                'Data1': parseInt(message.substr(17,2), 16),
+                'Data2': parseInt(message.substr(19, 2), 16),
+                'Data3': parseInt(message.substr(21, 2), 16),
                 'text': "ESD (E7) nodeNumber " + parseInt(message.substr(9, 4), 16) +
                                 " ServiceIndex " + parseInt(message.substr(13, 2), 16) +
-                                " Data1 " + parseInt(message.substr(15, 2), 16) +
-                                " Data2 " + parseInt(message.substr(17, 2), 16) +
-                                " Data3 " + parseInt(message.substr(19, 2), 16) +
-                                " Data4 " + parseInt(message.substr(21, 2), 16)
+                                " ServiceType " + parseInt(message.substr(15, 2), 16) +
+                                " Data1 " + parseInt(message.substr(17, 2), 16) +
+                                " Data2 " + parseInt(message.substr(19, 2), 16) +
+                                " Data3 " + parseInt(message.substr(21, 2), 16)
         }
     }
     /**
     * @desc opCode E7<br>
     * @param {int} nodeNumber 0 to 65535
     * @param {int} ServiceIndex 0 to 255
+    * @param {int} ServiceType 0 to 255
     * @param {int} Data1 0 to 255
     * @param {int} Data2 0 to 255
     * @param {int} Data3 0 to 255
-    * @param {int} Data4 0 to 255
     * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Format: [&ltMjPri&gt&ltMinPri=2&gt&ltCANID&gt]&ltE7&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltServiceIndex&gt&ltData1&gt&ltData2&gt&ltData3&gt&ltData4&gt
     */
-    encodeESD(nodeNumber, ServiceIndex, Data1, Data2, Data3, Data4) {
+    encodeESD(nodeNumber, ServiceIndex, ServiceType, Data1, Data2, Data3) {
         return this.header({MinPri: 2}) + 'E7'  + decToHex(nodeNumber, 4) +
                                             decToHex(ServiceIndex, 2) +
+                                            decToHex(ServiceType, 2) +
                                             decToHex(Data1, 2) +
                                             decToHex(Data2, 2) +
-                                            decToHex(Data3, 2) +
-                                            decToHex(Data4, 2) + ';'
+                                            decToHex(Data3, 2) + ';'
     }
     
 

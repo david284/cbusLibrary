@@ -246,7 +246,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'PLOC', 'session': '1', 'address':'2', 'speed':'3', 'direction':'Forward', 'Fn1':'5', 'Fn2':'6', 'Fn3':'7'}, 'expected': ':SA780NE101000283050607;'});
 		testCases.push({'test':{'mnemonic': 'NAME', 'name': '1234567'}, 'expected': ':SB780NE231323334353637;'});
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5', 'build':'6'}, 'expected': ':SA780NE300010203040506;'});
-		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'Data1':'3', 'Data2':'4', 'Data3':'5', 'Data4':'6'}, 'expected': ':SA780NE700010203040506;'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data1':'4', 'Data2':'5', 'Data3':'6'}, 'expected': ':SA780NE700010203040506;'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1': '1', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': ':SB780NEF01020304050607;'});
 		testCases.push({'test':{'mnemonic': 'ACON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF000010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF100010002030405;'});
@@ -593,12 +593,12 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'minor':'5', 'build':'6'}, 'expected': 'encode: property \'major\' missing'});
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'build':'6'}, 'expected': 'encode: property \'minor\' missing'});
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5'}, 'expected': 'encode: property \'build\' missing'});
-		testCases.push({'test':{'mnemonic': 'ESD', 'ServiceIndex':'2', 'Data1':'3', 'Data2':'5', 'Data3':'4', 'Data4':'6'}, 'expected': 'encode: property \'nodeNumber\' missing'});
-		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'Data1':'3', 'Data2':'4', 'Data3':'5', 'Data4':'6'}, 'expected': 'encode: property \'ServiceIndex\' missing'});
-		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'Data2':'4', 'Data3':'5', 'Data4':'6'}, 'expected': 'encode: property \'Data1\' missing'});
-		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'Data1':'3', 'Data3':'5', 'Data4':'6'}, 'expected': 'encode: property \'Data2\' missing'});
-		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'Data1':'3', 'Data2':'4', 'Data4':'6'}, 'expected': 'encode: property \'Data3\' missing'});
-		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'Data1':'3', 'Data2':'4', 'Data3':'5'}, 'expected': 'encode: property \'Data4\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'ServiceIndex':'2', 'Data1':'3', 'Data1':'5', 'Data2':'4', 'Data3':'6'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceType':'3', 'Data1':'4', 'Data2':'5', 'Data3':'6'}, 'expected': 'encode: property \'ServiceIndex\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'Data1':'4', 'Data2':'5', 'Data3':'6'}, 'expected': 'encode: property \'ServiceType\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data2':'5', 'Data3':'6'}, 'expected': 'encode: property \'Data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data1':'4', 'Data3':'6'}, 'expected': 'encode: property \'Data2\' missing'});
+		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data1':'4', 'Data2':'5'}, 'expected': 'encode: property \'Data3\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param1\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param2\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param3\' missing'});
@@ -5839,10 +5839,10 @@ describe('cbusMessage tests', function(){
                                                     'opCode':'E7', 
                                                     'nodeNumber':arg1, 
                                                     'ServiceIndex':arg2, 
-                                                    'Data1':arg3, 
-                                                    'Data2':arg4, 
-                                                    'Data3':arg5, 
-                                                    'Data4':arg6});
+                                                    'ServiceType':arg3, 
+                                                    'Data1':arg4, 
+                                                    'Data2':arg5, 
+                                                    'Data3':arg6});
                                 }
                             }
                         }
@@ -5857,8 +5857,8 @@ describe('cbusMessage tests', function(){
 	itParam("ESD test nodeNumber ${value.nodeNumber} ServiceIndex ${value.ServiceIndex} Data1 ${value.Data1} Data2 ${value.Data2} Data3 ${value.Data3} Data4 ${value.Data4}", 
     GetTestCase_ESD(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SA780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceIndex, 2) + decToHex(value.Data1, 2) + decToHex(value.Data2, 2) + decToHex(value.Data3, 2) + decToHex(value.Data4, 2) + ";";
-        var encode = cbusLib.encodeESD(value.nodeNumber, value.ServiceIndex, value.Data1, value.Data2, value.Data3, value.Data4);
+		expected = ":SA780N" + value.opCode + decToHex(value.nodeNumber, 4) + decToHex(value.ServiceIndex, 2) + decToHex(value.ServiceType, 2) + decToHex(value.Data1, 2) + decToHex(value.Data2, 2) + decToHex(value.Data3, 2) + ";";
+        var encode = cbusLib.encodeESD(value.nodeNumber, value.ServiceIndex, value.ServiceType, value.Data1, value.Data2, value.Data3);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
 		expect(encode).to.equal(expected, 'encode');
@@ -5871,10 +5871,10 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
         expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
         expect(decode.ServiceIndex).to.equal(value.ServiceIndex, 'ServiceIndex');
+        expect(decode.ServiceType).to.equal(value.ServiceType, 'ServiceType');
         expect(decode.Data1).to.equal(value.Data1, 'Data1');
         expect(decode.Data2).to.equal(value.Data2, 'Data2');
         expect(decode.Data3).to.equal(value.Data3, 'Data3');
-        expect(decode.Data4).to.equal(value.Data4, 'Data4');
 	})
 
 
