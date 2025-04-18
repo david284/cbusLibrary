@@ -1387,7 +1387,13 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('build')) {throw Error("encode: property 'build' missing")};
                 message.encoded = this.encodeSTAT(message.nodeNumber, message.CS, message.flags, message.major, message.minor, message.build);
                 break;
-                case 'ESD':    // E7
+            case 'ENACK':    // E6
+                if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
+                if(!message.hasOwnProperty('ackOpCode')) {throw Error("encode: property 'ackOpCode' missing")};
+                if(!message.hasOwnProperty('eventIdentifier')) {throw Error("encode: property 'eventIdentifier' missing")};
+                message.encoded = this.encodeENACK(message.nodeNumber, message.ackOpCode, message.eventIdentifier);
+                break;
+            case 'ESD':    // E7
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
                 if(!message.hasOwnProperty('ServiceIndex')) {throw Error("encode: property 'ServiceIndex' missing")};
                 if(!message.hasOwnProperty('ServiceType')) {throw Error("encode: property 'ServiceType' missing")};
