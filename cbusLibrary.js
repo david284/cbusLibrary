@@ -565,7 +565,10 @@ class cbusLibrary {
         case 'E3':
             return this.decodeSTAT(message);
             break;
-        // E4 - E6 reserved
+        // E4 - E5 reserved
+        case 'E6':
+            return this.decodeENACK(message);
+            break;
         case 'E7':
             return this.decodeESD(message);
             break;
@@ -5125,6 +5128,48 @@ class cbusLibrary {
                                             decToHex(build, 2) + ';'
     }
     
+    /**
+    * E6 ENACK 
+    * opcode (1 bytes), E6 ENACK,
+    * NN (2 bytes) Module’s Node Number,
+    * opcode (1 bytes), The opcode of the event being acknowledged,
+    * EventNNh (1 bytes), The high byte of the event’s NN,
+    * EventNNl (1 bytes), The low byte of the event’s NN,
+    * EventENh (1 bytes), The high byte of the event’s EN,
+    * EventENl (1 bytes), The low byte of the event’s EN
+    **/
+    decodeENACK(message) {
+      return {'encoded': message,
+              'ID_TYPE': 'S',
+              'mnemonic': 'ENACK',
+              'opCode': message.substr(7, 2),  
+              'nodeNumber': parseInt(message.substr(9, 4), 16),
+              'ackOpCode': message.substr(13, 2),  
+              'eventIdentifier': message.substring(15, 23),
+              'text': "ENACK (E6) nodeNumber " + parseInt(message.substr(9, 4), 16) +
+                              " ackOpCode " + parseInt(message.substr(13, 2), 16) +
+                              " eventIdentifier " + message.substring(15, 23)
+      }
+    }
+    /**
+    * @desc opCode E6<br>
+    * @param {int} nodeNumber 0 to 65535
+    * @param {string} ackOpcode "00" to "FF"
+    * @param {string} eventIdentifer "00000000" to "FFFFFFFF"
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    */
+    encodeENACK(nodeNumber, ackOpCode, eventIdentifier) {
+      // process ackOpCode - remove spaces, limit to 2 chars, and pad with 0's if less than two
+      var processedAckOpCode = ackOpCode.trim().substring(0, 2).padStart(2, '0')
+      // process eventIdentifier - remove spaces, limit to 8 chars, and pad with 0's if less than eight
+      var processedEventIdentifier = eventIdentifier.trim().substring(0, 8).padStart(8, '0')
+      return this.header({MinPri: 2}) + 'E6' + 
+        decToHex(nodeNumber, 4) +
+        processedAckOpCode +
+        processedEventIdentifier + ';'
+  }
+
+
 
     // E7 ESD
     // ESD Format: [<MjPri><MinPri=2><CANID>]<E7><NN hi><NN lo><ServiceIndex><ServiceIndex>
