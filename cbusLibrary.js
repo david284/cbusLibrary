@@ -278,10 +278,10 @@ class cbusLibrary {
         case '4F':
             return this.decodeNNRSM(message);
             break;
-		case '50':
+		    case '50':
             return this.decodeRQNN(message);
             break;
-		case '51':
+		    case '51':
             return this.decodeNNREL(message);
             break;
         case '52':
@@ -531,7 +531,6 @@ class cbusLibrary {
             break;
         case 'D4':
             return this.decodeARON2(message);
-			
             break;
         case 'D5':
             return this.decodeAROF2(message);
@@ -573,9 +572,6 @@ class cbusLibrary {
             return this.decodeESD(message);
             break;
         // E8 - EE reserved
-        case 'F0':
-            return this.decodeACON3(message);
-            break;
         case 'EF':
             return this.decodePARAMS(message);
             break;
