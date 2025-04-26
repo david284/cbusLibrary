@@ -571,7 +571,11 @@ class cbusLibrary {
         case 'E7':
             return this.decodeESD(message);
             break;
-        // E8 - EE reserved
+        // E8 reserved
+        case 'E9':
+              return this.decodeDTXC(message);
+              break;
+        // EA - EE reserved
         case 'EF':
             return this.decodePARAMS(message);
             break;
@@ -5216,6 +5220,59 @@ class cbusLibrary {
                                             decToHex(Data3, 2) + ';'
     }
     
+
+    // E9 DTXC
+    // DTXC Format: [<MjPri><MinPri=2><CANID>]
+    //    <E9>
+    //    <streamIdentifier>
+    //    <sequenceNumber>  <0>                 <!=0>
+    //                  <messageLen Hi>     <data 1>
+    //                  <messageLen Lo>     <data 2>
+    //                  <CRC Hi>            <data 3>
+    //                  <CRC Lo>            <data 4>
+    //                  <flags>             <data 5>
+    //
+    decodeDTXC(message) {
+      var output = {}
+      output['encoded'] = message
+      output['ID_TYPE'] = 'S'
+      output['mnemonic'] = 'DTXC'
+      output['opCode'] = message.substr(7, 2)
+      output['streamIdentifier'] = parseInt(message.substr(9, 2), 16)
+      output['sequenceNumber'] = parseInt(message.substr(11, 2), 16)
+      if (output.sequenceNumber == 0) {
+        output['messageLength'] = parseInt(message.substr(13, 4), 16)
+        output['CRC16'] = parseInt(message.substr(17, 4), 16)
+        output['flags'] = parseInt(message.substr(21, 2), 16)
+      } else {
+        output['Data1'] = parseInt(message.substr(13, 2), 16)
+        output['Data2'] = parseInt(message.substr(15, 2), 16)
+        output['Data3'] = parseInt(message.substr(17, 2), 16)
+        output['Data4'] = parseInt(message.substr(19, 2), 16)
+        output['Data5'] = parseInt(message.substr(21, 2), 16)
+      }
+      output['text'] = JSON.stringify(output)
+      return output
+    }
+    encodeDTXC_SEQ0(streamIdentifier, sequenceNumber, messageLength, CRC16, flags) {
+      return this.header({MinPri: 3}) + 'E9' + 
+        decToHex(streamIdentifier, 2) + 
+        decToHex(sequenceNumber, 2) + 
+        decToHex(messageLength, 4) + 
+        decToHex(CRC16, 4) + 
+        decToHex(flags, 2) + ';'
+    }
+    encodeDTXC(streamIdentifier, sequenceNumber, Data1, Data2, Data3, Data4, Data5) {
+      return this.header({MinPri: 3}) + 'E9' + 
+        decToHex(streamIdentifier, 2) + 
+        decToHex(sequenceNumber, 2) + 
+        decToHex(Data1, 2) + 
+        decToHex(Data2, 2) + 
+        decToHex(Data3, 2) + 
+        decToHex(Data4, 2) + 
+        decToHex(Data5, 2) + ';'
+    }
+
 
     // EF PARAMS
     // PARAMS Format: [<MjPri><MinPri=3><CANID>]<EF><PARA 1><PARA 2><PARA 3><PARA 4><PARA 5><PARA 6><PARA 7>
