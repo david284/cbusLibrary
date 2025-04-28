@@ -261,8 +261,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ARDAT', 'nodeNumber': '1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': ':SA780NF700010203040506;'});
 		testCases.push({'test':{'mnemonic': 'ASON3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF800010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ASOF3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF900010002030405;'});
-		testCases.push({'test':{'mnemonic': 'DDES', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': ':SA780NFA00010203040506;'});
-		testCases.push({'test':{'mnemonic': 'DDRS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': ':SA780NFB00010203040506;'});
+		testCases.push({'test':{'mnemonic': 'DDES', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': ':SB780NFA00010203040506;'});
+		testCases.push({'test':{'mnemonic': 'DDRS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': ':SB780NFB00010203040506;'});
+		testCases.push({'test':{'mnemonic': 'DDWS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': ':SB780NFC00010203040506;'});
 		testCases.push({'test':{'mnemonic': 'ARSON3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NFD00010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ARSOF3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NFE00010002030405;'});
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte5':'6', 'byte6':'7'}, 'expected': ':SB780NFF01020304050607;'});
@@ -684,7 +685,13 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'DDRS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data4':'5', 'data5':'6'}, 'expected': 'encode: property \'data3\' missing'});
 		testCases.push({'test':{'mnemonic': 'DDRS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data5':'6'}, 'expected': 'encode: property \'data4\' missing'});
 		testCases.push({'test':{'mnemonic': 'DDRS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5'}, 'expected': 'encode: property \'data5\' missing'});
-		testCases.push({'test':{'mnemonic': 'ARSON3', 'deviceNumber': '2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'DDWS', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': 'encode: property \'deviceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'DDWS', 'deviceNumber':'1', 'data2':'3', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': 'encode: property \'data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'DDWS', 'deviceNumber':'1', 'data1':'2', 'data3':'4', 'data4':'5', 'data5':'6'}, 'expected': 'encode: property \'data2\' missing'});
+		testCases.push({'test':{'mnemonic': 'DDWS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data4':'5', 'data5':'6'}, 'expected': 'encode: property \'data3\' missing'});
+		testCases.push({'test':{'mnemonic': 'DDWS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data5':'6'}, 'expected': 'encode: property \'data4\' missing'});
+		testCases.push({'test':{'mnemonic': 'DDWS', 'deviceNumber':'1', 'data1':'2', 'data2':'3', 'data3':'4', 'data4':'5'}, 'expected': 'encode: property \'data5\' missing'});
+    testCases.push({'test':{'mnemonic': 'ARSON3', 'deviceNumber': '2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARSON3', 'nodeNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'deviceNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARSON3', 'nodeNumber':'2', 'deviceNumber':'2', 'data2':'4', 'data3':'5'}, 'expected': 'encode: property \'data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARSON3', 'nodeNumber':'2', 'deviceNumber':'2', 'data1':'3', 'data3':'5'}, 'expected': 'encode: property \'data2\' missing'});
@@ -6775,7 +6782,7 @@ describe('cbusMessage tests', function(){
 	itParam("DDES test deviceNumber ${value.deviceNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5}", 
     GetTestCase_DDES(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SA780N" + value.opCode + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
+		expected = ":SB780N" + value.opCode + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
         var encode = cbusLib.encodeDDES(value.deviceNumber, value.data1, value.data2, value.data3, value.data4, value.data5);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
@@ -6846,7 +6853,7 @@ describe('cbusMessage tests', function(){
 	itParam("DDRS test deviceNumber ${value.deviceNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5}", 
     GetTestCase_DDRS(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
-		expected = ":SA780N" + value.opCode + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
+		expected = ":SB780N" + value.opCode + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
         var encode = cbusLib.encodeDDRS(value.deviceNumber, value.data1, value.data2, value.data3, value.data4, value.data5);
         var decode = cbusLib.decode(encode);
 		winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
@@ -6867,6 +6874,77 @@ describe('cbusMessage tests', function(){
 	})
 
 
+    // FC DDWS testcases
+    //
+    function GetTestCase_DDWS () {
+      var testCases = [];
+      for (a1 = 1; a1 < 4; a1++) {
+        if (a1 == 1) arg1 = 0;
+        if (a1 == 2) arg1 = 1;
+        if (a1 == 3) arg1 = 65535;
+                  for (a2 = 1; a2 < 4; a2++) {
+                      if (a2 == 1) arg2 = 0;
+                      if (a2 == 2) arg2 = 1;
+                      if (a2 == 3) arg2 = 255;
+                      for (a3 = 1; a3 < 4; a3++) {
+                          if (a3 == 1) arg3 = 0;
+                          if (a3 == 2) arg3 = 1;
+                          if (a3 == 3) arg3 = 255;
+                          for (a4 = 1; a4 < 4; a4++) {
+                              if (a4 == 1) arg4 = 0;
+                              if (a4 == 2) arg4 = 1;
+                              if (a4 == 3) arg4 = 255;
+                              for (a5 = 1; a5 < 4; a5++) {
+                                  if (a5 == 1) arg5 = 0;
+                                  if (a5 == 2) arg5 = 1;
+                                  if (a5 == 3) arg5 = 255;
+                                  for (a6 = 1; a6 < 4; a6++) {
+                                      if (a6 == 1) arg6 = 0;
+                                      if (a6 == 2) arg6 = 1;
+                                      if (a6 == 3) arg6 = 255;
+                                      testCases.push({'mnemonic':'DDWS', 
+                                                      'opCode':'FC', 
+                                                      'deviceNumber':arg1, 
+                                                      'data1':arg2, 
+                                                      'data2':arg3, 
+                                                      'data3':arg4, 
+                                                      'data4':arg5, 
+                                                      'data5':arg6});
+                                  }
+                              }
+                          }
+                      }
+                  }
+      }
+      return testCases;
+    }
+  
+      // FC DDWS
+    //
+    itParam("DDWS test deviceNumber ${value.deviceNumber} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5}", 
+      GetTestCase_DDWS(), function (value) {
+      winston.info({message: 'cbusMessage test: BEGIN '  + value.mnemonic +' test ' + JSON.stringify(value)});
+      expected = ":SB780N" + value.opCode + decToHex(value.deviceNumber, 4) + decToHex(value.data1, 2) + decToHex(value.data2, 2) + decToHex(value.data3, 2) + decToHex(value.data4, 2) + decToHex(value.data5, 2) + ";";
+          var encode = cbusLib.encodeDDWS(value.deviceNumber, value.data1, value.data2, value.data3, value.data4, value.data5);
+          var decode = cbusLib.decode(encode);
+      winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+      expect(encode).to.equal(expected, 'encode');
+      winston.info({message: 'cbusMessage test: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+      expect(decode.encoded).to.equal(expected, 'encoded');
+      expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+      expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+      expect(decode.opCode).to.equal(value.opCode, 'opCode');
+          expect(decode.text).to.include(value.mnemonic + ' ', 'text mnemonic');
+          expect(decode.text).to.include('(' + value.opCode + ')', 'text opCode');
+          expect(decode.deviceNumber).to.equal(value.deviceNumber, 'deviceNumber');
+          expect(decode.data1).to.equal(value.data1, 'data1');
+          expect(decode.data2).to.equal(value.data2, 'data2');
+          expect(decode.data3).to.equal(value.data3, 'data3');
+          expect(decode.data4).to.equal(value.data4, 'data4');
+          expect(decode.data5).to.equal(value.data5, 'data5');
+    })
+  
+  /*
     // FC Unsupported opCode
     //
 	it("Unsupported opCode test",  function () {
@@ -6881,10 +6959,10 @@ describe('cbusMessage tests', function(){
         expect(decode.text).to.include('UNSUPPORTED ', 'text mnemonic');
         expect(decode.text).to.include('(FC)', 'text opcode');
 	})
+*/
 
-
-    // FD ARSON3 testcases
-    //
+  // FD ARSON3 testcases
+  //
 	function GetTestCase_ARSON3 () {
 		var testCases = [];
 		for (a1 = 1; a1 < 4; a1++) {

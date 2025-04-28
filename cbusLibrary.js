@@ -615,7 +615,9 @@ class cbusLibrary {
         case 'FB':
             return this.decodeDDRS(message);
             break;
-        // FC - reserved
+        case 'FC':
+            return this.decodeDDWS(message);
+            break;
         case 'FD':
             return this.decodeARSON3(message);
             break;
@@ -1526,6 +1528,15 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('data4')) {throw Error("encode: property 'data4' missing")};
                 if(!message.hasOwnProperty('data5')) {throw Error("encode: property 'data5' missing")};
                 message.encoded = this.encodeDDRS(message.deviceNumber, message.data1, message.data2, message.data3, message.data4, message.data5);
+                break;
+            case 'DDWS':   // FC
+                if(!message.hasOwnProperty('deviceNumber')) {throw Error("encode: property 'deviceNumber' missing")};
+                if(!message.hasOwnProperty('data1')) {throw Error("encode: property 'data1' missing")};
+                if(!message.hasOwnProperty('data2')) {throw Error("encode: property 'data2' missing")};
+                if(!message.hasOwnProperty('data3')) {throw Error("encode: property 'data3' missing")};
+                if(!message.hasOwnProperty('data4')) {throw Error("encode: property 'data4' missing")};
+                if(!message.hasOwnProperty('data5')) {throw Error("encode: property 'data5' missing")};
+                message.encoded = this.encodeDDWS(message.deviceNumber, message.data1, message.data2, message.data3, message.data4, message.data5);
                 break;
             case 'ARSON3':   // FD
                 if(!message.hasOwnProperty('nodeNumber')) {throw Error("encode: property 'nodeNumber' missing")};
@@ -5755,7 +5766,7 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFA&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
     encodeDDES(deviceNumber, data1, data2, data3, data4, data5) {
-        return this.header({MinPri: 2}) + 'FA'  + decToHex(deviceNumber, 4) +
+        return this.header({MinPri: 3}) + 'FA'  + decToHex(deviceNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
                                             decToHex(data3, 2) +
@@ -5799,7 +5810,7 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFB&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
     encodeDDRS(deviceNumber, data1, data2, data3, data4, data5) {
-        return this.header({MinPri: 2}) + 'FB'  + decToHex(deviceNumber, 4) +
+        return this.header({MinPri: 3}) + 'FB'  + decToHex(deviceNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
                                             decToHex(data3, 2) +
@@ -5808,8 +5819,52 @@ class cbusLibrary {
     }
     
 
+    // FC DDWS
+    // DDWS Format: [<MjPri><MinPri=3><CANID>]<FC><DN hi><DN lo>
+    //              <data1><data2><data3><data4><data5>   
+    //
+    decodeDDWS(message) {
+      return {'encoded': message,
+        'ID_TYPE': 'S',
+        'mnemonic': 'DDWS',
+        'opCode': message.substr(7, 2),
+        'deviceNumber': parseInt(message.substr(9, 4), 16),
+        'data1': parseInt(message.substr(13, 2), 16),
+        'data2': parseInt(message.substr(15, 2), 16),
+        'data3': parseInt(message.substr(17, 2), 16),
+        'data4': parseInt(message.substr(19, 2), 16),
+        'data5': parseInt(message.substr(21, 2), 16),
+        'text': "DDWS (FC) deviceNumber " + parseInt(message.substr(9, 4), 16) +
+          " data1 " + parseInt(message.substr(13, 2), 16) +
+          " data2 " + parseInt(message.substr(15, 2), 16) +
+          " data3 " + parseInt(message.substr(17, 2), 16) +
+          " data4 " + parseInt(message.substr(19, 2), 16) +
+          " data5 " + parseInt(message.substr(21, 2), 16)
+      }
+    }
+    /**
+    * @desc opCode FC<br>
+    * @param {int} deviceNumber 0 to 65535
+    * @param {int} data1 0 to 255
+    * @param {int} data2 0 to 255
+    * @param {int} data3 0 to 255
+    * @param {int} data4 0 to 255
+    * @param {int} data5 0 to 255
+    * @return {String} CBUS message encoded as a 'Grid Connect' ASCII string<br>
+    * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltFC&gt&ltdeviceNumber hi&gt&ltdeviceNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
+    */
+    encodeDDWS(deviceNumber, data1, data2, data3, data4, data5) {
+      return this.header({MinPri: 3}) + 'FC'  + decToHex(deviceNumber, 4) +
+        decToHex(data1, 2) +
+        decToHex(data2, 2) +
+        decToHex(data3, 2) +
+        decToHex(data4, 2) +
+        decToHex(data5, 2) + ';'
+    }
+    
+
     // FD ARSON3
-	// ARSON3 Format: [<MjPri><MinPri=3><CANID>]<FD><NN hi><NN lo><DN hi><DN lo>
+    // ARSON3 Format: [<MjPri><MinPri=3><CANID>]<FD><NN hi><NN lo><DN hi><DN lo>
     //                  <data 1><data 2><data 3>
     //
     decodeARSON3(message) {
