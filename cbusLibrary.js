@@ -5604,7 +5604,7 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF6&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
     encodeACDAT(nodeNumber, data1, data2, data3, data4, data5) {
-        return this.header({MinPri: 2}) + 'F6'  + decToHex(nodeNumber, 4) +
+        return this.header({MinPri: 3}) + 'F6'  + decToHex(nodeNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
                                             decToHex(data3, 2) +
@@ -5648,7 +5648,7 @@ class cbusLibrary {
     * Format: [&ltMjPri&gt&ltMinPri=3&gt&ltCANID&gt]&ltF7&gt&ltnodeNumber hi&gt&ltnodeNumber lo&gt&ltdata1&gt&ltdata2&gt&ltdata3&gt&ltdata4&gt&ltdata5&gt
     */
     encodeARDAT(nodeNumber, data1, data2, data3, data4, data5) {
-        return this.header({MinPri: 2}) + 'F7'  + decToHex(nodeNumber, 4) +
+        return this.header({MinPri: 3}) + 'F7'  + decToHex(nodeNumber, 4) +
                                             decToHex(data1, 2) +
                                             decToHex(data2, 2) +
                                             decToHex(data3, 2) +
