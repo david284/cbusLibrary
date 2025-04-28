@@ -1402,6 +1402,23 @@ class cbusLibrary {
                 if(!message.hasOwnProperty('Data3')) {throw Error("encode: property 'Data3' missing")};
                 message.encoded = this.encodeESD(message.nodeNumber, message.ServiceIndex, message.ServiceType, message.Data1, message.Data2, message.Data3);
                 break;
+            case 'DTXC':    // E9
+                if(!message.hasOwnProperty('streamIdentifier')) {throw Error("encode: property 'streamIdentifier' missing")};
+                if(!message.hasOwnProperty('sequenceNumber')) {throw Error("encode: property 'sequenceNumber' missing")};
+                if(message.sequenceNumber == 0){
+                  if(!message.hasOwnProperty('messageLength')) {throw Error("encode: property 'messageLength' missing")};
+                  if(!message.hasOwnProperty('CRC16')) {throw Error("encode: property 'CRC16' missing")};
+                  if(!message.hasOwnProperty('flags')) {throw Error("encode: property 'flags' missing")};
+                  message.encoded = this.encodeDTXC_SEQ0(message.streamIdentifier, message.sequenceNumber, message.messageLength, message.CRC16, message.flags)
+                } else {
+                  if(!message.hasOwnProperty('Data1')) {throw Error("encode: property 'Data1' missing")};
+                  if(!message.hasOwnProperty('Data2')) {throw Error("encode: property 'Data2' missing")};
+                  if(!message.hasOwnProperty('Data3')) {throw Error("encode: property 'Data3' missing")};
+                  if(!message.hasOwnProperty('Data4')) {throw Error("encode: property 'Data4' missing")};
+                  if(!message.hasOwnProperty('Data5')) {throw Error("encode: property 'Data5' missing")};
+                  message.encoded = this.encodeDTXC(message.streamIdentifier, message.sequenceNumber, message.Data1, message.Data2, message.Data3, message.Data4, message.Data5)
+                }
+                break;
             case 'PARAMS':       // EF
                 if(!message.hasOwnProperty('param1')) {throw Error("encode: property 'param1' missing")};
                 if(!message.hasOwnProperty('param2')) {throw Error("encode: property 'param2' missing")};

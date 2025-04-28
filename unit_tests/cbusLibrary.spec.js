@@ -248,6 +248,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5', 'build':'6'}, 'expected': ':SA780NE300010203040506;'});
 		testCases.push({'test':{'mnemonic': 'ENACK', 'nodeNumber':'1', 'ackOpCode':'02', 'eventIdentifier':'00000003'}, 'expected': ':SA780NE600010200000003;'});
 		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data1':'4', 'Data2':'5', 'Data3':'6'}, 'expected': ':SA780NE700010203040506;'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'0', 'messageLength':'3', 'CRC16':'4', 'flags':'5'}, 'expected': ':SB780NE901000003000405;'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'255', 'Data1':'3', 'Data2':'4', 'Data3':'5', 'Data4':'6', 'Data5':'7'}, 'expected': ':SB780NE901FF0304050607;'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1': '1', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': ':SB780NEF01020304050607;'});
 		testCases.push({'test':{'mnemonic': 'ACON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF000010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NF100010002030405;'});
@@ -543,7 +545,7 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'EVANS', 'nodeNumber':'2', 'eventVariableIndex':'3', 'eventVariableValue':'4'}, 'expected': 'encode: property \'eventNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'EVANS', 'nodeNumber':'2', 'eventNumber':'2', 'eventVariableValue':'4'}, 'expected': 'encode: property \'eventVariableIndex\' missing'});
 		testCases.push({'test':{'mnemonic': 'EVANS', 'nodeNumber':'2', 'eventNumber':'2', 'eventVariableIndex':'3'}, 'expected': 'encode: property \'eventVariableValue\' missing'});
-        testCases.push({'test':{'mnemonic': 'ARON2', 'eventNumber': '2', 'data1':'3', 'data2':'4'}, 'expected': 'encode: property \'nodeNumber\' missing'});
+    testCases.push({'test':{'mnemonic': 'ARON2', 'eventNumber': '2', 'data1':'3', 'data2':'4'}, 'expected': 'encode: property \'nodeNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARON2', 'nodeNumber':'2', 'data1':'3', 'data2':'4'}, 'expected': 'encode: property \'eventNumber\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARON2', 'nodeNumber':'2', 'eventNumber':'2', 'data2':'4'}, 'expected': 'encode: property \'data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'ARON2', 'nodeNumber':'2', 'eventNumber':'2', 'data1':'3'}, 'expected': 'encode: property \'data2\' missing'});
@@ -603,6 +605,16 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data2':'5', 'Data3':'6'}, 'expected': 'encode: property \'Data1\' missing'});
 		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data1':'4', 'Data3':'6'}, 'expected': 'encode: property \'Data2\' missing'});
 		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data1':'4', 'Data2':'5'}, 'expected': 'encode: property \'Data3\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'sequenceNumber':'0', 'messageLength':'3', 'CRC16':'4', 'flags':'5'}, 'expected': 'encode: property \'streamIdentifier\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'messageLength':'3', 'CRC16':'4', 'flags':'5'}, 'expected': 'encode: property \'sequenceNumber\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'0', 'CRC16':'4', 'flags':'5'}, 'expected': 'encode: property \'messageLength\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'0', 'messageLength':'3', 'flags':'5'}, 'expected': 'encode: property \'CRC16\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'0', 'messageLength':'3', 'CRC16':'4'}, 'expected': 'encode: property \'flags\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'1', 'Data2':'4', 'Data3':'5', 'Data4':'6', 'Data5':'7'}, 'expected': 'encode: property \'Data1\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'1', 'Data1':'4', 'Data3':'5', 'Data4':'6', 'Data5':'7'}, 'expected': 'encode: property \'Data2\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'1', 'Data1':'4', 'Data2':'5', 'Data4':'6', 'Data5':'7'}, 'expected': 'encode: property \'Data3\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'1', 'Data1':'4', 'Data2':'5', 'Data3':'6', 'Data5':'7'}, 'expected': 'encode: property \'Data4\' missing'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'1', 'Data1':'4', 'Data2':'5', 'Data3':'6', 'Data4':'7'}, 'expected': 'encode: property \'Data5\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param1\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param2\' missing'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1':'1', 'param2':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': 'encode: property \'param3\' missing'});
