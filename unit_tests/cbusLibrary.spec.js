@@ -7370,5 +7370,30 @@ describe('cbusMessage tests', function(){
     })
 
 
+	function GetTestCase_undecoded () {
+		var arg1, arg2, testCases = [];
+		for (a1 = 1; a1 < 9; a1++) {
+			if (a1 == 1) {arg1 = ':', arg2 = "invalid message :"}
+			if (a1 == 2) {arg1 = ':S', arg2 = "unsupported message :S"}
+			if (a1 == 3) {arg1 = ':S0000', arg2 = "unsupported message :S0000"}
+			if (a1 == 4) {arg1 = ':S0000P', arg2 = "unsupported message :S0000P"}
+      if (a1 == 5) {arg1 = ':X', arg2 = "unsupported message :X"}
+      if (a1 == 6) {arg1 = ':X00000000', arg2 = "unsupported message :X00000000"}
+      if (a1 == 7) {arg1 = ':X00000000P', arg2 = "unsupported message :X00000000P"}
+      if (a1 == 8) {arg1 = ':P', arg2 = "unsupported message :P"}
+        testCases.push({'message':arg1, 'expected':arg2});
+		}
+		return testCases;
+	}
+
+
+ 	itParam("undecoded message ${value.message}", GetTestCase_undecoded(), function (value) {
+		winston.info({message: 'cbusMessage test: BEGIN undecoded message test ' + JSON.stringify(value)});
+    var decode = cbusLib.decode(value.message);
+		winston.info({message: 'cbusMessage test: undecoded message decode ' + JSON.stringify(decode)});
+		expect(decode.text).to.equal(value.expected, 'decode');
+	})
+
+
 })
 

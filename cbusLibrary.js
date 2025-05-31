@@ -149,19 +149,43 @@ class cbusLibrary {
     *    }
     */
     decode(message) {
-        if(message.hasOwnProperty('encoded')) {
-            message = message.encoded;
-        }
-        if (( message.substr(1, 1) == 'S' ) & (message.length >= 9)) {
+      if(message.hasOwnProperty('encoded')) {
+          message = message.encoded;
+      }
+      if (message.length >=2){
+        if (( message.substring(1, 2) == 'S' ) & (message.length >=7)) {
+          if ((message.substring(6,7) == 'N') & (message.length >=9)) {
+            // example :S7020N10;
             return this.decodeStandardMessage(message)
-        } else if (( message.substr(1, 1) == 'X' ) & (message.length >= 11)) {
+          } else if (message.substring(6,7) == 'R'){
+            // example :S7020R;
+            return this.unDecodedMessage(message, 'S', `RTR message ${message}`)
+          } else {
+            return this.unDecodedMessage(message, '', `unsupported message ${message}`)
+          }
+        } else if (( message.substring(1, 2) == 'X' ) & (message.length >= 11)) {
+          if (message.substring(10,11) == 'N') {
+            // example :X00080001N00FFFFFF0101FFFF;
             return this.decodeExtendedMessage(message)
+          } else if (message.substring(10,11) == 'R'){
+            // example :X00080001R;
+            return this.unDecodedMessage(message, 'X', `RTR message ${message}`)
+          } else {
+            return this.unDecodedMessage(message, '', `unsupported message ${message}`)
+          }
         } else {
-            return {'encoded': message,
-                    'ID_TYPE': '',
-                    'text': 'Unsupported message',
-            }
+            return this.unDecodedMessage(message, '', `unsupported message ${message}`)
         }
+      } else {
+        return this.unDecodedMessage(message, '', `invalid message ${message}`)
+      }
+    }
+
+    unDecodedMessage(message, ID_TYPE, text){
+      return  {'encoded': message,
+                'ID_TYPE': ID_TYPE,
+                'text': text
+      }
     }
 
     decodeStandardMessage(message) {
