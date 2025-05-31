@@ -157,6 +157,9 @@ class cbusLibrary {
           if ((message.substring(6,7) == 'N') & (message.length >=9)) {
             // example :S7020N10;
             return this.decodeStandardMessage(message)
+          } else if ((message.substring(6,7) == 'N') & (message.length == 8)) {
+            // example :S7020N;
+            return this.unDecodedMessage(message, 'S', `Empty message ${message}`)
           } else if (message.substring(6,7) == 'R'){
             // example :S7020R;
             return this.unDecodedMessage(message, 'S', `RTR message ${message}`)
@@ -164,9 +167,12 @@ class cbusLibrary {
             return this.unDecodedMessage(message, '', `unsupported message ${message}`)
           }
         } else if (( message.substring(1, 2) == 'X' ) & (message.length >= 11)) {
-          if (message.substring(10,11) == 'N') {
+          if ((message.substring(10,11) == 'N') & (message.length >= 13)) {
             // example :X00080001N00FFFFFF0101FFFF;
             return this.decodeExtendedMessage(message)
+          } else if  ((message.substring(10,11) == 'N') & (message.length == 12)) {
+            // example :X00080001N;
+            return this.unDecodedMessage(message, 'X', `Empty message ${message}`)
           } else if (message.substring(10,11) == 'R'){
             // example :X00080001R;
             return this.unDecodedMessage(message, 'X', `RTR message ${message}`)
