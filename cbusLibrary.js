@@ -1661,7 +1661,7 @@ class cbusLibrary {
     */
     encode_EXT_PUT_CONTROL(address, CTLBT, SPCMD, CPDTL, CPDTH) {
         // Format: <header> ADDRL ADDRH ADDRU RESVD CTLBT SPCMD CPDTL CPDTH
-		return ":X00080000N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + '00' + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
+		return ":X00080004N" + address.substr(4, 2) + address.substr(2, 2) + address.substr(0, 2) + '00' + decToHex(CTLBT, 2) + decToHex(SPCMD, 2) + decToHex(CPDTL, 2) + decToHex(CPDTH, 2) + ";";
     }
     
 
@@ -1673,7 +1673,7 @@ class cbusLibrary {
     * 29 bit fixed header (:X00080004N.......)
     */
     encode_EXT_PUT_DATA(data) {
-		return ":X00080001N" + 
+		return ":X00080005N" + 
             decToHex(data[0], 2) + 
             decToHex(data[1], 2) + 
             decToHex(data[2], 2) + 
