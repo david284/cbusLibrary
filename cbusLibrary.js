@@ -1690,10 +1690,10 @@ class cbusLibrary {
     * @param {int} response response number to firmware download control message 
     * @return {string} CBUS message encoded as a 'Grid Connect' ASCII string<br>
     * Example :X80180004N02;<br>
-    * 29 bit fixed header (:X80080000N.......)
+    * 29 bit fixed header (:X80080004N.......)
     */
     encode_EXT_RESPONSE(response) {
-		return ":X80080000N" + decToHex(response, 2) + ";";
+		return ":X80080004N" + decToHex(response, 2) + ";";
     }
     
 

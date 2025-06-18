@@ -267,9 +267,9 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'ARSON3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NFD00010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ARSOF3', 'nodeNumber': '1', 'deviceNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SB780NFE00010002030405;'});
 		testCases.push({'test':{'mnemonic': 'EXTC6', 'Ext_OPC': '1', 'byte1':'2', 'byte2':'3', 'byte3':'4', 'byte4':'5', 'byte5':'6', 'byte6':'7'}, 'expected': ':SB780NFF01020304050607;'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': ':X00080000N0100000002030405;'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': ':X00080001N0102030405060708;'});
-		testCases.push({'test':{"ID_TYPE":"X","operation":"RESPONSE","response":'1'}, 'expected': ':X80080000N01;'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"CONTROL","address":"000001","CTLBT":"2","SPCMD":"3","CPDTL":"4","CPDTH":"5"}, 'expected': ':X00080004N0100000002030405;'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"PUT","type":"DATA","data":[1,2,3,4,5,6,7,8]}, 'expected': ':X00080005N0102030405060708;'});
+		testCases.push({'test':{"ID_TYPE":"X","operation":"RESPONSE","response":'1'}, 'expected': ':X80080004N01;'});
 		return testCases;
 	}
 
@@ -7217,7 +7217,7 @@ describe('cbusMessage tests', function(){
 	itParam("EXT_PUT_CONTROL test address ${value.address} CTLBT ${value.CTLBT} SPCMD ${value.SPCMD} CPDTL ${value.CPDTL} CPDTH ${value.CPDTH}", 
         GetTestCase_PUT_CONTROL(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN EXT_PUT_CONTROL test ' + JSON.stringify(value)});
-		expected = ":X00080000N" + value.address.substr(4, 2) + value.address.substr(2, 2) + value.address.substr(0, 2) + 
+		expected = ":X00080004N" + value.address.substr(4, 2) + value.address.substr(2, 2) + value.address.substr(0, 2) + 
             '00' +                          // RESVD - not used, always set to 0
             decToHex(value.CTLBT, 2) + 
             decToHex(value.SPCMD, 2) + 
@@ -7307,7 +7307,7 @@ describe('cbusMessage tests', function(){
 	itParam("EXT_PUT_DATA test data0 ${value.data0} data1 ${value.data1} data2 ${value.data2} data3 ${value.data3} data4 ${value.data4} data5 ${value.data5} data6 ${value.data6} data7 ${value.data7}", 
         GetTestCase_PUT_DATA(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN EXT_PUT_DATA test ' + JSON.stringify(value)});
-		expected = ":X00080001N" + 
+		expected = ":X00080005N" + 
             decToHex(value.data0, 2) + 
             decToHex(value.data1, 2) + 
             decToHex(value.data2, 2) + 
@@ -7353,7 +7353,7 @@ describe('cbusMessage tests', function(){
     //
 	itParam("EXT_RESPONSE test response ${value.response}", GetTestCase_EXT_RESPONSE(), function (value) {
 		winston.info({message: 'cbusMessage test: BEGIN EXT_RESPONSE test ' + JSON.stringify(value)});
-		expected = ":X80080000N" + decToHex(value.response, 2) + ";";
+		expected = ":X80080004N" + decToHex(value.response, 2) + ";";
         var encode = cbusLib.encode_EXT_RESPONSE(value.response);
 		expect(encode).to.equal(expected, 'encode');
 		winston.info({message: 'cbusMessage test: encode ' + encode});
