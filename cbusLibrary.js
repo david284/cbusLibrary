@@ -49,7 +49,7 @@ class cbusLibrary {
     constructor() {
         this.canHeader = {
                     'MjPri': 2,     // lowest allowed priority (highest value)
-                    'CAN_ID': 60,
+                    'CAN_ID': 123,  // allocated by Pete Brownlow to MMC
         }
     }
 
@@ -80,7 +80,7 @@ class cbusLibrary {
     * @example
     * {
     *   'MjPri': 2,
-    *   'CAN_ID': 60,
+    *   'CAN_ID': 123,
     * }
     */
     getCanHeader() {
