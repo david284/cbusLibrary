@@ -727,12 +727,22 @@ describe('cbusMessage tests', function(){
 		return testCases;
 	}
 
-    //
-    //
+  //
+  //
 	itParam("Generic encode fail test - ${JSON.stringify(value.test)}", GetTestCase_encodeFail(), function (value) {
-		winston.info({message: 'cbusMessage test: BEGIN Generic encode failure test '});
-        expect(() => cbusLib.encode(value.test)).to.throw(Error).with.property('message', value.expected);
+		winston.info({message: `cbusMessage test: BEGIN Generic encode failure test ${JSON.stringify(value)}`});
+    let errorString = ""
+    try{
+      cbusLib.encode(value.test)
+    }
+    catch (err){
+      errorString = err
+    }
+    winston.info({message: `cbusMessage test: Generic encode failure test:   result: ${errorString}`});
+		winston.info({message: `cbusMessage test: Generic encode failure test: expected: ${value.expected}`});
+    expect(errorString.toString()).to.equal("Error: " + value.expected.toString());
 	})
+
 
 
     // 00 ACK
