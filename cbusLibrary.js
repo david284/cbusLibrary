@@ -2156,8 +2156,8 @@ class cbusLibrary {
                 'ID_TYPE': 'S',
                 'mnemonic': 'RLOC',
                 'opCode': message.substr(7, 2),
-                'address': parseInt(message.substr(9, 4), 16),
-                'text': 'RLOC (40) Node ' + parseInt(message.substr(9, 4), 16),
+                'address': parseInt(message.substr(9, 4), 16) & 0x3FFF,
+                'text': 'RLOC (40) address ' + (parseInt(message.substr(9, 4), 16)  & 0x3FFF),
         }
     }
     /**
@@ -2273,14 +2273,15 @@ class cbusLibrary {
 	// PCON Format: [<MjPri><MinPri=2><CANID>]<45><Session><Consist#>
     //
     decodePCON(message) {
-        return {'encoded': message,
-                'ID_TYPE': 'S',
-                'mnemonic': 'PCON',
-                'opCode': message.substr(7, 2),
-                'session': parseInt(message.substr(9, 2), 16),
-                'consistAddress': parseInt(message.substr(11, 2), 16),
-                'text': 'PCON (45) Node ' + parseInt(message.substr(9, 4), 16),
-        }
+      return {'encoded': message,
+        'ID_TYPE': 'S',
+        'mnemonic': 'PCON',
+        'opCode': message.substr(7, 2),
+        'session': parseInt(message.substr(9, 2), 16),
+        'consistAddress': parseInt(message.substr(11, 2), 16),
+        'text': 'PCON (45) session ' + parseInt(message.substr(9, 2), 16)
+        + ' consist ' + parseInt(message.substr(11, 2), 16)
+      }
     }
     /**
     * @desc opCode 45<br>
@@ -2304,7 +2305,8 @@ class cbusLibrary {
                 'opCode': message.substr(7, 2),
                 'session': parseInt(message.substr(9, 2), 16),
                 'consistAddress': parseInt(message.substr(11, 2), 16),
-                'text': 'KCON (46) Node ' + parseInt(message.substr(9, 4), 16),
+                'text': 'KCON (46) session ' + parseInt(message.substr(9, 2), 16)
+                + ' consist ' + parseInt(message.substr(11, 2), 16)
         }
     }
     /**
@@ -2888,15 +2890,15 @@ class cbusLibrary {
     // <Dat1> and <Dat2> are [AddrH] and [AddrL] of the decoder, respectively.
     //
     decodeGLOC(message) {
-        return {'encoded': message,
-                'ID_TYPE': 'S',
-                'mnemonic': 'GLOC',
-                'opCode': message.substr(7, 2),
-                'address': parseInt(message.substr(9, 4), 16),
-                'flags': parseInt(message.substr(13, 2), 16),
-                'text': "GLOC (61) address " + parseInt(message.substr(9, 4), 16) +
-					" flags " + parseInt(message.substr(13, 2), 16),
-        }
+      return {'encoded': message,
+        'ID_TYPE': 'S',
+        'mnemonic': 'GLOC',
+        'opCode': message.substr(7, 2),
+        'address': parseInt(message.substr(9, 4), 16) & 0x3FFF,
+        'flags': parseInt(message.substr(13, 2), 16),
+        'text': "GLOC (61) address " + (parseInt(message.substr(9, 4), 16)  & 0x3FFF)
+        + " flags " + parseInt(message.substr(13, 2), 16)
+      }
     }
     /**
     * @desc opCode 61<br>
@@ -4498,11 +4500,11 @@ class cbusLibrary {
                 'ID_TYPE': 'S',
                 'mnemonic': 'WCVOA',
                 'opCode': message.substr(7, 2),
-                'address': parseInt(message.substr(9, 4), 16),
+                'address': parseInt(message.substr(9, 4), 16) & 0x3FFF,
                 'CV': parseInt(message.substr(13, 4), 16),
                 'mode': parseInt(message.substr(17, 2), 16),
                 'value': parseInt(message.substr(19, 2), 16),
-                'text': "WCVOA (C1) address " + parseInt(message.substr(9, 4), 16) + 
+                'text': "WCVOA (C1) address " + (parseInt(message.substr(9, 4), 16) & 0x3FFF) + 
 					" CV " + parseInt(message.substr(13, 4), 16) +
 					" mode " + parseInt(message.substr(17, 2), 16) +
 					" value " + parseInt(message.substr(19, 2), 16)
@@ -4530,12 +4532,12 @@ class cbusLibrary {
                 'ID_TYPE': 'S',
                 'mnemonic': 'CABDAT',
                 'opCode': message.substr(7, 2),
-                'address': parseInt(message.substr(9, 4), 16),
+                'address': parseInt(message.substr(9, 4), 16) & 0x3FFF,
                 'datcode': parseInt(message.substr(13, 2), 16),
                 'aspect1': parseInt(message.substr(15, 2), 16),
                 'aspect2': parseInt(message.substr(17, 2), 16),
                 'speed': parseInt(message.substr(19, 2), 16),
-                'text': "CABDAT (C2) address " + parseInt(message.substr(9, 4), 16) + 
+                'text': "CABDAT (C2) address " + (parseInt(message.substr(9, 4), 16) & 0x3FFF) + 
 					" datcode " + parseInt(message.substr(13, 2), 16) +
 					" aspect1 " + parseInt(message.substr(13, 2), 16) +
 					" aspect2 " + parseInt(message.substr(17, 2), 16) +
@@ -5085,27 +5087,27 @@ class cbusLibrary {
     // PLOC Format: [<MjPri><MinPri=2><CANID>]<E1><Session><AddrH><AddrL><Speed/Dir><Fn1><Fn2><Fn3>
     //
     decodePLOC(message) {
-        var speedDir = parseInt(message.substr(15, 2), 16)
-        var direction = (speedDir > 127) ? 'Forward' : 'Reverse';
-        return {'encoded': message,
-                'ID_TYPE': 'S',
-                'mnemonic': 'PLOC',
-                'opCode': message.substr(7, 2),
-                'session': parseInt(message.substr(9, 2), 16),
-                'address': parseInt(message.substr(11, 4), 16),
-                'speed': speedDir % 128,
-                'direction': direction,
-                'Fn1': parseInt(message.substr(17, 2), 16),
-                'Fn2': parseInt(message.substr(19, 2), 16),
-                'Fn3': parseInt(message.substr(21, 2), 16),
-                'text': "PLOC (E1) Session " + parseInt(message.substr(9, 2), 16) + 
-					" Address " + parseInt(message.substr(11, 4), 16) +
-					" Speed/Dir " + speedDir % 128 +
-					" Direction " + direction +
-					" Fn1 " + parseInt(message.substr(17, 2), 16) +
-					" Fn2 " + parseInt(message.substr(19, 2), 16) +
-					" Fn3 " + parseInt(message.substr(21, 2), 16)
-        }
+      var speedDir = parseInt(message.substr(15, 2), 16)
+      var direction = (speedDir > 127) ? 'Forward' : 'Reverse';
+      return {'encoded': message,
+        'ID_TYPE': 'S',
+        'mnemonic': 'PLOC',
+        'opCode': message.substr(7, 2),
+        'session': parseInt(message.substr(9, 2), 16),
+        'address': parseInt(message.substr(11, 4), 16) & 0x3FFF,
+        'speed': speedDir % 128,
+        'direction': direction,
+        'Fn1': parseInt(message.substr(17, 2), 16),
+        'Fn2': parseInt(message.substr(19, 2), 16),
+        'Fn3': parseInt(message.substr(21, 2), 16),
+        'text': "PLOC (E1) Session " + parseInt(message.substr(9, 2), 16) + 
+          " Address " + (parseInt(message.substr(11, 4), 16) & 0x3FFF) +
+          " Speed/Dir " + speedDir % 128 +
+          " Direction " + direction +
+          " Fn1 " + parseInt(message.substr(17, 2), 16) +
+          " Fn2 " + parseInt(message.substr(19, 2), 16) +
+          " Fn3 " + parseInt(message.substr(21, 2), 16)
+      }
     }
     /**
     * @desc opCode E1<br>

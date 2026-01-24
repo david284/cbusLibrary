@@ -1244,7 +1244,7 @@ describe('cbusMessage tests', function(){
 		for (aIndex = 1; aIndex < 4; aIndex++) {
 			if (aIndex == 1) address = 0;
 			if (aIndex == 2) address = 1;
-			if (aIndex == 3) address = 65535;
+			if (aIndex == 3) address = 16383;
 
 			testCases.push({'address':address});
 		}
@@ -2284,7 +2284,7 @@ describe('cbusMessage tests', function(){
 		for (a1 = 1; a1 < 4; a1++) {
 			if (a1 == 1) arg1 = 0;
 			if (a1 == 2) arg1 = 1;
-			if (a1 == 3) arg1 = 65535;
+			if (a1 == 3) arg1 = 16383;
                 for (a2 = 1; a2 < 4; a2++) {
                     if (a2 == 1) arg2 = 0;
                     if (a2 == 2) arg2 = 1;
@@ -4755,7 +4755,7 @@ describe('cbusMessage tests', function(){
 		for (a1 = 1; a1 < 4; a1++) {
 			if (a1 == 1) arg1 = 0;
 			if (a1 == 2) arg1 = 1;
-			if (a1 == 3) arg1 = 65535;
+			if (a1 == 3) arg1 = 16383;
                 for (a2 = 1; a2 < 4; a2++) {
                     if (a2 == 1) arg2 = 0;
                     if (a2 == 2) arg2 = 1;
@@ -4811,7 +4811,7 @@ describe('cbusMessage tests', function(){
 		for (a1 = 1; a1 < 4; a1++) {
 			if (a1 == 1) arg1 = 0;
 			if (a1 == 2) arg1 = 1;
-			if (a1 == 3) arg1 = 65535;
+			if (a1 == 3) arg1 = 16383;
                 for (a2 = 1; a2 < 4; a2++) {
                     if (a2 == 1) arg2 = 0;
                     if (a2 == 2) arg2 = 1;
@@ -5681,7 +5681,7 @@ describe('cbusMessage tests', function(){
 			for (AD = 1; AD < 4; AD++) {
 				if (AD == 1) address = 0;
 				if (AD == 2) address = 1;
-				if (AD == 3) address = 65535;
+				if (AD == 3) address = 16383;
                 for (SP = 1; SP < 4; SP++) {
                     if (SP == 1) speed = 0;
                     if (SP == 2) speed = 1;
