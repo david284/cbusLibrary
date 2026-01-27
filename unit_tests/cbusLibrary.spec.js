@@ -7410,5 +7410,340 @@ describe('cbusMessage tests', function(){
 	})
 
 
+  // LM_EXCEPTIONS testcases
+  //
+  function GetTestCase_LM_EXCEPTIONS () {
+    var testCases = [];
+    for (a1 = 1; a1 < 4; a1++) {
+      if (a1 == 1) arg1 = 0, arg2 = "INVALID_VALUE(0)";
+      if (a1 == 2) arg1 = 200, arg2 = "UNKNOWN_COMMAND";
+      if (a1 == 3) arg1 = 255, arg2 = "UNKNOWN_COMMAND";
+      testCases.push({'mnemonic':'LM',
+                    'command':arg1,  // Usages command
+                    'opCode':'EA',
+                    "expected":arg2
+      })
+    }
+    return testCases;
+  }
+
+  // LM_EXCEPTIONS
+  // invalid & unknown
+  //
+  itParam(`LM_EXCEPTIONS test}`, 
+    GetTestCase_LM_EXCEPTIONS(), function (value) {
+    winston.info({message: `UNIT_TEST LM_EXCEPTIONS: BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
+    winston.info({message: `cbusMessage test: BEGIN LM_EXCEPTIONS`});
+    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + "0000" + "0000" + "0000" + ";";
+    var decode = cbusLib.decode(expected);
+    winston.info({message: 'UNIT_TEST: LM_INVALID decode ' + JSON.stringify(decode)});
+    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.command).to.equal(value.expected, 'command');
+    winston.info({message: `UNIT_TEST: END LM_EXCEPTIONS`});
+  })
+
+  // LM_DATA testcases
+  //
+  function GetTestCase_LM_DATA () {
+    var testCases = [];
+    for (a1 = 1; a1 < 3; a1++) {
+      if (a1 == 1) arg1 = 1;
+      if (a1 == 2) arg1 = 199;
+      for (a2 = 1; a2 < 4; a2++) {
+        if (a2 == 1) arg2 = 0;
+        if (a2 == 2) arg2 = 1;
+        if (a2 == 3) arg2 = 255;
+        for (a3 = 1; a3 < 4; a3++) {
+          if (a3 == 1) arg3 = 0;
+          if (a3 == 2) arg3 = 1;
+          if (a3 == 3) arg3 = 255;
+          for (a4 = 1; a4 < 4; a4++) {
+            if (a4 == 1) arg4 = 0;
+            if (a4 == 2) arg4 = 1;
+            if (a4 == 3) arg4 = 255;
+            for (a5 = 1; a5 < 4; a5++) {
+              if (a5 == 1) arg5 = 0;
+              if (a5 == 2) arg5 = 1;
+              if (a5 == 3) arg5 = 255;
+              for (a6 = 1; a6 < 4; a6++) {
+                if (a6 == 1) arg6 = 0;
+                if (a6 == 2) arg6 = 1;
+                if (a6 == 3) arg6 = 255;
+                for (a7 = 1; a7 < 4; a7++) {
+                  if (a7 == 1) arg7 = 0;
+                  if (a7 == 2) arg7 = 1;
+                  if (a7 == 3) arg7 = 255;
+                  testCases.push({'mnemonic':'LM',
+                    'command':arg1,  // Usages command
+                    'opCode':'EA',
+                    "Data1": arg2,
+                    "Data2": arg3,
+                    "Data3": arg4,
+                    "Data4": arg5,
+                    "Data5": arg6,
+                    "Data6": arg7,
+                  })
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return testCases;
+  }
+
+  // LM_DATA
+  // invalid & unknown
+  //
+  itParam(`LM_DATA test}`, 
+    GetTestCase_LM_DATA(), function (value) {
+    winston.info({message: `UNIT_TEST: BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
+    winston.info({message: `UNIT_TEST: BEGIN LM_DATA`});
+    expected = ":SBF60N" + value.opCode
+      + decToHex(value.command,2) 
+      + decToHex(value.Data1,2) 
+      + decToHex(value.Data2,2) 
+      + decToHex(value.Data3,2) 
+      + decToHex(value.Data4,2) 
+      + decToHex(value.Data5,2) 
+      + decToHex(value.Data6,2) + ";";
+    var decode = cbusLib.decode(expected);
+    winston.info({message: 'UNIT_TEST: LM_DATA decode ' + JSON.stringify(decode)});
+    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.command).to.equal("DATA", 'command');
+    expect(decode.Data1).to.equal(value.Data1, 'Data1');
+    expect(decode.Data2).to.equal(value.Data2, 'Data2');
+    expect(decode.Data3).to.equal(value.Data3, 'Data3');
+    expect(decode.Data4).to.equal(value.Data4, 'Data4');
+    expect(decode.Data5).to.equal(value.Data5, 'Data5');
+    expect(decode.Data6).to.equal(value.Data6, 'Data6');
+    winston.info({message: `UNIT_TEST: END LM_DATA`});
+  })
+
+  // LM_USAGES testcases
+  //
+  function GetTestCase_LM_USAGES () {
+    var testCases = [];
+    for (a1 = 1; a1 < 3; a1++) {
+      if (a1 == 1) arg1 = 0;
+      if (a1 == 2) arg1 = 1;
+      for (a2 = 1; a2 < 4; a2++) {
+        if (a2 == 1) arg2 = 0;
+        if (a2 == 2) arg2 = 1;
+        if (a2 == 3) arg2 = 255;
+        for (a3 = 1; a3 < 4; a3++) {
+          if (a3 == 1) arg3 = 0;
+          if (a3 == 2) arg3 = 1;
+          if (a3 == 3) arg3 = 65535;
+          for (a4 = 1; a4 < 4; a4++) {
+            if (a4 == 1) arg4 = 0;
+            if (a4 == 2) arg4 = 1;
+            if (a4 == 3) arg4 = 255;
+            for (a5 = 1; a5 < 4; a5++) {
+              if (a5 == 1) arg5 = 0;
+              if (a5 == 2) arg5 = 1;
+              if (a5 == 3) arg5 = 255;
+              testCases.push({'mnemonic':'LM',
+                'command':218,  // Usages command
+                'opCode':'EA', 
+                'client_server':arg1,
+                'use':arg2,
+                'nodeNumber':arg3,
+                'option_flags':arg4,
+                'state':arg5
+              })
+            }
+          }
+        }
+      }
+    }
+    return testCases;
+  }
+  
+  // EA LM
+  //
+  itParam(`LM_USAGES test}`, 
+    GetTestCase_LM_USAGES(), function (value) {
+    winston.info({message: `UNIT_TEST: LM_USAGES BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
+    expected = ":SBF60N" + value.opCode + decToHex(value.command,2)
+     + decToHex(value.client_server,2)
+     + decToHex(value.use,2) 
+     + decToHex(value.nodeNumber, 4) 
+     + decToHex(value.option_flags,2)
+     + decToHex(value.state,2) + ";";
+    //var encode = cbusLib.encodeDTXC_SEQ0(value.streamIdentifier, value.sequenceNumber, value.messageLength, value.CRC16, value.flags)
+    var decode = cbusLib.decode(expected);
+    //winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+    //expect(encode).to.equal(expected, 'encode');
+    winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.command).to.equal("USAGES", 'command');
+    expect(decode.client_server).to.equal(value.client_server, 'client_server');
+    expect(decode.use).to.equal(value.use, 'use');
+    expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+    expect(decode.option_flags).to.equal(value.option_flags, 'option_flags');
+    expect(decode.state).to.equal(value.state, 'state');
+    expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
+    expect(decode.text).to.include(value.opCode, 'text opCode');
+    expect(decode.text).to.include(decToHex(value.nodeNumber,4), 'text nodeNumber');
+    winston.info({message: `UNIT_TEST: LM_USAGES END`});
+  })
+
+  // LM_QUERY testcases
+  //
+  function GetTestCase_LM_QUERY () {
+    var testCases = [];
+    for (a1 = 1; a1 < 4; a1++) {
+      if (a1 == 1) arg1 = 0;
+      if (a1 == 2) arg1 = 1;
+      if (a1 == 3) arg1 = 65535;
+      testCases.push({'mnemonic':'LM',
+                    'command':219,  // query command
+                    'opCode':'EA', 
+                    'nodeNumber':arg1
+      })
+    }
+    return testCases;
+  }
+  
+  // EA LM
+  // sequence 0 test
+  //
+  itParam(`LM_QUERY test}`, 
+    GetTestCase_LM_QUERY(), function (value) {
+    winston.info({message: `UNIT_TEST: LM_QUERY BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
+    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + "0000" + decToHex(value.nodeNumber, 4) + "0000" + ";";
+    //var encode = cbusLib.encodeDTXC_SEQ0(value.streamIdentifier, value.sequenceNumber, value.messageLength, value.CRC16, value.flags)
+    var decode = cbusLib.decode(expected);
+    //winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+    //expect(encode).to.equal(expected, 'encode');
+    winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+    expect(decode.command).to.equal("QUERY", 'command');
+    expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
+    expect(decode.text).to.include(value.opCode, 'text opCode');
+    expect(decode.text).to.include(decToHex(value.nodeNumber,4), 'text nodeNumber');
+    winston.info({message: `UNIT_TEST: LM_QUERY END`});
+  })
+
+  // LM_REQUEST testcases
+  //
+  function GetTestCase_LM_REQUEST () {
+    var testCases = [];
+    for (a1 = 1; a1 < 4; a1++) {
+      if (a1 == 1) arg1 = 0;
+      if (a1 == 2) arg1 = 1;
+      if (a1 == 3) arg1 = 255;
+      for (a2 = 1; a2 < 4; a2++) {
+        if (a2 == 1) arg2 = 0;
+        if (a2 == 2) arg2 = 1;
+        if (a2 == 3) arg2 = 65535;
+        for (a3 = 1; a3 < 4; a3++) {
+          if (a3 == 1) arg3 = 0;
+          if (a3 == 2) arg3 = 1;
+          if (a3 == 3) arg3 = 255;
+          testCases.push({'mnemonic':'LM',
+            'command':220,  // LM_REQUEST command
+            'opCode':'EA', 
+            'channel':arg1,
+            'nodeNumber':arg2,
+            'option_flags':arg3
+          })
+        }
+      }
+    }
+    return testCases;
+  }
+  
+  // EA LM_REQUEST
+  //
+  itParam(`LM_REQUEST test`, 
+    GetTestCase_LM_REQUEST(), function (value) {
+    winston.info({message: `UNIT_TEST: LM_REQUEST BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
+    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + "00" + decToHex(value.nodeNumber, 4) + decToHex(value.option_flags,2) + "00" + ";";
+    var decode = cbusLib.decode(expected);
+    //winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
+    //expect(encode).to.equal(expected, 'encode');
+    winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.command).to.equal("REQUEST", 'command');
+    expect(decode.channel).to.equal(value.channel, 'channel');
+    expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
+    expect(decode.option_flags).to.equal(value.option_flags, 'option_flags');
+    expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
+    expect(decode.text).to.include(value.opCode, 'text opCode');
+    winston.info({message: `UNIT_TEST: LM_REQUEST END`});
+  })
+
+  // LM_CHANNEL_COMMANDS testcases
+  //
+  function GetTestCase_LM_CHANNEL_COMMANDS () {
+    var testCases = [];
+    for (a1 = 1; a1 <= 5; a1++) {
+      if (a1 == 1) arg1 = 230, arg3="START_BLOCK";
+      if (a1 == 2) arg1 = 231, arg3="END_BLOCK0";
+      if (a1 == 3) arg1 = 252, arg3="RELEASE_CHANNEL";
+      if (a1 == 4) arg1 = 253, arg3="CLAIM_CHANNEL";
+      if (a1 == 5) arg1 = 254, arg3="PROPOSE_CHANNEL";
+      for (a2 = 1; a2 < 4; a2++) {
+        if (a2 == 1) arg2 = 0;
+        if (a2 == 2) arg2 = 1;
+        if (a2 == 3) arg2 = 199;
+        testCases.push({'mnemonic':'LM',
+          'command':arg1,
+          'opCode':'EA', 
+          'channel':arg2,
+          'CMD_TXT': arg3
+        })
+      }
+    }
+    return testCases;
+  }
+  
+  // EA LM_CHANNEL_COMMANDS
+  //
+  itParam(`LM_CHANNEL_COMMANDS test`, 
+    GetTestCase_LM_CHANNEL_COMMANDS(), function (value) {
+    winston.info({message: `UNIT_TEST: LM_CHANNEL_COMMANDS BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
+    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + "0000000000" + ";";
+    var decode = cbusLib.decode(expected);
+    winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
+    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(decode.encoded).to.equal(expected, 'encoded');
+    expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
+    expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
+    expect(decode.opCode).to.equal(value.opCode, 'opCode');
+    expect(decode.command).to.equal(value.CMD_TXT, 'command');
+    expect(decode.channel).to.equal(value.channel, 'channel');
+    expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
+    expect(decode.text).to.include(value.opCode, 'text opCode');
+    winston.info({message: `UNIT_TEST: LM_CHANNEL_COMMANDS END`});
+  })
+
+
+
+
 })
 

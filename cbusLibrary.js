@@ -605,6 +605,9 @@ class cbusLibrary {
         case 'E9':
               return this.decodeDTXC(message);
               break;
+        case 'EA':
+              return this.decodeLM(message);
+              break;
         // EA - EE reserved
         case 'EF':
             return this.decodePARAMS(message);
@@ -5331,6 +5334,124 @@ class cbusLibrary {
         decToHex(Data3, 2) + 
         decToHex(Data4, 2) + 
         decToHex(Data5, 2) + ';'
+    }
+
+    // EA - LM (long message)
+    //
+    decodeLM(message) {
+      var output = {}
+      output['encoded'] = message
+      output['ID_TYPE'] = 'S'
+      output['mnemonic'] = 'LM'
+      output['opCode'] = message.substr(7, 2)
+      var MessageData1 = parseInt(message.substr(9, 2), 16)
+      if (MessageData1 == 0){
+        output['command'] = "INVALID_VALUE(0)"
+      } else if (MessageData1 < 200){
+        // channel data 1 to 199
+        output['command'] = "DATA"
+        output['channel'] = parseInt(message.substr(9, 2), 16)
+        output['Data1'] = parseInt(message.substr(11, 2), 16)
+        output['Data2'] = parseInt(message.substr(13, 2), 16)
+        output['Data3'] = parseInt(message.substr(15, 2), 16)
+        output['Data4'] = parseInt(message.substr(17, 2), 16)
+        output['Data5'] = parseInt(message.substr(19, 2), 16)
+        output['Data6'] = parseInt(message.substr(21, 2), 16)       
+      } else {
+        // commands 200 to 255
+        switch (MessageData1){
+          case 218:
+            output['command'] = "USAGES"
+            output['client_server'] = parseInt(message.substr(11, 2), 16)
+            output['use'] = parseInt(message.substr(13, 2), 16)
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            output['option_flags'] = parseInt(message.substr(19, 2), 16)
+            output['state'] = parseInt(message.substr(21, 2), 16)
+            break;
+          case 219:
+            output['command'] = "QUERY"
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            break;
+          case 220:
+            output['command'] = "REQUEST"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['use'] = parseInt(message.substr(13, 2), 16)
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            output['option_flags'] = parseInt(message.substr(19, 2), 16)
+            break;
+          case 230:
+            output['command'] = "START_BLOCK"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            break;
+          case 231:
+            output['command'] = "END_BLOCK0"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            break;
+          case 232:
+            output['command'] = "END_BLOCK1"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['Data1'] = parseInt(message.substr(13, 2), 16)
+            break;
+          case 233:
+            output['command'] = "END_BLOCK2"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['Data1'] = parseInt(message.substr(13, 2), 16)
+            output['Data2'] = parseInt(message.substr(15, 2), 16)
+            break;
+          case 234:
+            output['command'] = "END_BLOCK3"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['Data1'] = parseInt(message.substr(13, 2), 16)
+            output['Data2'] = parseInt(message.substr(15, 2), 16)
+            output['Data3'] = parseInt(message.substr(17, 2), 16)
+            break;
+          case 235:
+            output['command'] = "END_BLOCK4"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['Data1'] = parseInt(message.substr(13, 2), 16)
+            output['Data2'] = parseInt(message.substr(15, 2), 16)
+            output['Data3'] = parseInt(message.substr(17, 2), 16)
+            output['Data4'] = parseInt(message.substr(19, 2), 16)
+            break;
+          case 236:
+            output['command'] = "END_BLOCK5"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['Data1'] = parseInt(message.substr(13, 2), 16)
+            output['Data2'] = parseInt(message.substr(15, 2), 16)
+            output['Data3'] = parseInt(message.substr(17, 2), 16)
+            output['Data4'] = parseInt(message.substr(19, 2), 16)
+            output['Data5'] = parseInt(message.substr(21, 2), 16)
+            break;
+          case 238:
+            output['command'] = "END_MESSAGE"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['checksum'] = parseInt(message.substr(15, 4), 16)
+            break;
+          case 239:
+            output['command'] = "START_MESSAGE"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['use'] = parseInt(message.substr(13, 2), 16)
+            output['option_flags'] = parseInt(message.substr(19, 2), 16)
+            break;
+          case 252:
+            output['command'] = "RELEASE_CHANNEL"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            break;
+          case 253:
+            output['command'] = "CLAIM_CHANNEL"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            break;
+          case 254:
+            output['command'] = "PROPOSE_CHANNEL"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            break;
+          default:
+            output['command'] = "UNKNOWN_COMMAND"
+            break;
+        }
+      }
+      output['text'] = JSON.stringify(output)
+      return output
     }
 
 
