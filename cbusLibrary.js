@@ -5513,6 +5513,61 @@ class cbusLibrary {
         + "0000000000" + ";";    
     }
     //
+    encodeLM_END_BLOCK1(channel, Data1) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(232,2) 
+        + decToHex(channel, 2) 
+        + decToHex(Data1, 2) 
+        + "00000000" + ";";    
+    }
+    //
+    encodeLM_END_BLOCK2(channel, Data1, Data2) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(233,2) 
+        + decToHex(channel, 2) 
+        + decToHex(Data1, 2) 
+        + decToHex(Data2, 2) 
+        + "000000" + ";";    
+    }
+    //
+    encodeLM_END_BLOCK3(channel, Data1, Data2, Data3) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(234,2) 
+        + decToHex(channel, 2) 
+        + decToHex(Data1, 2) 
+        + decToHex(Data2, 2) 
+        + decToHex(Data3, 2) 
+        + "0000" + ";";    
+    }
+    //
+    encodeLM_END_BLOCK4(channel, Data1, Data2, Data3, Data4) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(235,2) 
+        + decToHex(channel, 2) 
+        + decToHex(Data1, 2) 
+        + decToHex(Data2, 2)
+        + decToHex(Data3, 2) 
+        + decToHex(Data4, 2) 
+        + "00" + ";";    
+    }
+    //
+    encodeLM_END_BLOCK5(channel, Data1, Data2, Data3, Data4, Data5) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(236,2) 
+        + decToHex(channel, 2) 
+        + decToHex(Data1, 2) 
+        + decToHex(Data2, 2)
+        + decToHex(Data3, 2) 
+        + decToHex(Data4, 2) 
+        + decToHex(Data5, 2) 
+        + ";";    
+    }
+    //
     encodeLM_RELEASE_CHANNEL(channel) {
       return this.header({MinPri: 2})
         + 'EA'
@@ -5536,6 +5591,27 @@ class cbusLibrary {
         + decToHex(channel, 2) 
         + "0000000000" + ";";    
     }
+    //
+    encodeLM_END_MESSAGE(channel, checksum) {
+      return this.header({MinPri: 2})
+        + 'EA'
+      + decToHex(238,2)      
+      + decToHex(channel,2) 
+      + "00" 
+      + decToHex(checksum,4)
+      + "0000" + ";";
+    }    
+    //
+    encodeLM_START_MESSAGE(channel, use, option_flags) {
+      return this.header({MinPri: 2})
+        + 'EA'
+      + decToHex(239,2)      
+      + decToHex(channel,2) 
+      + decToHex(use,2) 
+      + "0000" 
+      + decToHex(option_flags,2)
+      + "00" + ";";
+    }    
 
 
 

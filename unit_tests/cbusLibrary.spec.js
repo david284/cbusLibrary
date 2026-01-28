@@ -7789,10 +7789,12 @@ describe('cbusMessage tests', function(){
   itParam(`LM_END_BLOCK1 test`, 
     GetTestCase_LM_END_BLOCK1(), function (value) {
     winston.info({message: `UNIT_TEST: LM_END_BLOCK1 BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + decToHex(value.Data1,2) + "00000000" + ";";
-    var decode = cbusLib.decode(expected);
+    expected = ":SAF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + decToHex(value.Data1,2) + "00000000" + ";";
+    encode = cbusLib.encodeLM_END_BLOCK1(value.channel, value.Data1)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -7839,16 +7841,18 @@ describe('cbusMessage tests', function(){
   itParam(`LM_END_BLOCK2 test`, 
     GetTestCase_LM_END_BLOCK2(), function (value) {
     winston.info({message: `UNIT_TEST: LM_END_BLOCK2 BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N"
+    expected = ":SAF60N"
       + value.opCode
       + decToHex(value.command,2)
       + decToHex(value.channel,2) 
       + decToHex(value.Data1,2) 
       + decToHex(value.Data2,2) 
       + "000000" + ";";
-    var decode = cbusLib.decode(expected);
+    encode = cbusLib.encodeLM_END_BLOCK2(value.channel, value.Data1, value.Data2)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -7902,7 +7906,7 @@ describe('cbusMessage tests', function(){
   itParam(`LM_END_BLOCK3 test`, 
     GetTestCase_LM_END_BLOCK3(), function (value) {
     winston.info({message: `UNIT_TEST: LM_END_BLOCK3 BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N"
+    expected = ":SAF60N"
       + value.opCode
       + decToHex(value.command,2)
       + decToHex(value.channel,2) 
@@ -7910,9 +7914,11 @@ describe('cbusMessage tests', function(){
       + decToHex(value.Data2,2) 
       + decToHex(value.Data3,2) 
       + "0000" + ";";
-    var decode = cbusLib.decode(expected);
+    encode = cbusLib.encodeLM_END_BLOCK3(value.channel, value.Data1, value.Data2, value.Data3)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -7973,7 +7979,7 @@ describe('cbusMessage tests', function(){
   itParam(`LM_END_BLOCK4 test`, 
     GetTestCase_LM_END_BLOCK4(), function (value) {
     winston.info({message: `UNIT_TEST: LM_END_BLOCK4 BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N"
+    expected = ":SAF60N"
       + value.opCode
       + decToHex(value.command,2)
       + decToHex(value.channel,2) 
@@ -7982,9 +7988,11 @@ describe('cbusMessage tests', function(){
       + decToHex(value.Data3,2) 
       + decToHex(value.Data4,2) 
       + "00" + ";";
-    var decode = cbusLib.decode(expected);
+    encode = cbusLib.encodeLM_END_BLOCK4(value.channel, value.Data1, value.Data2, value.Data3, value.Data4)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -8053,7 +8061,7 @@ describe('cbusMessage tests', function(){
   itParam(`LM_END_BLOCK5 test`, 
     GetTestCase_LM_END_BLOCK5(), function (value) {
     winston.info({message: `UNIT_TEST: LM_END_BLOCK5 BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N"
+    expected = ":SAF60N"
       + value.opCode
       + decToHex(value.command,2)
       + decToHex(value.channel,2) 
@@ -8062,9 +8070,11 @@ describe('cbusMessage tests', function(){
       + decToHex(value.Data3,2) 
       + decToHex(value.Data4,2) 
       + decToHex(value.Data5,2) + ";";
-    var decode = cbusLib.decode(expected);
+    encode = cbusLib.encodeLM_END_BLOCK5(value.channel, value.Data1, value.Data2, value.Data3, value.Data4, value.Data5)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -8109,16 +8119,18 @@ describe('cbusMessage tests', function(){
   itParam(`LM_END_MESSAGE test`, 
     GetTestCase_LM_END_MESSAGE(), function (value) {
     winston.info({message: `UNIT_TEST: LM_END_MESSAGE BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N" 
+    expected = ":SAF60N" 
       + value.opCode
       + decToHex(value.command,2)      
       + decToHex(value.channel,2) 
       + "00" 
       + decToHex(value.checksum,4)
       + "0000" + ";";
-    var decode = cbusLib.decode(expected);
+    encode = cbusLib.encodeLM_END_MESSAGE(value.channel, value.checksum)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -8165,7 +8177,7 @@ describe('cbusMessage tests', function(){
   itParam(`LM_START_MESSAGE test`, 
     GetTestCase_LM_START_MESSAGE(), function (value) {
     winston.info({message: `UNIT_TEST: LM_START_MESSAGE BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N" 
+    expected = ":SAF60N" 
       + value.opCode 
       + decToHex(value.command,2)      
       + decToHex(value.channel,2) 
@@ -8173,9 +8185,11 @@ describe('cbusMessage tests', function(){
       + "0000" 
       + decToHex(value.option_flags,2)
       + "00" + ";";
-    var decode = cbusLib.decode(expected);
+    encode = cbusLib.encodeLM_START_MESSAGE(value.channel, value.use, value.option_flags)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
