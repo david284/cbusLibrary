@@ -5453,6 +5453,90 @@ class cbusLibrary {
       output['text'] = JSON.stringify(output)
       return output
     }
+    //
+    encodeLM_DATA(channel, Data1, Data2, Data3, Data4, Data5, Data6) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(channel, 2)
+        + decToHex(Data1, 2) 
+        + decToHex(Data2, 2) 
+        + decToHex(Data3, 2) 
+        + decToHex(Data4, 2) 
+        + decToHex(Data5, 2) 
+        + decToHex(Data6, 2)
+        + ";";
+    }
+    //
+    encodeLM_USAGES(client_server, use, nodeNumber, option_flags, state) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(218,2)
+        + decToHex(client_server,2)
+        + decToHex(use,2) 
+        + decToHex(nodeNumber, 4) 
+        + decToHex(option_flags,2)
+        + decToHex(state,2) + ";";
+    }    
+    //
+    encodeLM_QUERY(nodeNumber) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(219,2) 
+        + "0000" 
+        + decToHex(nodeNumber, 4) 
+        + "0000" + ";";    
+    }    
+    //
+    encodeLM_REQUEST(channel, nodeNumber, option_flags) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(220,2) 
+        + decToHex(channel,2) 
+        + "00" + decToHex(nodeNumber, 4) 
+        + decToHex(option_flags,2) 
+        + "00" + ";";    
+    }    
+    //
+    encodeLM_START_BLOCK(channel) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(230,2) 
+        + decToHex(channel, 2) 
+        + "0000000000" + ";";    
+    }
+    //
+    encodeLM_END_BLOCK0(channel) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(231,2) 
+        + decToHex(channel, 2) 
+        + "0000000000" + ";";    
+    }
+    //
+    encodeLM_RELEASE_CHANNEL(channel) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(252,2) 
+        + decToHex(channel, 2) 
+        + "0000000000" + ";";    
+    }
+    //
+    encodeLM_CLAIM_CHANNEL(channel) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(253,2) 
+        + decToHex(channel, 2) 
+        + "0000000000" + ";";    
+    }
+    //
+    encodeLM_PROPOSE_CHANNEL(channel) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(254,2) 
+        + decToHex(channel, 2) 
+        + "0000000000" + ";";    
+    }
+
 
 
     // EF PARAMS

@@ -7504,7 +7504,7 @@ describe('cbusMessage tests', function(){
     GetTestCase_LM_DATA(), function (value) {
     winston.info({message: `UNIT_TEST: BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
     winston.info({message: `UNIT_TEST: BEGIN LM_DATA`});
-    expected = ":SBF60N" + value.opCode
+    expected = ":SAF60N" + value.opCode
       + decToHex(value.command,2) 
       + decToHex(value.Data1,2) 
       + decToHex(value.Data2,2) 
@@ -7512,9 +7512,11 @@ describe('cbusMessage tests', function(){
       + decToHex(value.Data4,2) 
       + decToHex(value.Data5,2) 
       + decToHex(value.Data6,2) + ";";
-    var decode = cbusLib.decode(expected);
+    var encode = cbusLib.encodeLM_DATA(value.command, value.Data1, value.Data2, value.Data3, value.Data4, value.Data5, value.Data6)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}` });
     winston.info({message: 'UNIT_TEST: LM_DATA decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -7574,18 +7576,17 @@ describe('cbusMessage tests', function(){
   itParam(`LM_USAGES test}`, 
     GetTestCase_LM_USAGES(), function (value) {
     winston.info({message: `UNIT_TEST: LM_USAGES BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N" + value.opCode + decToHex(value.command,2)
+    expected = ":SAF60N" + value.opCode + decToHex(value.command,2)
      + decToHex(value.client_server,2)
      + decToHex(value.use,2) 
      + decToHex(value.nodeNumber, 4) 
      + decToHex(value.option_flags,2)
      + decToHex(value.state,2) + ";";
-    //var encode = cbusLib.encodeDTXC_SEQ0(value.streamIdentifier, value.sequenceNumber, value.messageLength, value.CRC16, value.flags)
-    var decode = cbusLib.decode(expected);
-    //winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-    //expect(encode).to.equal(expected, 'encode');
+    var encode = cbusLib.encodeLM_USAGES(value.client_server, value.use, value.nodeNumber, value.option_flags, value.state)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -7625,13 +7626,12 @@ describe('cbusMessage tests', function(){
   itParam(`LM_QUERY test}`, 
     GetTestCase_LM_QUERY(), function (value) {
     winston.info({message: `UNIT_TEST: LM_QUERY BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + "0000" + decToHex(value.nodeNumber, 4) + "0000" + ";";
-    //var encode = cbusLib.encodeDTXC_SEQ0(value.streamIdentifier, value.sequenceNumber, value.messageLength, value.CRC16, value.flags)
-    var decode = cbusLib.decode(expected);
-    //winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-    //expect(encode).to.equal(expected, 'encode');
+    expected = ":SAF60N" + value.opCode + decToHex(value.command,2) + "0000" + decToHex(value.nodeNumber, 4) + "0000" + ";";
+    var encode = cbusLib.encodeLM_QUERY(value.nodeNumber)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -7678,12 +7678,12 @@ describe('cbusMessage tests', function(){
   itParam(`LM_REQUEST test`, 
     GetTestCase_LM_REQUEST(), function (value) {
     winston.info({message: `UNIT_TEST: LM_REQUEST BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + "00" + decToHex(value.nodeNumber, 4) + decToHex(value.option_flags,2) + "00" + ";";
-    var decode = cbusLib.decode(expected);
-    //winston.info({message: 'cbusMessage test: ' + value.mnemonic +' encode ' + encode});
-    //expect(encode).to.equal(expected, 'encode');
+    expected = ":SAF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + "00" + decToHex(value.nodeNumber, 4) + decToHex(value.option_flags,2) + "00" + ";";
+    var encode = cbusLib.encodeLM_REQUEST(value.channel, value.nodeNumber, value.option_flags)
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
@@ -7727,10 +7727,29 @@ describe('cbusMessage tests', function(){
   itParam(`LM_CHANNEL_COMMANDS test`, 
     GetTestCase_LM_CHANNEL_COMMANDS(), function (value) {
     winston.info({message: `UNIT_TEST: LM_CHANNEL_COMMANDS BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SBF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + "0000000000" + ";";
-    var decode = cbusLib.decode(expected);
+    expected = ":SAF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + "0000000000" + ";";
+    let encode =""
+    switch (value.command){
+      case 230:
+        encode = cbusLib.encodeLM_START_BLOCK(value.channel)
+        break;
+      case 231:
+        encode = cbusLib.encodeLM_END_BLOCK0(value.channel)
+        break;
+      case 252:
+        encode = cbusLib.encodeLM_RELEASE_CHANNEL(value.channel)
+        break;
+      case 253:
+        encode = cbusLib.encodeLM_CLAIM_CHANNEL(value.channel)
+        break;
+      case 254:
+        encode = cbusLib.encodeLM_PROPOSE_CHANNEL(value.channel)
+        break;
+    }
+    var decode = cbusLib.decode(encode);
+    winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
-    winston.info({message: 'UNIT_TEST: decode text ' + decode.text});
+    expect(encode).to.equal(expected, 'encode');
     expect(decode.encoded).to.equal(expected, 'encoded');
     expect(decode.ID_TYPE).to.equal('S', 'ID_TYPE');
     expect(decode.mnemonic).to.equal(value.mnemonic, 'mnemonic');
