@@ -5450,7 +5450,13 @@ class cbusLibrary {
             break;
         }
       }
-      output['text'] = JSON.stringify(output)
+      // create copy
+      var textElement = JSON.parse(JSON.stringify(output))
+      delete textElement.encoded
+      delete textElement.ID_TYPE
+      delete textElement.mnemonic
+      delete textElement.opCode
+      output['text'] = output.mnemonic + ' (' + output.opCode + ') ' + JSON.stringify(textElement)
       return output
     }
     //

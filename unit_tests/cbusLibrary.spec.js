@@ -7528,6 +7528,8 @@ describe('cbusMessage tests', function(){
     expect(decode.Data4).to.equal(value.Data4, 'Data4');
     expect(decode.Data5).to.equal(value.Data5, 'Data5');
     expect(decode.Data6).to.equal(value.Data6, 'Data6');
+    expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
+    expect(decode.text).to.include(value.opCode, 'text opCode');
     winston.info({message: `UNIT_TEST: END LM_DATA`});
   })
 
@@ -7599,7 +7601,6 @@ describe('cbusMessage tests', function(){
     expect(decode.state).to.equal(value.state, 'state');
     expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
     expect(decode.text).to.include(value.opCode, 'text opCode');
-    expect(decode.text).to.include(decToHex(value.nodeNumber,4), 'text nodeNumber');
     winston.info({message: `UNIT_TEST: LM_USAGES END`});
   })
 
@@ -7640,7 +7641,6 @@ describe('cbusMessage tests', function(){
     expect(decode.command).to.equal("QUERY", 'command');
     expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
     expect(decode.text).to.include(value.opCode, 'text opCode');
-    expect(decode.text).to.include(decToHex(value.nodeNumber,4), 'text nodeNumber');
     winston.info({message: `UNIT_TEST: LM_QUERY END`});
   })
 
