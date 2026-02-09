@@ -5431,6 +5431,7 @@ class cbusLibrary {
             output['command'] = "START_MESSAGE"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['use'] = parseInt(message.substr(13, 2), 16)
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
             output['option_flags'] = parseInt(message.substr(19, 2), 16)
             break;
           case 252:
@@ -5493,12 +5494,13 @@ class cbusLibrary {
         + "0000" + ";";    
     }    
     //
-    encodeLM_REQUEST(channel, nodeNumber, option_flags) {
+    encodeLM_REQUEST(channel, use, nodeNumber, option_flags) {
       return this.header({MinPri: 2})
         + 'EA'
         + decToHex(220,2) 
         + decToHex(channel,2) 
-        + "00" + decToHex(nodeNumber, 4) 
+        + decToHex(use,2)
+        + decToHex(nodeNumber, 4) 
         + decToHex(option_flags,2) 
         + "00" + ";";    
     }    
@@ -5608,13 +5610,13 @@ class cbusLibrary {
       + "0000" + ";";
     }    
     //
-    encodeLM_START_MESSAGE(channel, use, option_flags) {
+    encodeLM_START_MESSAGE(channel, use, nodeNumber, option_flags) {
       return this.header({MinPri: 2})
         + 'EA'
       + decToHex(239,2)      
       + decToHex(channel,2) 
       + decToHex(use,2) 
-      + "0000" 
+      + decToHex(nodeNumber, 4) 
       + decToHex(option_flags,2)
       + "00" + ";";
     }    

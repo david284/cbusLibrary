@@ -7655,18 +7655,24 @@ describe('cbusMessage tests', function(){
       for (a2 = 1; a2 < 4; a2++) {
         if (a2 == 1) arg2 = 0;
         if (a2 == 2) arg2 = 1;
-        if (a2 == 3) arg2 = 65535;
+        if (a2 == 3) arg2 = 255;
         for (a3 = 1; a3 < 4; a3++) {
           if (a3 == 1) arg3 = 0;
           if (a3 == 2) arg3 = 1;
-          if (a3 == 3) arg3 = 255;
-          testCases.push({'mnemonic':'LM',
-            'command':220,  // LM_REQUEST command
-            'opCode':'EA', 
-            'channel':arg1,
-            'nodeNumber':arg2,
-            'option_flags':arg3
-          })
+          if (a3 == 3) arg3 = 65535;
+          for (a4 = 1; a4 < 4; a4++) {
+            if (a4 == 1) arg4 = 0;
+            if (a4 == 2) arg4 = 1;
+            if (a4 == 3) arg4 = 255;
+            testCases.push({'mnemonic':'LM',
+                'command':220,  // LM_REQUEST command
+                'opCode':'EA', 
+                'channel':arg1,
+                'use':arg2,
+                'nodeNumber':arg3,
+                'option_flags':arg4
+            })
+          }
         }
       }
     }
@@ -7678,8 +7684,8 @@ describe('cbusMessage tests', function(){
   itParam(`LM_REQUEST test`, 
     GetTestCase_LM_REQUEST(), function (value) {
     winston.info({message: `UNIT_TEST: LM_REQUEST BEGIN ${value.mnemonic} : ${JSON.stringify(value)}`});
-    expected = ":SAF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + "00" + decToHex(value.nodeNumber, 4) + decToHex(value.option_flags,2) + "00" + ";";
-    var encode = cbusLib.encodeLM_REQUEST(value.channel, value.nodeNumber, value.option_flags)
+    expected = ":SAF60N" + value.opCode + decToHex(value.command,2) + decToHex(value.channel,2) + decToHex(value.use,2) + decToHex(value.nodeNumber, 4) + decToHex(value.option_flags,2) + "00" + ";";
+    var encode = cbusLib.encodeLM_REQUEST(value.channel, value.use, value.nodeNumber, value.option_flags)
     var decode = cbusLib.decode(encode);
     winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
@@ -7690,6 +7696,7 @@ describe('cbusMessage tests', function(){
     expect(decode.opCode).to.equal(value.opCode, 'opCode');
     expect(decode.command).to.equal("REQUEST", 'command');
     expect(decode.channel).to.equal(value.channel, 'channel');
+    expect(decode.use).to.equal(value.use, 'use');
     expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
     expect(decode.option_flags).to.equal(value.option_flags, 'option_flags');
     expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
@@ -8158,14 +8165,20 @@ describe('cbusMessage tests', function(){
         for (a3 = 1; a3 < 4; a3++) {
           if (a3 == 1) arg3 = 0;
           if (a3 == 2) arg3 = 1;
-          if (a3 == 3) arg3 = 255;
-          testCases.push({'mnemonic':'LM',
-            'command':239,    // START_MESSAGE
-            'opCode':'EA', 
-            'channel':arg1,
-            'use': arg2,
-            'option_flags':arg3
-          })
+          if (a3 == 3) arg3 = 65535;
+          for (a4 = 1; a4 < 4; a4++) {
+            if (a4 == 1) arg4 = 0;
+            if (a4 == 2) arg4 = 1;
+            if (a4 == 3) arg4 = 255;
+            testCases.push({'mnemonic':'LM',
+                'command':239,    // START_MESSAGE
+                'opCode':'EA', 
+                'channel':arg1,
+                'use': arg2,
+                'nodeNumber':arg3,
+                'option_flags':arg4
+            })
+            }
         }
       }
     }
@@ -8182,10 +8195,12 @@ describe('cbusMessage tests', function(){
       + decToHex(value.command,2)      
       + decToHex(value.channel,2) 
       + decToHex(value.use,2) 
-      + "0000" 
+      + decToHex(value.nodeNumber,4) 
       + decToHex(value.option_flags,2)
       + "00" + ";";
-    encode = cbusLib.encodeLM_START_MESSAGE(value.channel, value.use, value.option_flags)
+    winston.info({message: `UNIT_TEST: ${value.mnemonic} expected ${expected}` });
+    encode = cbusLib.encodeLM_START_MESSAGE(value.channel, value.use, value.nodeNumber, value.option_flags)
+    winston.info({message: `UNIT_TEST: ${value.mnemonic}  encoded ${encode}` });
     var decode = cbusLib.decode(encode);
     winston.info({message: `UNIT_TEST: encode ${encode}`});
     winston.info({message: 'UNIT_TEST: ' + value.mnemonic +' decode ' + JSON.stringify(decode)});
@@ -8197,6 +8212,7 @@ describe('cbusMessage tests', function(){
     expect(decode.command).to.equal("START_MESSAGE", 'command');
     expect(decode.channel).to.equal(value.channel, 'channel');
     expect(decode.use).to.equal(value.use, 'use');
+    expect(decode.nodeNumber).to.equal(value.nodeNumber, 'nodeNumber');
     expect(decode.option_flags).to.equal(value.option_flags, 'option_flags');
     expect(decode.text).to.include(value.mnemonic, 'text mnemonic');
     expect(decode.text).to.include(value.opCode, 'text opCode');
