@@ -5344,10 +5344,10 @@ class cbusLibrary {
       output['ID_TYPE'] = 'S'
       output['mnemonic'] = 'LM'
       output['opCode'] = message.substr(7, 2)
-      var MessageData1 = parseInt(message.substr(9, 2), 16)
-      if (MessageData1 == 0){
+      var MessageByte1 = parseInt(message.substr(9, 2), 16)
+      if (MessageByte1 == 0){
         output['command'] = "INVALID_VALUE(0)"
-      } else if (MessageData1 < 200){
+      } else if ((MessageByte1 > 0) && (MessageByte1 < 200)){
         // channel data 1 to 199
         output['command'] = "DATA"
         output['channel'] = parseInt(message.substr(9, 2), 16)
@@ -5359,62 +5359,70 @@ class cbusLibrary {
         output['Data6'] = parseInt(message.substr(21, 2), 16)       
       } else {
         // commands 200 to 255
-        switch (MessageData1){
-          case 218:
-            output['command'] = "USAGES"
-            output['client_server'] = parseInt(message.substr(11, 2), 16)
-            output['use'] = parseInt(message.substr(13, 2), 16)
-            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
-            output['option_flags'] = parseInt(message.substr(19, 2), 16)
-            output['state'] = parseInt(message.substr(21, 2), 16)
-            break;
-          case 219:
-            output['command'] = "QUERY"
+        switch (MessageByte1){
+          case 200:
+            output['command'] = "PROPOSE_CHANNEL"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
             output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
             break;
-          case 220:
+          case 201:
+            output['command'] = "INUSE_CHANNEL"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            break;
+          case 202:
+            output['command'] = "CLAIM_CHANNEL"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            break;
+          case 203:
+            output['command'] = "RELEASE_CHANNEL"
+            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            break;
+          case 205:
             output['command'] = "REQUEST"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['use'] = parseInt(message.substr(13, 2), 16)
             output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
             output['option_flags'] = parseInt(message.substr(19, 2), 16)
+            output['request_number'] = parseInt(message.substr(21, 2), 16)
             break;
-          case 230:
-            output['command'] = "START_BLOCK"
+          case 210:
+            output['command'] = "START_MESSAGE"
             output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['use'] = parseInt(message.substr(13, 2), 16)
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            output['option_flags'] = parseInt(message.substr(19, 2), 16)
             break;
-          case 231:
-            output['command'] = "END_BLOCK0"
-            output['channel'] = parseInt(message.substr(11, 2), 16)
-            break;
-          case 232:
-            output['command'] = "END_BLOCK1"
+          case 211:
+            output['command'] = "LAST_DATA1"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['Data1'] = parseInt(message.substr(13, 2), 16)
             break;
-          case 233:
-            output['command'] = "END_BLOCK2"
+          case 212:
+            output['command'] = "LAST_DATA2"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['Data1'] = parseInt(message.substr(13, 2), 16)
             output['Data2'] = parseInt(message.substr(15, 2), 16)
             break;
-          case 234:
-            output['command'] = "END_BLOCK3"
+          case 213:
+            output['command'] = "LAST_DATA3"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['Data1'] = parseInt(message.substr(13, 2), 16)
             output['Data2'] = parseInt(message.substr(15, 2), 16)
             output['Data3'] = parseInt(message.substr(17, 2), 16)
             break;
-          case 235:
-            output['command'] = "END_BLOCK4"
+          case 214:
+            output['command'] = "LAST_DATA4"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['Data1'] = parseInt(message.substr(13, 2), 16)
             output['Data2'] = parseInt(message.substr(15, 2), 16)
             output['Data3'] = parseInt(message.substr(17, 2), 16)
             output['Data4'] = parseInt(message.substr(19, 2), 16)
             break;
-          case 236:
-            output['command'] = "END_BLOCK5"
+          case 215:
+            output['command'] = "LAST_DATA5"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['Data1'] = parseInt(message.substr(13, 2), 16)
             output['Data2'] = parseInt(message.substr(15, 2), 16)
@@ -5422,29 +5430,22 @@ class cbusLibrary {
             output['Data4'] = parseInt(message.substr(19, 2), 16)
             output['Data5'] = parseInt(message.substr(21, 2), 16)
             break;
-          case 238:
+          case 219:
             output['command'] = "END_MESSAGE"
             output['channel'] = parseInt(message.substr(11, 2), 16)
             output['checksum'] = parseInt(message.substr(15, 4), 16)
             break;
-          case 239:
-            output['command'] = "START_MESSAGE"
-            output['channel'] = parseInt(message.substr(11, 2), 16)
+          case 220:
+            output['command'] = "QUERY"
+            output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
+            break;
+          case 221:
+            output['command'] = "USAGES"
+            output['client_server'] = parseInt(message.substr(11, 2), 16)
             output['use'] = parseInt(message.substr(13, 2), 16)
             output['nodeNumber'] = parseInt(message.substr(15, 4), 16)
             output['option_flags'] = parseInt(message.substr(19, 2), 16)
-            break;
-          case 252:
-            output['command'] = "RELEASE_CHANNEL"
-            output['channel'] = parseInt(message.substr(11, 2), 16)
-            break;
-          case 253:
-            output['command'] = "CLAIM_CHANNEL"
-            output['channel'] = parseInt(message.substr(11, 2), 16)
-            break;
-          case 254:
-            output['command'] = "PROPOSE_CHANNEL"
-            output['channel'] = parseInt(message.substr(11, 2), 16)
+            output['state'] = parseInt(message.substr(21, 2), 16)
             break;
           default:
             output['command'] = "UNKNOWN_COMMAND"
@@ -5473,88 +5474,113 @@ class cbusLibrary {
         + decToHex(Data6, 2)
         + ";";
     }
+    // PROPOSE (200)
     //
-    encodeLM_USAGES(client_server, use, nodeNumber, option_flags, state) {
+    encodeLM_PROPOSE_CHANNEL(channel, nodeNumber) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(218,2)
-        + decToHex(client_server,2)
-        + decToHex(use,2) 
-        + decToHex(nodeNumber, 4) 
-        + decToHex(option_flags,2)
-        + decToHex(state,2) + ";";
-    }    
-    //
-    encodeLM_QUERY(nodeNumber) {
-      return this.header({MinPri: 2})
-        + 'EA'
-        + decToHex(219,2) 
-        + "0000" 
+        + decToHex(200,2) 
+        + decToHex(channel, 2) 
+        + "00"
         + decToHex(nodeNumber, 4) 
         + "0000" + ";";    
-    }    
+    }
+    // INUSE (201)
     //
-    encodeLM_REQUEST(channel, use, nodeNumber, option_flags) {
+    encodeLM_INUSE_CHANNEL(channel, nodeNumber) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(220,2) 
+        + decToHex(201,2) 
+        + decToHex(channel, 2) 
+        + "00"
+        + decToHex(nodeNumber, 4) 
+        + "0000" + ";";    
+    }
+    // CLAIM (202)
+    //
+    encodeLM_CLAIM_CHANNEL(channel, nodeNumber) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(202,2) 
+        + decToHex(channel, 2) 
+        + "00"
+        + decToHex(nodeNumber, 4) 
+        + "0000" + ";";    
+    }
+    // RELEASE (203)
+    //
+    encodeLM_RELEASE_CHANNEL(channel, nodeNumber) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(203,2) 
+        + decToHex(channel, 2) 
+        + "00"
+        + decToHex(nodeNumber, 4) 
+        + "0000" + ";";    
+    }
+    // REQUEST (205)
+    //
+    encodeLM_REQUEST(channel, use, nodeNumber, option_flags, request_number) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(205,2) 
         + decToHex(channel,2) 
         + decToHex(use,2)
         + decToHex(nodeNumber, 4) 
         + decToHex(option_flags,2) 
-        + "00" + ";";    
+        + decToHex(request_number,2) + ";";    
     }    
+    // START_MESSAGE (210)
     //
-    encodeLM_START_BLOCK(channel) {
+    encodeLM_START_MESSAGE(channel, use, nodeNumber, option_flags) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(230,2) 
-        + decToHex(channel, 2) 
-        + "0000000000" + ";";    
-    }
+      + decToHex(210,2)      
+      + decToHex(channel,2) 
+      + decToHex(use,2) 
+      + decToHex(nodeNumber, 4) 
+      + decToHex(option_flags,2)
+      + "00" + ";";
+    }    
+    // LAST_DATA1 (211)
     //
-    encodeLM_END_BLOCK0(channel) {
+    encodeLM_LAST_DATA1(channel, Data1) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(231,2) 
-        + decToHex(channel, 2) 
-        + "0000000000" + ";";    
-    }
-    //
-    encodeLM_END_BLOCK1(channel, Data1) {
-      return this.header({MinPri: 2})
-        + 'EA'
-        + decToHex(232,2) 
+        + decToHex(211,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
         + "00000000" + ";";    
     }
+    // LAST_DATA2 (212)
     //
-    encodeLM_END_BLOCK2(channel, Data1, Data2) {
+    encodeLM_LAST_DATA2(channel, Data1, Data2) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(233,2) 
+        + decToHex(212,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
         + decToHex(Data2, 2) 
         + "000000" + ";";    
     }
+    // LAST_DATA3 (213)
     //
-    encodeLM_END_BLOCK3(channel, Data1, Data2, Data3) {
+    encodeLM_LAST_DATA3(channel, Data1, Data2, Data3) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(234,2) 
+        + decToHex(213,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
         + decToHex(Data2, 2) 
         + decToHex(Data3, 2) 
         + "0000" + ";";    
     }
+    // LAST_DATA4 (214)
     //
-    encodeLM_END_BLOCK4(channel, Data1, Data2, Data3, Data4) {
+    encodeLM_LAST_DATA4(channel, Data1, Data2, Data3, Data4) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(235,2) 
+        + decToHex(214,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
         + decToHex(Data2, 2)
@@ -5562,11 +5588,12 @@ class cbusLibrary {
         + decToHex(Data4, 2) 
         + "00" + ";";    
     }
+    // LAST_DATA5 (215)
     //
-    encodeLM_END_BLOCK5(channel, Data1, Data2, Data3, Data4, Data5) {
+    encodeLM_LAST_DATA5(channel, Data1, Data2, Data3, Data4, Data5) {
       return this.header({MinPri: 2})
         + 'EA'
-        + decToHex(236,2) 
+        + decToHex(215,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
         + decToHex(Data2, 2)
@@ -5575,51 +5602,40 @@ class cbusLibrary {
         + decToHex(Data5, 2) 
         + ";";    
     }
-    //
-    encodeLM_RELEASE_CHANNEL(channel) {
-      return this.header({MinPri: 2})
-        + 'EA'
-        + decToHex(252,2) 
-        + decToHex(channel, 2) 
-        + "0000000000" + ";";    
-    }
-    //
-    encodeLM_CLAIM_CHANNEL(channel) {
-      return this.header({MinPri: 2})
-        + 'EA'
-        + decToHex(253,2) 
-        + decToHex(channel, 2) 
-        + "0000000000" + ";";    
-    }
-    //
-    encodeLM_PROPOSE_CHANNEL(channel) {
-      return this.header({MinPri: 2})
-        + 'EA'
-        + decToHex(254,2) 
-        + decToHex(channel, 2) 
-        + "0000000000" + ";";    
-    }
+    // END_MESSAGE (219)
     //
     encodeLM_END_MESSAGE(channel, checksum) {
       return this.header({MinPri: 2})
         + 'EA'
-      + decToHex(238,2)      
+      + decToHex(219,2)      
       + decToHex(channel,2) 
       + "00" 
       + decToHex(checksum,4)
       + "0000" + ";";
-    }    
+    }
+    // QUERY (220)
     //
-    encodeLM_START_MESSAGE(channel, use, nodeNumber, option_flags) {
+    encodeLM_QUERY(nodeNumber) {
       return this.header({MinPri: 2})
         + 'EA'
-      + decToHex(239,2)      
-      + decToHex(channel,2) 
-      + decToHex(use,2) 
-      + decToHex(nodeNumber, 4) 
-      + decToHex(option_flags,2)
-      + "00" + ";";
+        + decToHex(220,2) 
+        + "0000" 
+        + decToHex(nodeNumber, 4) 
+        + "0000" + ";";    
+    }
+    // USAGES (221)
+    //
+    encodeLM_USAGES(client_server, use, nodeNumber, option_flags, state) {
+      return this.header({MinPri: 2})
+        + 'EA'
+        + decToHex(221,2)
+        + decToHex(client_server,2)
+        + decToHex(use,2) 
+        + decToHex(nodeNumber, 4) 
+        + decToHex(option_flags,2)
+        + decToHex(state,2) + ";";
     }    
+    //
 
 
 
