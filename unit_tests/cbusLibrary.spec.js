@@ -249,8 +249,8 @@ describe('cbusMessage tests', function(){
 		testCases.push({'test':{'mnemonic': 'STAT', 'nodeNumber':'1', 'CS':'2', 'flags':'3', 'major':'4', 'minor':'5', 'build':'6'}, 'expected': ':SAF60NE300010203040506;'});
 		testCases.push({'test':{'mnemonic': 'ENACK', 'nodeNumber':'1', 'ackOpCode':'02', 'eventIdentifier':'00000003'}, 'expected': ':SAF60NE600010200000003;'});
 		testCases.push({'test':{'mnemonic': 'ESD', 'nodeNumber':'1', 'ServiceIndex':'2', 'ServiceType':'3', 'Data1':'4', 'Data2':'5', 'Data3':'6'}, 'expected': ':SAF60NE700010203040506;'});
-		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'0', 'messageLength':'3', 'CRC16':'4', 'flags':'5'}, 'expected': ':SBF60NE901000003000405;'});
-		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'1', 'sequenceNumber':'255', 'Data1':'3', 'Data2':'4', 'Data3':'5', 'Data4':'6', 'Data5':'7'}, 'expected': ':SBF60NE901FF0304050607;'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'235', 'sequenceNumber':'0', 'messageLength':'3', 'CRC16':'4', 'flags':'5'}, 'expected': ':SBF60NE9EB000003000405;'});
+		testCases.push({'test':{'mnemonic': 'DTXC', 'streamIdentifier':'255', 'sequenceNumber':'255', 'Data1':'3', 'Data2':'4', 'Data3':'5', 'Data4':'6', 'Data5':'7'}, 'expected': ':SBF60NE9FFFF0304050607;'});
 		testCases.push({'test':{'mnemonic': 'PARAMS', 'param1': '1', 'param2':'2', 'param3':'3', 'param4':'4', 'param5':'5', 'param6':'6', 'param7':'7'}, 'expected': ':SBF60NEF01020304050607;'});
 		testCases.push({'test':{'mnemonic': 'ACON3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SBF60NF000010002030405;'});
 		testCases.push({'test':{'mnemonic': 'ACOF3', 'nodeNumber': '1', 'eventNumber':'2', 'data1':'3', 'data2':'4', 'data3':'5'}, 'expected': ':SBF60NF100010002030405;'});
@@ -5983,8 +5983,8 @@ describe('cbusMessage tests', function(){
   function GetTestCase_DTXC_0 () {
     var testCases = [];
     for (a1 = 1; a1 < 4; a1++) {
-      if (a1 == 1) arg1 = 0;
-      if (a1 == 2) arg1 = 1;
+      if (a1 == 1) arg1 = 235;
+      if (a1 == 2) arg1 = 236;
       if (a1 == 3) arg1 = 255;
       for (a2 = 1; a2 < 4; a2++) {
         if (a2 == 1) arg2 = 0;
@@ -6041,8 +6041,8 @@ describe('cbusMessage tests', function(){
   function GetTestCase_DTXC_1 () {
     var testCases = [];
     for (a1 = 1; a1 < 4; a1++) {
-      if (a1 == 1) arg1 = 0;
-      if (a1 == 2) arg1 = 1;
+      if (a1 == 1) arg1 = 235;
+      if (a1 == 2) arg1 = 236;
       if (a1 == 3) arg1 = 255;
       for (a2 = 1; a2 < 4; a2++) {
         if (a2 == 1) arg2 = 1;      // sequence number
