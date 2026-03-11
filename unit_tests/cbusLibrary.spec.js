@@ -5983,8 +5983,8 @@ describe('cbusMessage tests', function(){
   function GetTestCase_DTXC_0 () {
     var testCases = [];
     for (a1 = 1; a1 < 4; a1++) {
-      if (a1 == 1) arg1 = 235;
-      if (a1 == 2) arg1 = 236;
+      if (a1 == 1) arg1 = 0;
+      if (a1 == 2) arg1 = 1;
       if (a1 == 3) arg1 = 255;
       for (a2 = 1; a2 < 4; a2++) {
         if (a2 == 1) arg2 = 0;
@@ -6041,8 +6041,8 @@ describe('cbusMessage tests', function(){
   function GetTestCase_DTXC_1 () {
     var testCases = [];
     for (a1 = 1; a1 < 4; a1++) {
-      if (a1 == 1) arg1 = 235;
-      if (a1 == 2) arg1 = 236;
+      if (a1 == 1) arg1 = 0;
+      if (a1 == 2) arg1 = 1;
       if (a1 == 3) arg1 = 255;
       for (a2 = 1; a2 < 4; a2++) {
         if (a2 == 1) arg2 = 1;      // sequence number

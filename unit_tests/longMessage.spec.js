@@ -67,7 +67,7 @@ describe('longMessage tests', function(){
       if (a1 == 3) arg1 = 234, arg2 = "UNKNOWN_COMMAND";
       testCases.push({'mnemonic':'LM',
                     'command':arg1,  // Usages command
-                    'opCode':'E9',
+                    'opCode':'EA',
                     "expected":arg2
       })
     }
@@ -126,7 +126,7 @@ describe('longMessage tests', function(){
                   if (a7 == 3) arg7 = 255;
                   testCases.push({'mnemonic':'LM',
                     'command':arg1,  // channel number
-                    'opCode':'E9',
+                    'opCode':'EA',
                     "Data1": arg2,
                     "Data2": arg3,
                     "Data3": arg4,
@@ -199,7 +199,7 @@ describe('longMessage tests', function(){
           if (a4 == 3) arg4 = 65535;
           testCases.push({'mnemonic':'LM',
             'command':arg1,
-            'opCode':'E9', 
+            'opCode':'EA', 
             'channel':arg2,
             'CMD_TXT': arg3,
             'nodeNumber': arg4
@@ -275,7 +275,7 @@ describe('longMessage tests', function(){
             if (a4 == 3) arg4 = 255;
             testCases.push({'mnemonic':'LM',
                 'command':205,  // LM_REQUEST command
-                'opCode':'E9', 
+                'opCode':'EA', 
                 'channel':arg1,
                 'use':arg2,
                 'nodeNumber':arg3,
@@ -335,7 +335,7 @@ describe('longMessage tests', function(){
             if (a4 == 3) arg4 = 255;
             testCases.push({'mnemonic':'LM',
                 'command':210,    // START_MESSAGE
-                'opCode':'E9', 
+                'opCode':'EA', 
                 'channel':arg1,
                 'use': arg2,
                 'nodeNumber':arg3,
@@ -396,7 +396,7 @@ describe('longMessage tests', function(){
         if (a2 == 3) arg2 = 255;
         testCases.push({'mnemonic':'LM',
           'command':211,
-          'opCode':'E9', 
+          'opCode':'EA', 
           'channel':arg1,
           'Data1': arg2
         })
@@ -446,7 +446,7 @@ describe('longMessage tests', function(){
           if (a3 == 3) arg3 = 255;
           testCases.push({'mnemonic':'LM',
             'command':212,
-            'opCode':'E9', 
+            'opCode':'EA', 
             'channel':arg1,
             'Data1': arg2,
             'Data2': arg3
@@ -509,7 +509,7 @@ describe('longMessage tests', function(){
             if (a4 == 3) arg4 = 255;
             testCases.push({'mnemonic':'LM',
               'command':213,
-              'opCode':'E9', 
+              'opCode':'EA', 
               'channel':arg1,
               'Data1': arg2,
               'Data2': arg3,
@@ -580,7 +580,7 @@ describe('longMessage tests', function(){
               if (a5 == 3) arg5 = 255;
               testCases.push({'mnemonic':'LM',
                 'command':214,
-                'opCode':'E9', 
+                'opCode':'EA', 
                 'channel':arg1,
                 'Data1': arg2,
                 'Data2': arg3,
@@ -660,7 +660,7 @@ describe('longMessage tests', function(){
                 if (a6 == 3) arg6 = 255;
                 testCases.push({'mnemonic':'LM',
                   'command':215,
-                  'opCode':'E9', 
+                  'opCode':'EA', 
                   'channel':arg1,
                   'Data1': arg2,
                   'Data2': arg3,
@@ -726,7 +726,7 @@ describe('longMessage tests', function(){
         if (a2 == 3) arg2 = 65535;
         testCases.push({'mnemonic':'LM',
           'command':219,    // END_MESSAGE
-          'opCode':'E9', 
+          'opCode':'EA', 
           'channel':arg1,
           'checksum': arg2
         })
@@ -774,7 +774,7 @@ describe('longMessage tests', function(){
       if (a1 == 3) arg1 = 65535;
       testCases.push({'mnemonic':'LM',
                     'command':220,  // query command
-                    'opCode':'E9', 
+                    'opCode':'EA', 
                     'nodeNumber':arg1
       })
     }
@@ -829,7 +829,7 @@ describe('longMessage tests', function(){
               if (a5 == 3) arg5 = 255;
               testCases.push({'mnemonic':'LM',
                 'command':221,  // Usages command
-                'opCode':'E9', 
+                'opCode':'EA', 
                 'client_server':arg1,
                 'use':arg2,
                 'nodeNumber':arg3,

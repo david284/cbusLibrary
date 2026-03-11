@@ -603,14 +603,12 @@ class cbusLibrary {
             break;
         // E8 reserved
         case 'E9':
-              return this.decodeLM(message);
+              return this.decodeDTXC(message);
               break;
-        /*
         case 'EA':
               return this.decodeLM(message);
               break;
-        */
-        // EA - EE reserved
+        // EB - EE reserved
         case 'EF':
             return this.decodePARAMS(message);
             break;
@@ -3309,7 +3307,7 @@ class cbusLibrary {
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
                 'text': "WCVB (83) session " + parseInt(message.substr(9, 2), 16) + 
-					" CV " + parseInt(message.substr(11, 2), 16) +
+					" CV " + parseInt(message.substr(11, 4), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
     }
@@ -3338,7 +3336,7 @@ class cbusLibrary {
                 'CV': parseInt(message.substr(11, 4), 16),
                 'mode': parseInt(message.substr(15, 2), 16),
                 'text': "QCVS (84) session " + parseInt(message.substr(9, 2), 16) + 
-					" CV " + parseInt(message.substr(11, 2), 16) +
+					" CV " + parseInt(message.substr(11, 4), 16) +
 					" mode " + parseInt(message.substr(15, 2), 16)
         }
     }
@@ -3367,7 +3365,7 @@ class cbusLibrary {
                 'CV': parseInt(message.substr(11, 4), 16),
                 'value': parseInt(message.substr(15, 2), 16),
                 'text': "PCVS (85) session " + parseInt(message.substr(9, 2), 16) + 
-					" CV " + parseInt(message.substr(11, 2), 16) +
+					" CV " + parseInt(message.substr(11, 4), 16) +
 					" value " + parseInt(message.substr(15, 2), 16)
         }
     }
@@ -5285,8 +5283,61 @@ class cbusLibrary {
                                             decToHex(Data3, 2) + ';'
     }
     
-    // E9 - LM (long message)
-    // also legacy support for DTXC (RFC0005)
+    // E9 - DTXC (RFC0005)
+    //
+    decodeDTXC(message) {
+      var output = {}
+      output['encoded'] = message
+      output['ID_TYPE'] = 'S'
+      output['mnemonic'] = 'DTXC'     // replace LM with DTXC
+      output['opCode'] = message.substr(7, 2)
+      output['streamIdentifier'] = parseInt(message.substr(9, 2), 16)
+        output['sequenceNumber'] = parseInt(message.substr(11, 2), 16)
+        if (output.sequenceNumber == 0) {
+            output['messageLength'] = parseInt(message.substr(13, 4), 16)
+            output['CRC16'] = parseInt(message.substr(17, 4), 16)
+            output['flags'] = parseInt(message.substr(21, 2), 16)
+        } else {
+            output['Data1'] = parseInt(message.substr(13, 2), 16)
+            output['Data2'] = parseInt(message.substr(15, 2), 16)
+            output['Data3'] = parseInt(message.substr(17, 2), 16)
+            output['Data4'] = parseInt(message.substr(19, 2), 16)
+            output['Data5'] = parseInt(message.substr(21, 2), 16)
+        }         
+      // create copy
+      var textElement = JSON.parse(JSON.stringify(output))
+      delete textElement.encoded
+      delete textElement.ID_TYPE
+      delete textElement.mnemonic
+      delete textElement.opCode
+      output['text'] = output.mnemonic + ' (' + output.opCode + ') ' + JSON.stringify(textElement)
+      return output
+    }
+    //
+    encodeDTXC_SEQ0(streamIdentifier, sequenceNumber, messageLength, CRC16, flags) {
+      return this.header({MinPri: 3}) + 'E9' + 
+        decToHex(streamIdentifier, 2) + 
+        decToHex(sequenceNumber, 2) + 
+        decToHex(messageLength, 4) + 
+        decToHex(CRC16, 4) + 
+        decToHex(flags, 2) + ';'
+    }
+    //
+    // RFC0005 support
+    // streamIdentifier must be between 235 to 255
+    //
+    encodeDTXC(streamIdentifier, sequenceNumber, Data1, Data2, Data3, Data4, Data5) {
+      return this.header({MinPri: 3}) + 'E9' + 
+        decToHex(streamIdentifier, 2) + 
+        decToHex(sequenceNumber, 2) + 
+        decToHex(Data1, 2) + 
+        decToHex(Data2, 2) + 
+        decToHex(Data3, 2) + 
+        decToHex(Data4, 2) + 
+        decToHex(Data5, 2) + ';'
+    }
+
+    // EA - LM (long message)
     //
     decodeLM(message) {
       var output = {}
@@ -5307,8 +5358,8 @@ class cbusLibrary {
         output['Data4'] = parseInt(message.substr(17, 2), 16)
         output['Data5'] = parseInt(message.substr(19, 2), 16)
         output['Data6'] = parseInt(message.substr(21, 2), 16)       
-      } else if ((MessageByte1 > 199) && (MessageByte1 < 235)){
-        // commands 200 to 234
+      } else if (MessageByte1 > 199){
+        // commands 200 to 255
         switch (MessageByte1){
           case 200:
             output['command'] = "PROPOSE_CHANNEL"
@@ -5401,22 +5452,6 @@ class cbusLibrary {
             output['command'] = "UNKNOWN_COMMAND"
             break;
         }
-      } else {
-        // values 235 to 255 DTXC (RFC0005)
-        output['mnemonic'] = 'DTXC'     // replace LM with DTXC
-        output['streamIdentifier'] = parseInt(message.substr(9, 2), 16)
-        output['sequenceNumber'] = parseInt(message.substr(11, 2), 16)
-        if (output.sequenceNumber == 0) {
-          output['messageLength'] = parseInt(message.substr(13, 4), 16)
-          output['CRC16'] = parseInt(message.substr(17, 4), 16)
-          output['flags'] = parseInt(message.substr(21, 2), 16)
-        } else {
-          output['Data1'] = parseInt(message.substr(13, 2), 16)
-          output['Data2'] = parseInt(message.substr(15, 2), 16)
-          output['Data3'] = parseInt(message.substr(17, 2), 16)
-          output['Data4'] = parseInt(message.substr(19, 2), 16)
-          output['Data5'] = parseInt(message.substr(21, 2), 16)
-        }         
       }
       // create copy
       var textElement = JSON.parse(JSON.stringify(output))
@@ -5430,7 +5465,7 @@ class cbusLibrary {
     //
     encodeLM_DATA(channel, Data1, Data2, Data3, Data4, Data5, Data6) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(channel, 2)
         + decToHex(Data1, 2) 
         + decToHex(Data2, 2) 
@@ -5444,7 +5479,7 @@ class cbusLibrary {
     //
     encodeLM_PROPOSE_CHANNEL(channel, nodeNumber) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(200,2) 
         + decToHex(channel, 2) 
         + "00"
@@ -5455,7 +5490,7 @@ class cbusLibrary {
     //
     encodeLM_INUSE_CHANNEL(channel, nodeNumber) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(201,2) 
         + decToHex(channel, 2) 
         + "00"
@@ -5466,7 +5501,7 @@ class cbusLibrary {
     //
     encodeLM_CLAIM_CHANNEL(channel, nodeNumber) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(202,2) 
         + decToHex(channel, 2) 
         + "00"
@@ -5477,7 +5512,7 @@ class cbusLibrary {
     //
     encodeLM_RELEASE_CHANNEL(channel, nodeNumber) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(203,2) 
         + decToHex(channel, 2) 
         + "00"
@@ -5488,7 +5523,7 @@ class cbusLibrary {
     //
     encodeLM_REQUEST(channel, use, nodeNumber, option_flags, request_number) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(205,2) 
         + decToHex(channel,2) 
         + decToHex(use,2)
@@ -5500,7 +5535,7 @@ class cbusLibrary {
     //
     encodeLM_START_MESSAGE(channel, use, nodeNumber, option_flags) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
       + decToHex(210,2)      
       + decToHex(channel,2) 
       + decToHex(use,2) 
@@ -5512,7 +5547,7 @@ class cbusLibrary {
     //
     encodeLM_LAST_DATA1(channel, Data1) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(211,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
@@ -5522,7 +5557,7 @@ class cbusLibrary {
     //
     encodeLM_LAST_DATA2(channel, Data1, Data2) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(212,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
@@ -5533,7 +5568,7 @@ class cbusLibrary {
     //
     encodeLM_LAST_DATA3(channel, Data1, Data2, Data3) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(213,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
@@ -5545,7 +5580,7 @@ class cbusLibrary {
     //
     encodeLM_LAST_DATA4(channel, Data1, Data2, Data3, Data4) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(214,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
@@ -5558,7 +5593,7 @@ class cbusLibrary {
     //
     encodeLM_LAST_DATA5(channel, Data1, Data2, Data3, Data4, Data5) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(215,2) 
         + decToHex(channel, 2) 
         + decToHex(Data1, 2) 
@@ -5572,18 +5607,18 @@ class cbusLibrary {
     //
     encodeLM_END_MESSAGE(channel, checksum) {
       return this.header({MinPri: 2})
-        + 'E9'
-      + decToHex(219,2)      
-      + decToHex(channel,2) 
-      + "00" 
-      + decToHex(checksum,4)
-      + "0000" + ";";
+        + 'EA'
+        + decToHex(219,2)      
+        + decToHex(channel,2) 
+        + "00" 
+        + decToHex(checksum,4)
+        + "0000" + ";";
     }
     // QUERY (220)
     //
     encodeLM_QUERY(nodeNumber) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(220,2) 
         + "0000" 
         + decToHex(nodeNumber, 4) 
@@ -5593,39 +5628,13 @@ class cbusLibrary {
     //
     encodeLM_USAGES(client_server, use, nodeNumber, option_flags, state) {
       return this.header({MinPri: 2})
-        + 'E9'
+        + 'EA'
         + decToHex(221,2)
         + decToHex(client_server,2)
         + decToHex(use,2) 
         + decToHex(nodeNumber, 4) 
         + decToHex(option_flags,2)
         + decToHex(state,2) + ";";
-    }
-    //
-    // RFC0005 support
-    // streamIdentifier must be between 235 to 255
-    //
-    encodeDTXC_SEQ0(streamIdentifier, sequenceNumber, messageLength, CRC16, flags) {
-      return this.header({MinPri: 3}) + 'E9' + 
-        decToHex(streamIdentifier, 2) + 
-        decToHex(sequenceNumber, 2) + 
-        decToHex(messageLength, 4) + 
-        decToHex(CRC16, 4) + 
-        decToHex(flags, 2) + ';'
-    }
-    //
-    // RFC0005 support
-    // streamIdentifier must be between 235 to 255
-    //
-    encodeDTXC(streamIdentifier, sequenceNumber, Data1, Data2, Data3, Data4, Data5) {
-      return this.header({MinPri: 3}) + 'E9' + 
-        decToHex(streamIdentifier, 2) + 
-        decToHex(sequenceNumber, 2) + 
-        decToHex(Data1, 2) + 
-        decToHex(Data2, 2) + 
-        decToHex(Data3, 2) + 
-        decToHex(Data4, 2) + 
-        decToHex(Data5, 2) + ';'
     }
 
     // EF PARAMS
