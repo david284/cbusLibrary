@@ -5216,7 +5216,7 @@ class cbusLibrary {
               'ackOpCode': message.substr(13, 2),  
               'eventIdentifier': message.substring(15, 23),
               'text': "ENACK (E6) nodeNumber " + parseInt(message.substr(9, 4), 16) +
-                              " ackOpCode " + parseInt(message.substr(13, 2), 16) +
+                              " ackOpCode " + message.substr(13, 2) +
                               " eventIdentifier " + message.substring(15, 23)
       }
     }
