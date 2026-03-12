@@ -19,4 +19,5 @@ For full documentation on API, tests etc.. follow this link <a href="https://dav
 
 ## publish
   To publish theisw package after changes
+  login npm
   npm publish 
