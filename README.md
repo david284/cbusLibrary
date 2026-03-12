@@ -14,6 +14,9 @@ For full documentation on API, tests etc.. follow this link <a href="https://dav
 
 ## usage
 
-    const cbusLib = require('cbusLibrary')
-An instance of the class is created automatically, so can be used immediately
+  const cbusLib = require('cbusLibrary')
+  An instance of the class is created automatically, so can be used immediately
 
+## publish
+  To publish theisw package after changes
+  npm publish 
